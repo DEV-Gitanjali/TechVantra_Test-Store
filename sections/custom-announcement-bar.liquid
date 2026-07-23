@@ -223,10 +223,10 @@
     <div class="localization-wrapper">
       {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
         <localization-form class="small-hide medium-hide">
-          {%- form 'localization', id: 'AnnouncementCountryForm', class: 'localization-form' -%}
+          {%- form 'localization', id: 'CustomAnnouncementCountryForm', class: 'localization-form' -%}
             <div>
-              <h2 class="visually-hidden" id="AnnouncementCountryLabel">{{ 'localization.country_label' | t }}</h2>
-              {%- render 'country-localization', localPosition: 'AnnouncementCountry' -%}
+              <h2 class="visually-hidden" id="CustomAnnouncementCountryLabel">{{ 'localization.country_label' | t }}</h2>
+              {%- render 'country-localization', localPosition: 'CustomAnnouncementCountry' -%}
             </div>
           {%- endform -%}
         </localization-form>
@@ -234,10 +234,10 @@
 
       {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
         <localization-form class="small-hide medium-hide">
-          {%- form 'localization', id: 'AnnouncementLanguageForm', class: 'localization-form' -%}
+          {%- form 'localization', id: 'CustomAnnouncementLanguageForm', class: 'localization-form' -%}
             <div>
-              <h2 class="visually-hidden" id="AnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
-              {%- render 'language-localization', localPosition: 'AnnouncementLanguage' -%}
+              <h2 class="visually-hidden" id="CustomAnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+              {%- render 'language-localization', localPosition: 'CustomAnnouncementLanguage' -%}
             </div>
           {%- endform -%}
         </localization-form>
@@ -248,9 +248,9 @@
 
 {% schema %}
 {
-  "name": "t:sections.announcement-bar.name",
+  "name": "Custom announcement bar",
   "max_blocks": 12,
-  "class": "announcement-bar-section",
+  "class": "custom-announcement-bar-section",
   "enabled_on": {
     "groups": ["header"]
   },
@@ -339,7 +339,7 @@
         {
           "type": "text",
           "id": "text",
-          "default": "t:sections.announcement-bar.blocks.announcement.settings.text.default",
+          "default": "We now Deliver to 47 Countries! Check our Shipping Policy to see the Eligibility and Rates.",
           "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
         },
         {
@@ -363,12 +363,14 @@
         {
           "type": "color",
           "id": "background_color",
-          "label": "Background color"
+          "label": "Background color",
+          "default": "#FD8DB9"
         },
         {
           "type": "color",
           "id": "text_color",
-          "label": "Text color"
+          "label": "Text color",
+          "default": "#FFFFFF"
         },
         {
           "type": "header",
@@ -408,7 +410,7 @@
   ],
   "presets": [
     {
-      "name": "t:sections.announcement-bar.presets.name",
+      "name": "Custom announcement bar",
       "blocks": [
         {
           "type": "announcement"

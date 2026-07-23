@@ -1,7 +1,21 @@
+@font-face {
+  font-family: "Proxima Nova";
+  src: url("https://cdn.shopify.com/s/files/1/0782/0224/1129/files/Fontspring-DEMO-proximanovacond-regular.otf?v=1784816376")
+    format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --font-body-family: "Proxima Nova", Arial, Helvetica, sans-serif;
+}
+
 product-component,
 collection-component {
   display: block;
 }
+
+
 
 :root {
   --alpha-button-background: 1;
@@ -87,6 +101,12 @@ collection-component {
   padding: 0 1.5rem;
 }
 
+.header.page-width {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   max-width: 100%;
 }
@@ -110,7 +130,6 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
     padding: 0 5rem;
   }
 
-  .header.page-width,
   .utility-bar__grid.page-width {
     padding-left: 3.2rem;
     padding-right: 3.2rem;
@@ -2267,6 +2286,13 @@ input[type='checkbox'] {
   min-height: 3.8rem;
 }
 
+.announcement-bar__icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.8rem;
+  margin-bottom: 0.2rem;
+}
+
 .announcement-bar-slider--fade-in-next .announcement-bar__message,
 .announcement-bar-slider--fade-in-previous .announcement-bar__message,
 .announcement-bar-slider--fade-out-next .announcement-bar__message,
@@ -2400,7 +2426,7 @@ input[type='checkbox'] {
 
   .header--middle-left {
     grid-template-areas: 'heading navigation icons';
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: 1fr auto 1fr;
     column-gap: 2rem;
   }
 
@@ -2810,6 +2836,16 @@ details[open] > .header__submenu {
   padding: 1.2rem;
   text-decoration: none;
   color: rgba(var(--color-foreground), 0.75);
+}
+
+.list-menu--inline .header__menu-item {
+  font-weight: 600;
+  font-size: 1.4rem;
+  line-height: 1;
+  letter-spacing: 0;
+  color: #000000;
+  padding-left: 2.2rem;
+  padding-right: 2.2rem;
 }
 
 .header__menu-item:hover {
