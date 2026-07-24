@@ -264,7 +264,7 @@
         "heading_size": "h1",
         "heading_color": "#000000",
         "subheading": "",
-        "background_color": "#FFAECE",
+        "background_color": "#ffaece",
         "columns_desktop": 4,
         "card_radius": 0,
         "item_spacing": 18,
@@ -278,6 +278,7 @@
         "review_1a": {
           "type": "review",
           "settings": {
+            "avatar": "shopify://shop_images/image_438.png",
             "name": "Emily R.",
             "location": "California, USA",
             "rating": 5,
@@ -287,6 +288,7 @@
         "review_2b": {
           "type": "review",
           "settings": {
+            "avatar": "shopify://shop_images/smiling-young-brunette-caucasian-girl-looks-camera-olive-green_1.png",
             "name": "Michael S",
             "location": "Seattle, Washington",
             "rating": 5,
@@ -296,6 +298,27 @@
         "review_3c": {
           "type": "review",
           "settings": {
+            "avatar": "shopify://shop_images/brunette-young-woman-with-healthy-beauty-skin-smiles-gently-shows-white-perfect-teeth_1.png",
+            "name": "James W.",
+            "location": "San Diego, California",
+            "rating": 5,
+            "review": "The colors, shapes, and textures are perfect for little hands. I noticed a real boost in my daughter's imagination after playing with these toys every day."
+          }
+        },
+        "review_KjBxhW": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/smiling-young-brunette-caucasian-girl-looks-camera-olive-green_1.png",
+            "name": "Michael S",
+            "location": "Seattle, Washington",
+            "rating": 5,
+            "review": "I love how these activities encourage real-world thinking, problem-solving, and imagination. No screens needed, and my kids never even miss them!"
+          }
+        },
+        "review_jBQgQY": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/brunette-young-woman-with-healthy-beauty-skin-smiles-gently-shows-white-perfect-teeth_1.png",
             "name": "James W.",
             "location": "San Diego, California",
             "rating": 5,
@@ -306,7 +329,9 @@
       "block_order": [
         "review_1a",
         "review_2b",
-        "review_3c"
+        "review_3c",
+        "review_KjBxhW",
+        "review_jBQgQY"
       ],
       "name": "Custom customer reviews",
       "settings": {
@@ -314,7 +339,7 @@
         "heading_size": "h1",
         "heading_color": "#159a8d",
         "subheading": "<p>Real stories from real families — discover how our designs are making a difference in children's lives, one joyful moment at a time.</p>",
-        "background_color": "#FFFFFF",
+        "background_color": "#ffffff",
         "show_arrows": true,
         "slides_desktop": 3,
         "slides_tablet": 2,
@@ -323,6 +348,10 @@
         "autoplay_speed": 5,
         "card_radius": 20,
         "item_spacing": 24,
+        "show_divider": true,
+        "divider_color": "#8c8c8c",
+        "divider_thickness": 3,
+        "divider_style": "dashed",
         "padding_top": 48,
         "padding_bottom": 48
       }

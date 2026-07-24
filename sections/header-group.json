@@ -19,8 +19,8 @@
           "settings": {
             "text": "We now Deliver to 47 Countries! Check our Shipping Policy to see the Eligibility and Rates.",
             "link": "",
-            "background_color": "#FD8DB9",
-            "text_color": "#FFFFFF",
+            "background_color": "#fd8db9",
+            "text_color": "#ffffff",
             "dynamic_source": "none",
             "metafield_namespace": "",
             "metafield_key": ""
