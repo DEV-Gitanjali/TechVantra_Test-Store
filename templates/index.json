@@ -207,11 +207,59 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "explore_collection_7pXq9Z": {
+      "type": "custom-explore-collection",
+      "blocks": {
+        "collection_card_1a": {
+          "type": "collection_card",
+          "settings": {
+            "label": "Play Dough"
+          }
+        },
+        "collection_card_2b": {
+          "type": "collection_card",
+          "settings": {
+            "label": "Soft Toys"
+          }
+        },
+        "collection_card_3c": {
+          "type": "collection_card",
+          "settings": {
+            "label": "Winter Wear"
+          }
+        },
+        "collection_card_4d": {
+          "type": "collection_card",
+          "settings": {
+            "label": "Painting"
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_1a",
+        "collection_card_2b",
+        "collection_card_3c",
+        "collection_card_4d"
+      ],
+      "name": "Custom explore collection",
+      "settings": {
+        "heading": "Explore More Collection",
+        "heading_size": "h1",
+        "heading_color": "#1a1a1a",
+        "background_color": "#fbd0e0",
+        "columns_desktop": 4,
+        "card_radius": 0,
+        "item_spacing": 24,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
     "hero_banner_slider_36bnrm",
     "shop_by_age_9kLp2Q",
-    "shop_by_theme_4mNb7R"
+    "shop_by_theme_4mNb7R",
+    "explore_collection_7pXq9Z"
   ]
 }
