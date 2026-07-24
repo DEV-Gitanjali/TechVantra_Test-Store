@@ -1,0 +1,92 @@
+.shop-by-age__wrapper {
+  text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media screen and (min-width: 750px) {
+  .shop-by-age__wrapper {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.shop-by-age__heading {
+  margin: 0 0 3rem;
+  font-weight: 700;
+}
+
+.shop-by-age__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--shop-by-age-gap, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shop-by-age__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--circle-size-mobile, 100px);
+}
+
+.shop-by-age__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  color: currentColor;
+}
+
+.shop-by-age__circle {
+  display: block;
+  width: var(--circle-size-mobile, 100px);
+  height: var(--circle-size-mobile, 100px);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.shop-by-age__circle img,
+.shop-by-age__circle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-by-age__link:hover .shop-by-age__circle,
+.shop-by-age__link:focus-visible .shop-by-age__circle {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.shop-by-age__label {
+  margin: 14px 0 0;
+  font-family: var(--font-heading-family);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 68px;
+  letter-spacing: 0;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media screen and (min-width: 750px) {
+  .shop-by-age__item {
+    width: var(--circle-size-desktop, 160px);
+  }
+
+  .shop-by-age__circle {
+    width: var(--circle-size-desktop, 160px);
+    height: var(--circle-size-desktop, 160px);
+  }
+}

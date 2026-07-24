@@ -96,9 +96,74 @@
         "pause_on_hover": true,
         "enable_touch_swipe": true
       }
+    },
+    "shop_by_age_9kLp2Q": {
+      "type": "custom-shop-by-age",
+      "blocks": {
+        "age_group_1a": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "label": "0-1 Years",
+            "link": ""
+          }
+        },
+        "age_group_2b": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "label": "1-2 Years",
+            "link": ""
+          }
+        },
+        "age_group_3c": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "label": "2-3 Years",
+            "link": ""
+          }
+        },
+        "age_group_4d": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "label": "3-4 Years",
+            "link": ""
+          }
+        },
+        "age_group_5e": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "label": "4-5 Years",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "age_group_1a",
+        "age_group_2b",
+        "age_group_3c",
+        "age_group_4d",
+        "age_group_5e"
+      ],
+      "name": "Custom shop by age",
+      "settings": {
+        "heading": "Shop By Age",
+        "heading_size": "h1",
+        "heading_color": "#159A8D",
+        "color_scheme": "scheme-1",
+        "circle_size_desktop": 160,
+        "circle_size_mobile": 100,
+        "item_spacing": 32,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
-    "hero_banner_slider_36bnrm"
+    "hero_banner_slider_36bnrm",
+    "shop_by_age_9kLp2Q"
   ]
 }

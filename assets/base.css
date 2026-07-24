@@ -1,13 +1,13 @@
-@font-face {
+/* @font-face {
   font-family: "Proxima Nova";
   src: url("https://cdn.shopify.com/s/files/1/0782/0224/1129/files/Fontspring-DEMO-proximanovacond-regular.otf?v=1784816376")
     format("truetype");
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 :root {
-  --font-body-family: "Proxima Nova", Arial, Helvetica, sans-serif;
+  --font-body-family: Arial, Helvetica, sans-serif;
 }
 
 product-component,
