@@ -1,75 +1,104 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero_banner_slider_36bnrm": {
+      "type": "hero-banner-slider",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide_dVc34D": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "media_type": "image",
+            "desktop_image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "heading": "Creative Playtime With Building Blocks",
+            "description": "Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.",
+            "button_text": "Show Now",
+            "button_link": "",
+            "content_position": "left",
+            "vertical_alignment": "bottom",
+            "heading_color": "#FFFFFF",
+            "description_color": "#FFFFFF",
+            "button_bg_color": "#FD8DB9",
+            "button_text_color": "#FFFFFF",
+            "button_hover_bg_color": "#E85A91",
+            "button_hover_text_color": "#FFFFFF",
+            "overlay_color": "#000000",
+            "overlay_opacity": 25,
+            "heading_font_size_desktop": 48,
+            "heading_font_size_mobile": 28,
+            "description_font_size_desktop": 16,
+            "description_font_size_mobile": 13,
+            "button_font_size": 14,
+            "content_padding_left": 40,
+            "content_padding_right": 40,
+            "content_max_width": 480,
+            "button_border_radius": 50
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide_T9QnrM": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "media_type": "image",
+            "desktop_image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "heading": "Creative Playtime With Building Blocks",
+            "description": "Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.",
+            "button_text": "Show Now",
+            "button_link": "",
+            "content_position": "left",
+            "vertical_alignment": "bottom",
+            "heading_color": "#FFFFFF",
+            "description_color": "#FFFFFF",
+            "button_bg_color": "#FD8DB9",
+            "button_text_color": "#FFFFFF",
+            "button_hover_bg_color": "#E85A91",
+            "button_hover_text_color": "#FFFFFF",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "heading_font_size_desktop": 48,
+            "heading_font_size_mobile": 28,
+            "description_font_size_desktop": 16,
+            "description_font_size_mobile": 13,
+            "button_font_size": 14,
+            "content_padding_left": 40,
+            "content_padding_right": 40,
+            "content_max_width": 480,
+            "button_border_radius": 30
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "slide_dVc34D",
+        "slide_T9QnrM"
       ],
+      "name": "Hero banner slider",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "featured_collection": {
-      "type": "featured-collection",
-      "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "color_scheme": "",
+        "height_desktop": 600,
+        "height_tablet": 500,
+        "height_mobile": 420,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "enable_autoplay": true,
+        "autoplay_speed": 5,
+        "infinite_loop": true,
+        "transition_speed": 600,
+        "fade_effect": false,
+        "show_arrows": true,
+        "show_pagination": false,
+        "show_counter": true,
+        "pause_on_hover": true,
+        "enable_touch_swipe": true
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "hero_banner_slider_36bnrm"
   ]
 }
