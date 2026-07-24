@@ -1,0 +1,402 @@
+{{ 'custom-customer-reviews.css' | asset_url | stylesheet_tag }}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .customer-reviews {
+    background-color: {{ section.settings.background_color }};
+  }
+{%- endstyle -%}
+
+<div class="customer-reviews">
+  <div
+    class="customer-reviews__wrapper page-width section-{{ section.id }}-padding"
+    style="--customer-reviews-gap: {{ section.settings.item_spacing }}px; --customer-reviews-radius: {{ section.settings.card_radius }}px; --customer-reviews-divider-color: {{ section.settings.divider_color | default: '#8C8C8C' }}; --customer-reviews-divider-thickness: {{ section.settings.divider_thickness | default: 2 }}px; --customer-reviews-divider-style: {{ section.settings.divider_style | default: 'dotted' }};"
+  >
+    <div class="customer-reviews__header">
+      <div class="customer-reviews__heading-group">
+        {%- if section.settings.heading != blank -%}
+          <h2
+            class="customer-reviews__heading {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            style="color: {{ section.settings.heading_color }};"
+          >
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <div class="customer-reviews__subheading{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+            {{ section.settings.subheading }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_arrows and section.blocks.size > 0 -%}
+        <div class="customer-reviews__nav">
+          <button
+            type="button"
+            class="customer-reviews__arrow customer-reviews__arrow--prev"
+            aria-label="{{ 'general.slider.previous_slide' | t | default: 'Previous reviews' }}"
+            aria-controls="CustomerReviews-{{ section.id }}"
+          >
+            <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+          </button>
+          <button
+            type="button"
+            class="customer-reviews__arrow customer-reviews__arrow--next"
+            aria-label="{{ 'general.slider.next_slide' | t | default: 'Next reviews' }}"
+            aria-controls="CustomerReviews-{{ section.id }}"
+          >
+            <span class="svg-wrapper">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div
+        class="swiper customer-reviews__swiper"
+        id="CustomerReviews-{{ section.id }}"
+        data-slides-desktop="{{ section.settings.slides_desktop }}"
+        data-slides-tablet="{{ section.settings.slides_tablet }}"
+        data-loop="{{ section.settings.enable_loop }}"
+        data-autoplay="{{ section.settings.enable_autoplay }}"
+        data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+        data-space-between="{{ section.settings.item_spacing }}"
+      >
+        <div class="swiper-wrapper">
+          {%- for block in section.blocks -%}
+            <div class="swiper-slide" {{ block.shopify_attributes }}>
+              <div class="customer-reviews__card-wrap">
+                <div class="customer-reviews__card">
+                  <div class="customer-reviews__card-top">
+                    <span class="customer-reviews__avatar">
+                      {%- if block.settings.avatar != blank -%}
+                        <img
+                          src="{{ block.settings.avatar | image_url: width: 96 }}"
+                          srcset="{{ block.settings.avatar | image_url: width: 96 }} 1x, {{ block.settings.avatar | image_url: width: 192 }} 2x"
+                          alt="{{ block.settings.avatar.alt | default: block.settings.name | escape }}"
+                          width="48"
+                          height="48"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        <span class="customer-reviews__avatar-placeholder" aria-hidden="true">
+                          {{- block.settings.name | slice: 0, 1 | upcase -}}
+                        </span>
+                      {%- endif -%}
+                    </span>
+                    <span class="customer-reviews__identity">
+                      {%- if block.settings.name != blank -%}
+                        <span class="customer-reviews__name">{{ block.settings.name }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.location != blank -%}
+                        <span class="customer-reviews__location">{{ block.settings.location }}</span>
+                      {%- endif -%}
+                    </span>
+                  </div>
+
+                  {%- unless section.settings.show_divider == false -%}
+                    <div class="customer-reviews__divider" aria-hidden="true"></div>
+                  {%- endunless -%}
+
+                  {%- if block.settings.rating > 0 -%}
+                    <div class="customer-reviews__stars" role="img" aria-label="{{ block.settings.rating }} {{ 'products.product.rating_out_of' | t | default: 'out of 5 stars' }}">
+                      {%- for i in (1..5) -%}
+                        <span class="customer-reviews__star{% if i <= block.settings.rating %} customer-reviews__star--filled{% endif %}" aria-hidden="true">
+                          {{- 'icon-star-filled.svg' | inline_asset_content -}}
+                        </span>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- unless section.settings.show_divider == false -%}
+                    <div class="customer-reviews__divider" aria-hidden="true"></div>
+                  {%- endunless -%}
+
+                  {%- if block.settings.review != blank -%}
+                    <p class="customer-reviews__text">{{ block.settings.review }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script src="{{ 'custom-customer-reviews.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Custom customer reviews",
+  "tag": "section",
+  "class": "section custom-customer-reviews-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Our Customer Reviews"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#159A8D"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Real stories from real families — discover how our designs are making a difference in children's lives, one joyful moment at a time.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Section background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "slides_desktop",
+      "label": "Reviews shown (desktop)",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "slides_tablet",
+      "label": "Reviews shown (tablet)",
+      "min": 1,
+      "max": 3,
+      "step": 1,
+      "default": 2
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_loop",
+      "label": "Enable infinite loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Space between cards",
+      "min": 8,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Divider"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show divider lines",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "divider_color",
+      "label": "Divider color",
+      "default": "#8C8C8C"
+    },
+    {
+      "type": "range",
+      "id": "divider_thickness",
+      "label": "Divider thickness",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 2
+    },
+    {
+      "type": "select",
+      "id": "divider_style",
+      "label": "Divider style",
+      "options": [
+        { "value": "dotted", "label": "Dotted" },
+        { "value": "dashed", "label": "Dashed" },
+        { "value": "solid", "label": "Solid" }
+      ],
+      "default": "dotted"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "avatar",
+          "label": "Avatar photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Reviewer name",
+          "default": "Emily R."
+        },
+        {
+          "type": "text",
+          "id": "location",
+          "label": "Location",
+          "default": "California, USA"
+        },
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Star rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "review",
+          "label": "Review text",
+          "default": "We were looking for screen-free learning options, and these books are just magical. They make storytime exciting and truly engage curious little minds."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom customer reviews",
+      "blocks": [
+        {
+          "type": "review",
+          "settings": {
+            "name": "Emily R.",
+            "location": "California, USA",
+            "rating": 5,
+            "review": "We were looking for screen-free learning options, and these books are just magical. They make storytime exciting and truly engage curious little minds."
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "Michael S",
+            "location": "Seattle, Washington",
+            "rating": 5,
+            "review": "I love how these activities encourage real-world thinking, problem-solving, and imagination. No screens needed, and my kids never even miss them!"
+          }
+        },
+        {
+          "type": "review",
+          "settings": {
+            "name": "James W.",
+            "location": "San Diego, California",
+            "rating": 5,
+            "review": "The colors, shapes, and textures are perfect for little hands. I noticed a real boost in my daughter's imagination after playing with these toys every day."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

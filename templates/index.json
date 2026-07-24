@@ -271,12 +271,68 @@
         "padding_top": 48,
         "padding_bottom": 48
       }
+    },
+    "customer_reviews_5wZk3T": {
+      "type": "custom-customer-reviews",
+      "blocks": {
+        "review_1a": {
+          "type": "review",
+          "settings": {
+            "name": "Emily R.",
+            "location": "California, USA",
+            "rating": 5,
+            "review": "We were looking for screen-free learning options, and these books are just magical. They make storytime exciting and truly engage curious little minds."
+          }
+        },
+        "review_2b": {
+          "type": "review",
+          "settings": {
+            "name": "Michael S",
+            "location": "Seattle, Washington",
+            "rating": 5,
+            "review": "I love how these activities encourage real-world thinking, problem-solving, and imagination. No screens needed, and my kids never even miss them!"
+          }
+        },
+        "review_3c": {
+          "type": "review",
+          "settings": {
+            "name": "James W.",
+            "location": "San Diego, California",
+            "rating": 5,
+            "review": "The colors, shapes, and textures are perfect for little hands. I noticed a real boost in my daughter's imagination after playing with these toys every day."
+          }
+        }
+      },
+      "block_order": [
+        "review_1a",
+        "review_2b",
+        "review_3c"
+      ],
+      "name": "Custom customer reviews",
+      "settings": {
+        "heading": "Our Customer Reviews",
+        "heading_size": "h1",
+        "heading_color": "#159a8d",
+        "subheading": "<p>Real stories from real families — discover how our designs are making a difference in children's lives, one joyful moment at a time.</p>",
+        "background_color": "#FFFFFF",
+        "show_arrows": true,
+        "slides_desktop": 3,
+        "slides_tablet": 2,
+        "enable_loop": true,
+        "enable_autoplay": false,
+        "autoplay_speed": 5,
+        "card_radius": 20,
+        "item_spacing": 24,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
     "hero_banner_slider_36bnrm",
     "shop_by_age_9kLp2Q",
     "shop_by_theme_4mNb7R",
-    "explore_collection_7pXq9Z"
+    "explore_collection_7pXq9Z",
+    "customer_reviews_5wZk3T"
   ]
 }
