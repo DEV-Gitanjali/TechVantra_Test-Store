@@ -160,10 +160,58 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "shop_by_theme_4mNb7R": {
+      "type": "custom-shop-by-theme",
+      "blocks": {
+        "theme_card_1a": {
+          "type": "theme_card",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "My First Binders",
+            "link": "shopify://collections"
+          }
+        },
+        "theme_card_2b": {
+          "type": "theme_card",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "Story Themes",
+            "link": ""
+          }
+        },
+        "theme_card_3c": {
+          "type": "theme_card",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "Custom Books",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "theme_card_1a",
+        "theme_card_2b",
+        "theme_card_3c"
+      ],
+      "name": "Custom shop by theme",
+      "settings": {
+        "heading": "Shop By Theme",
+        "heading_size": "h1",
+        "heading_color": "#159A8D",
+        "subheading": "<p>Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.</p>",
+        "color_scheme": "scheme-1",
+        "columns_desktop": 3,
+        "card_radius": 16,
+        "item_spacing": 24,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "hero_banner_slider_36bnrm",
-    "shop_by_age_9kLp2Q"
+    "shop_by_age_9kLp2Q",
+    "shop_by_theme_4mNb7R"
   ]
 }

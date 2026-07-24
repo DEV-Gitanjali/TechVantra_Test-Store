@@ -6,7 +6,7 @@
 
 .shop-by-age__heading {
   margin: 0 0 3rem;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .shop-by-age__list {
@@ -64,7 +64,7 @@
   margin: 14px 0 0;
   font-family: var(--font-heading-family);
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 22px;
   line-height: 68px;
   letter-spacing: 0;
