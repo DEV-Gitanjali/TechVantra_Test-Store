@@ -1,14 +1,7 @@
 .shop-by-age__wrapper {
   text-align: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media screen and (min-width: 750px) {
-  .shop-by-age__wrapper {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .shop-by-age__heading {

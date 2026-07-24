@@ -23,12 +23,12 @@
             "button_link": "",
             "content_position": "left",
             "vertical_alignment": "bottom",
-            "heading_color": "#FFFFFF",
-            "description_color": "#FFFFFF",
-            "button_bg_color": "#FD8DB9",
-            "button_text_color": "#FFFFFF",
-            "button_hover_bg_color": "#E85A91",
-            "button_hover_text_color": "#FFFFFF",
+            "heading_color": "#ffffff",
+            "description_color": "#ffffff",
+            "button_bg_color": "#fd8db9",
+            "button_text_color": "#ffffff",
+            "button_hover_bg_color": "#e85a91",
+            "button_hover_text_color": "#ffffff",
             "overlay_color": "#000000",
             "overlay_opacity": 25,
             "heading_font_size_desktop": 48,
@@ -53,12 +53,12 @@
             "button_link": "",
             "content_position": "left",
             "vertical_alignment": "bottom",
-            "heading_color": "#FFFFFF",
-            "description_color": "#FFFFFF",
-            "button_bg_color": "#FD8DB9",
-            "button_text_color": "#FFFFFF",
-            "button_hover_bg_color": "#E85A91",
-            "button_hover_text_color": "#FFFFFF",
+            "heading_color": "#ffffff",
+            "description_color": "#ffffff",
+            "button_bg_color": "#fd8db9",
+            "button_text_color": "#ffffff",
+            "button_hover_bg_color": "#e85a91",
+            "button_hover_text_color": "#ffffff",
             "overlay_color": "#000000",
             "overlay_opacity": 0,
             "heading_font_size_desktop": 48,
@@ -103,15 +103,15 @@
         "age_group_1a": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "0-1 Years",
-            "link": ""
+            "link": "shopify://collections"
           }
         },
         "age_group_2b": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "1-2 Years",
             "link": ""
           }
@@ -119,7 +119,7 @@
         "age_group_3c": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "2-3 Years",
             "link": ""
           }
@@ -127,7 +127,7 @@
         "age_group_4d": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "3-4 Years",
             "link": ""
           }
@@ -135,7 +135,7 @@
         "age_group_5e": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "4-5 Years",
             "link": ""
           }
@@ -152,7 +152,7 @@
       "settings": {
         "heading": "Shop By Age",
         "heading_size": "h1",
-        "heading_color": "#159A8D",
+        "heading_color": "#008B8B",
         "color_scheme": "scheme-1",
         "circle_size_desktop": 160,
         "circle_size_mobile": 100,
