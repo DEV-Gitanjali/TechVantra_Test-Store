@@ -332,20 +332,10 @@
     },
     {
       "type": "range",
-      "id": "spacing_left",
-      "label": "Left spacing",
+      "id": "spacing_horizontal",
+      "label": "Left & right spacing",
       "min": 0,
-      "max": 200,
-      "step": 4,
-      "unit": "px",
-      "default": 100
-    },
-    {
-      "type": "range",
-      "id": "spacing_right",
-      "label": "Right spacing",
-      "min": 0,
-      "max": 150,
+      "max": 100,
       "step": 4,
       "unit": "px",
       "default": 0
@@ -430,40 +420,40 @@
       "id": "featured_card_width",
       "label": "Featured card width",
       "min": 260,
-      "max": 640,
+      "max": 560,
       "step": 10,
       "unit": "px",
-      "default": 460
+      "default": 380
     },
     {
       "type": "range",
       "id": "featured_card_height",
       "label": "Featured card height",
       "min": 260,
-      "max": 640,
+      "max": 600,
       "step": 10,
       "unit": "px",
-      "default": 540
+      "default": 460
     },
     {
       "type": "range",
       "id": "side_card_width",
       "label": "Side card width",
       "min": 120,
-      "max": 420,
+      "max": 400,
       "step": 10,
       "unit": "px",
-      "default": 280
+      "default": 220
     },
     {
       "type": "range",
       "id": "side_card_height",
       "label": "Side card height",
       "min": 160,
-      "max": 540,
+      "max": 500,
       "step": 10,
       "unit": "px",
-      "default": 380
+      "default": 320
     },
     {
       "type": "header",
@@ -531,7 +521,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 12
     },
     {
       "type": "select",
@@ -552,6 +542,18 @@
       "default": "#8C8C8C"
     },
     {
+      "type": "select",
+      "id": "label_text_transform",
+      "label": "Text transform",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
       "type": "header",
       "content": "Title typography"
     },
@@ -560,10 +562,10 @@
       "id": "title_font_size_desktop",
       "label": "Font size (desktop)",
       "min": 16,
-      "max": 48,
+      "max": 40,
       "step": 1,
       "unit": "px",
-      "default": 40
+      "default": 22
     },
     {
       "type": "range",
@@ -584,7 +586,7 @@
         { "value": "600", "label": "Semibold" },
         { "value": "700", "label": "Bold" }
       ],
-      "default": "500"
+      "default": "600"
     },
     {
       "type": "color",
@@ -597,10 +599,10 @@
       "id": "title_line_height",
       "label": "Line height",
       "min": 18,
-      "max": 60,
+      "max": 44,
       "step": 1,
       "unit": "px",
-      "default": 50
+      "default": 26
     },
     {
       "type": "header",
