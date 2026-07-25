@@ -362,6 +362,7 @@
         "coming_card_1a": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
@@ -373,6 +374,7 @@
         "coming_card_2b": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "image": "shopify://shop_images/little-girl-with-apron-painting.png",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
@@ -384,6 +386,7 @@
         "coming_card_3c": {
           "type": "collection_card",
           "settings": {
+            "collection": "",
             "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
@@ -400,15 +403,14 @@
       ],
       "name": "Custom coming next",
       "settings": {
-        "heading": "What's Coming Next 🎉",
+        "heading": "What's Coming Next",
         "heading_size": "h2",
         "heading_color": "#159a8d",
-        "subheading": "<p>Fun and exciting adventure just for kids! Get ready to discover brand-new surprises.</p>",
+        "subheading": "<p>Fun and exciting adventure just for kids! 🎉 Get ready to discover brand-new surprises</p>",
         "background_color": "#ffffff",
         "content_width": "full_width",
         "container_width": 1200,
-        "spacing_left": 100,
-        "spacing_right": 0,
+        "spacing_horizontal": 0,
         "card_gap": 40,
         "border_radius": 16,
         "desktop_layout": "carousel",
@@ -430,6 +432,7 @@
         "label_font_size": 12,
         "label_font_weight": "400",
         "label_color": "#8c8c8c",
+        "label_text_transform": "none",
         "title_font_size_desktop": 22,
         "title_font_size_mobile": 18,
         "title_font_weight": "600",
