@@ -444,6 +444,32 @@
         "overlay_color": "#000000",
         "overlay_opacity": 30
       }
+    },
+    "image_with_content_9fRt2K": {
+      "type": "custom-image-with-content",
+      "settings": {
+        "image": "shopify://shop_images/image_438.png",
+        "image_position": "left",
+        "image_width": 280,
+        "image_radius": 140,
+        "name": "Sruthi Sankar",
+        "name_size": "h2",
+        "name_color": "#159a8d",
+        "bio": "<p>I am an Architect by profession and a crafter by passion. During Covid I had to find a way to entertain and educate my son and stumbled upon this concept. Luckily being from a Textile Industry background I could find all the resources at hands reach and began designing my own collections. Exposing my samples to the outside world showed me the real potential and gave me the confidence to bring Felt Barn to the Market</p>",
+        "bio_color": "#1a1a1a",
+        "role_text": "Creative Head & Owner of Felt Barn by Sruthi Sankar",
+        "role_color": "#1a1a1a",
+        "button_label": "Get In Touch",
+        "button_link": "",
+        "button_bg_color": "#c2185b",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#e85a91",
+        "button_hover_text_color": "#ffffff",
+        "background_color": "#cff2f7",
+        "column_gap": 40,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -452,6 +478,7 @@
     "shop_by_theme_4mNb7R",
     "explore_collection_7pXq9Z",
     "customer_reviews_5wZk3T",
-    "coming_next_2hTf8L"
+    "coming_next_2hTf8L",
+    "image_with_content_9fRt2K"
   ]
 }
