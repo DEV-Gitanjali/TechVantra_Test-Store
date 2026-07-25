@@ -14,6 +14,7 @@ if (!customElements.get('coming-next-carousel')) {
       this.autoplayEnabled = this.dataset.autoplay === 'true';
       this.autoplaySpeed = (parseFloat(this.dataset.autoplaySpeed) || 4) * 1000;
       this.dragEnabled = this.dataset.drag === 'true';
+      this.transitionSpeed = parseInt(this.dataset.transitionSpeed, 10) || 400;
       this.reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       const featured = parseInt(this.dataset.featuredIndex, 10);
@@ -21,14 +22,15 @@ if (!customElements.get('coming-next-carousel')) {
 
       this.isDragging = false;
       this.autoplayTimer = null;
+      this.scrollAnimationFrame = null;
 
       if (!this.track || this.slides.length === 0 || this.isGrid) return;
 
       this.bindEvents();
+      this.setActiveButton(this.prevButton);
 
       requestAnimationFrame(() => {
-        this.scrollToIndex(this.currentIndex, false);
-        this.updateActive();
+        this.applyActiveState(this.currentIndex);
       });
 
       if (this.autoplayEnabled && !this.reduceMotion && this.slides.length > 1) {
@@ -39,8 +41,18 @@ if (!customElements.get('coming-next-carousel')) {
     bindEvents() {
       this.track.addEventListener('scroll', () => this.onScroll(), { passive: true });
 
-      if (this.prevButton) this.prevButton.addEventListener('click', () => this.prev());
-      if (this.nextButton) this.nextButton.addEventListener('click', () => this.next());
+      if (this.prevButton) {
+        this.prevButton.addEventListener('click', () => {
+          this.prev();
+          this.setActiveButton(this.prevButton);
+        });
+      }
+      if (this.nextButton) {
+        this.nextButton.addEventListener('click', () => {
+          this.next();
+          this.setActiveButton(this.nextButton);
+        });
+      }
 
       this.dots.forEach((dot) => {
         dot.addEventListener('click', () => this.goTo(parseInt(dot.dataset.index, 10)));
@@ -86,6 +98,7 @@ if (!customElements.get('coming-next-carousel')) {
 
       this.track.addEventListener('pointerdown', (event) => {
         if (event.pointerType !== 'mouse') return;
+        this.cancelScrollAnimation();
         this.isDragging = true;
         startX = event.clientX;
         startScroll = this.track.scrollLeft;
@@ -118,14 +131,18 @@ if (!customElements.get('coming-next-carousel')) {
     }
 
     updateActive() {
-      this.currentIndex = this.getClosestIndex();
+      this.applyActiveState(this.getClosestIndex());
+    }
 
-      this.slides.forEach((slide, index) => {
-        slide.classList.toggle('is-active', index === this.currentIndex);
+    applyActiveState(index) {
+      this.currentIndex = index;
+
+      this.slides.forEach((slide, i) => {
+        slide.classList.toggle('is-active', i === this.currentIndex);
       });
 
-      this.dots.forEach((dot, index) => {
-        const active = index === this.currentIndex;
+      this.dots.forEach((dot, i) => {
+        const active = i === this.currentIndex;
         dot.classList.toggle('is-active', active);
         dot.setAttribute('aria-selected', active ? 'true' : 'false');
       });
@@ -140,7 +157,40 @@ if (!customElements.get('coming-next-carousel')) {
       const slide = this.slides[index];
       if (!slide) return;
       const left = slide.offsetLeft + slide.offsetWidth / 2 - this.track.clientWidth / 2;
-      this.track.scrollTo({ left, behavior: smooth && !this.reduceMotion ? 'smooth' : 'auto' });
+      if (smooth && !this.reduceMotion) {
+        this.animateScrollTo(left);
+      } else {
+        this.cancelScrollAnimation();
+        this.track.scrollLeft = left;
+      }
+    }
+
+    animateScrollTo(targetLeft) {
+      this.cancelScrollAnimation();
+      const startLeft = this.track.scrollLeft;
+      const distance = targetLeft - startLeft;
+      const duration = this.transitionSpeed;
+      if (Math.abs(distance) < 1 || duration <= 0) {
+        this.track.scrollLeft = targetLeft;
+        return;
+      }
+      const startTime = performance.now();
+      const easeInOutCubic = (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2);
+
+      const step = (now) => {
+        const progress = Math.min((now - startTime) / duration, 1);
+        this.track.scrollLeft = startLeft + distance * easeInOutCubic(progress);
+        this.scrollAnimationFrame = progress < 1 ? requestAnimationFrame(step) : null;
+      };
+
+      this.scrollAnimationFrame = requestAnimationFrame(step);
+    }
+
+    cancelScrollAnimation() {
+      if (this.scrollAnimationFrame) {
+        cancelAnimationFrame(this.scrollAnimationFrame);
+        this.scrollAnimationFrame = null;
+      }
     }
 
     goTo(index) {
@@ -162,6 +212,11 @@ if (!customElements.get('coming-next-carousel')) {
       this.goTo(this.currentIndex - 1);
     }
 
+    setActiveButton(button) {
+      if (this.prevButton) this.prevButton.classList.toggle('is-current', button === this.prevButton);
+      if (this.nextButton) this.nextButton.classList.toggle('is-current', button === this.nextButton);
+    }
+
     startAutoplay() {
       if (!this.autoplayEnabled || this.reduceMotion || this.slides.length < 2) return;
       this.stopAutoplay();
@@ -177,6 +232,7 @@ if (!customElements.get('coming-next-carousel')) {
 
     disconnectedCallback() {
       this.stopAutoplay();
+      this.cancelScrollAnimation();
       if (this.resizeObserver) this.resizeObserver.disconnect();
     }
   }
