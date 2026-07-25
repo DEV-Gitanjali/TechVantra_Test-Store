@@ -28,18 +28,6 @@
 
     if (prevEl && nextEl) {
       config.navigation = { prevEl: prevEl, nextEl: nextEl };
-
-      var setActiveArrow = function (activeEl) {
-        prevEl.classList.toggle('is-current', activeEl === prevEl);
-        nextEl.classList.toggle('is-current', activeEl === nextEl);
-      };
-      setActiveArrow(prevEl);
-      prevEl.addEventListener('click', function () {
-        setActiveArrow(prevEl);
-      });
-      nextEl.addEventListener('click', function () {
-        setActiveArrow(nextEl);
-      });
     }
 
     if (autoplayEnabled) {

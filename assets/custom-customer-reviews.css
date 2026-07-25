@@ -65,28 +65,28 @@
   height: 100%;
 }
 
-.customer-reviews__arrow {
+.customer-reviews__arrow--prev {
+  border: none;
+  background: #0d5c55;
+  color: #ffffff;
+}
+
+.customer-reviews__arrow--prev svg {
+  transform: rotate(180deg);
+}
+
+.customer-reviews__arrow--prev:hover {
+  background: #083733;
+}
+
+.customer-reviews__arrow--next {
   border: 1.5px solid #0d5c55;
   background: transparent;
   color: #0d5c55;
 }
 
-.customer-reviews__arrow:hover {
+.customer-reviews__arrow--next:hover {
   background: rgba(13, 92, 85, 0.08);
-}
-
-.customer-reviews__arrow.is-current {
-  border-color: #0d5c55;
-  background: #0d5c55;
-  color: #ffffff;
-}
-
-.customer-reviews__arrow.is-current:hover {
-  background: #083733;
-}
-
-.customer-reviews__arrow--prev svg {
-  transform: rotate(180deg);
 }
 
 .customer-reviews__arrow.swiper-button-disabled {

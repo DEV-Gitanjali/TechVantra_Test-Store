@@ -54,19 +54,14 @@
   #shopify-section-{{ section.id }} .coming-next__label {
     font-size: {{ section.settings.label_font_size }}px;
     font-weight: {{ section.settings.label_font_weight }};
-    font-style: normal;
     color: {{ section.settings.label_color }};
-    line-height: 20px;
-    letter-spacing: normal;
     text-transform: {{ section.settings.label_text_transform }};
   }
 
   #shopify-section-{{ section.id }} .coming-next__title {
     font-weight: {{ section.settings.title_font_weight }};
-    font-style: normal;
     color: {{ section.settings.title_color }};
     line-height: {{ section.settings.title_line_height }}px;
-    letter-spacing: -0.03em;
     font-size: {{ section.settings.title_font_size_mobile }}px;
   }
 
@@ -154,7 +149,6 @@
           data-loop="{{ section.settings.enable_infinite_loop }}"
           data-drag="{{ section.settings.enable_drag }}"
           data-featured-index="{{ featured_index }}"
-          data-transition-speed="{{ section.settings.transition_speed }}"
         >
           <ul id="ComingNext-{{ section.id }}" class="coming-next__track" role="list">
             {%- for block in section.blocks -%}
@@ -501,7 +495,7 @@
       "type": "checkbox",
       "id": "enable_drag",
       "label": "Enable mouse drag to swipe",
-      "default": false
+      "default": true
     },
     {
       "type": "range",
@@ -525,7 +519,7 @@
       "max": 20,
       "step": 1,
       "unit": "px",
-      "default": 13
+      "default": 12
     },
     {
       "type": "select",
@@ -566,10 +560,10 @@
       "id": "title_font_size_desktop",
       "label": "Font size (desktop)",
       "min": 16,
-      "max": 48,
+      "max": 40,
       "step": 1,
       "unit": "px",
-      "default": 40
+      "default": 22
     },
     {
       "type": "range",
@@ -590,7 +584,7 @@
         { "value": "600", "label": "Semibold" },
         { "value": "700", "label": "Bold" }
       ],
-      "default": "500"
+      "default": "600"
     },
     {
       "type": "color",
@@ -603,10 +597,10 @@
       "id": "title_line_height",
       "label": "Line height",
       "min": 18,
-      "max": 60,
+      "max": 44,
       "step": 1,
       "unit": "px",
-      "default": 50
+      "default": 26
     },
     {
       "type": "header",

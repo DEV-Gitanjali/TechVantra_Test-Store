@@ -256,28 +256,28 @@
   height: 1.4rem;
 }
 
-.hero-banner-slider__arrow {
-  border: 0.1rem solid rgba(255, 255, 255, 0.8);
-  background: transparent;
-  color: #ffffff;
-}
-
-.hero-banner-slider__arrow:hover {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.hero-banner-slider__arrow.is-current {
-  border-color: #ffffff;
+.hero-banner-slider__arrow--prev {
+  border: none;
   background: #ffffff;
   color: #1a1a1a;
 }
 
-.hero-banner-slider__arrow.is-current:hover {
+.hero-banner-slider__arrow--prev:hover {
   background: #f0f0f0;
 }
 
 .hero-banner-slider__arrow--prev svg {
   transform: rotate(180deg);
+}
+
+.hero-banner-slider__arrow--next {
+  border: 0.1rem solid rgba(255, 255, 255, 0.8);
+  background: transparent;
+  color: #ffffff;
+}
+
+.hero-banner-slider__arrow--next:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .hero-banner-slider__counter {
