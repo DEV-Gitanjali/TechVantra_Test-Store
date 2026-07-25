@@ -470,6 +470,68 @@
         "padding_top": 48,
         "padding_bottom": 48
       }
+    },
+    "instagram_feed_6mLp8Q": {
+      "type": "custom-instagram-feed",
+      "blocks": {
+        "instagram_post_1a": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_831.png",
+            "link": ""
+          }
+        },
+        "instagram_post_2b": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_832.png",
+            "link": ""
+          }
+        },
+        "instagram_post_3c": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_830.png",
+            "link": ""
+          }
+        },
+        "instagram_post_4d": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
+            "link": ""
+          }
+        },
+        "instagram_post_5e": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "instagram_post_1a",
+        "instagram_post_2b",
+        "instagram_post_3c",
+        "instagram_post_4d",
+        "instagram_post_5e"
+      ],
+      "name": "Instagram feed",
+      "settings": {
+        "heading": "We're on Instagram",
+        "heading_size": "h1",
+        "heading_color": "#159a8d",
+        "background_color": "#ffffff",
+        "columns_desktop": 5,
+        "item_spacing": 4,
+        "open_in_new_tab": true,
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "icon_color": "#ffffff",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -479,6 +541,7 @@
     "explore_collection_7pXq9Z",
     "customer_reviews_5wZk3T",
     "coming_next_2hTf8L",
-    "image_with_content_9fRt2K"
+    "image_with_content_9fRt2K",
+    "instagram_feed_6mLp8Q"
   ]
 }
