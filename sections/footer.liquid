@@ -10,6 +10,100 @@
     margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
   }
 
+  #shopify-section-{{ section.id }} .footer {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  #shopify-section-{{ section.id }} .list-menu__item--active {
+    color: {{ section.settings.active_link_color }};
+  }
+
+  #shopify-section-{{ section.id }} .footer__blocks-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3.2rem 2.4rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand {
+    flex: 1 0 100%;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand .footer-block__image-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand:not(.footer-block--brand-divider) {
+    margin-bottom: -1.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand-divider {
+    padding-bottom: 3.2rem;
+    border-bottom: 0.1rem dashed rgba(var(--color-foreground), 0.35);
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand-divider .footer-block__details-content {
+    max-width: 87rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--menu-column {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-text {
+    margin-bottom: 1.2rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: rgba(var(--color-foreground), 0.75);
+    text-decoration: none;
+    margin-bottom: 0.8rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .footer__content-bottom-wrapper--socials {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social--bottom {
+    justify-content: flex-start;
+  }
+
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section.id }} .footer-block--menu-column {
+      flex: 1 1 0%;
+      width: auto;
+      max-width: none;
+    }
+  }
+
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
     padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
@@ -68,7 +162,7 @@
           >
             {%- for block in section.blocks -%}
               <div
-                class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if block.type == 'link_list' or block.type == 'contact_info' %} footer-block--menu-column{% endif %}{% if block.type == 'image' %} footer-block--brand{% endif %}{% if block.type == 'text' %} footer-block--brand footer-block--brand-divider{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                 {{ block.shopify_attributes }}
                 {% if settings.animations_reveal_on_scroll %}
                   data-cascade
@@ -130,6 +224,28 @@
                       {%- endif -%}
                       {%- if block.settings.show_social and has_social_icons -%}
                         {%- render 'social-icons', class: 'footer__list-social' -%}
+                      {%- endif -%}
+                    </div>
+                  {%- when 'contact_info' -%}
+                    <div class="footer-block__contact-info">
+                      {%- if block.settings.availability_text != blank -%}
+                        <div class="footer-block__contact-text rte">{{ block.settings.availability_text }}</div>
+                      {%- endif -%}
+                      {%- if block.settings.phone != blank -%}
+                        <a href="tel:{{ block.settings.phone | remove: ' ' }}" class="footer-block__contact-link">
+                          <span class="footer-block__contact-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                          </span>
+                          {{ block.settings.phone }}
+                        </a>
+                      {%- endif -%}
+                      {%- if block.settings.email != blank -%}
+                        <a href="mailto:{{ block.settings.email }}" class="footer-block__contact-link">
+                          <span class="footer-block__contact-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                          </span>
+                          {{ block.settings.email }}
+                        </a>
                       {%- endif -%}
                     </div>
                   {%- when 'image' -%}
@@ -242,9 +358,6 @@
             </div>
           {%- endif -%}
 
-          {%- if section.settings.show_social and has_social_icons -%}
-            {%- render 'social-icons', class: 'footer__list-social' -%}
-          {%- endif -%}
         </div>
       </div>
     {%- endunless -%}
@@ -297,7 +410,10 @@
         {%- endif -%}
       </div>
     </div>
-    <div class="footer__content-bottom-wrapper page-width{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
+    <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--socials{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
+      {%- if section.settings.show_social and has_social_icons -%}
+        {%- render 'social-icons', class: 'footer__list-social footer__list-social--bottom' -%}
+      {%- endif -%}
       <div class="footer__copyright caption">
         <small class="copyright__content"
           >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
@@ -382,6 +498,36 @@
       ]
     },
     {
+      "type": "contact_info",
+      "name": "Contact information",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Contact Info",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "availability_text",
+          "default": "<p>Available between 8AM to 8PM. Ready to answer your questions.</p>",
+          "label": "Availability text"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "default": "+91 0123456789",
+          "label": "Phone number"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "default": "hello@feltbarn.com",
+          "label": "Email"
+        }
+      ]
+    },
+    {
       "type": "image",
       "name": "Image",
       "settings": [
@@ -429,6 +575,18 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#BEE3F8"
+    },
+    {
+      "type": "color",
+      "id": "active_link_color",
+      "label": "Active link color",
+      "default": "#FF7A93"
     },
     {
       "type": "header",
