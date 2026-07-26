@@ -29,20 +29,6 @@
             "subtext": "<p>\"Step into a world where colors dance, stories come alive, and every detail is made just for curious little hearts. Our kids' collection is designed to celebrate creativity, learning, and laughter — making every day brighter, more exciting, and full of endless possibilities!</p>"
           }
         },
-        "link_list_GJ8DLq": {
-          "type": "link_list",
-          "settings": {
-            "heading": "My Accounts",
-            "menu": "my-accounts"
-          }
-        },
-        "link_list_J7hNnb": {
-          "type": "link_list",
-          "settings": {
-            "heading": "Popular Collections",
-            "menu": "popular-collections"
-          }
-        },
         "link_list_BGCNFY": {
           "type": "link_list",
           "settings": {
@@ -55,6 +41,20 @@
           "settings": {
             "heading": "Policies",
             "menu": "policies"
+          }
+        },
+        "link_list_J7hNnb": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Popular Collections",
+            "menu": "popular-collections"
+          }
+        },
+        "link_list_GJ8DLq": {
+          "type": "link_list",
+          "settings": {
+            "heading": "My Accounts",
+            "menu": "my-accounts"
           }
         },
         "contact_info_9kTp3L": {
@@ -78,6 +78,8 @@
       ],
       "settings": {
         "color_scheme": "scheme-1",
+        "background_color": "#B3E7E7",
+        "active_link_color": "#ff7a93",
         "newsletter_enable": false,
         "newsletter_heading": "Subscribe to our emails",
         "enable_follow_on_shop": true,

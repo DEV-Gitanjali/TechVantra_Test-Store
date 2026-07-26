@@ -6,6 +6,8 @@
 {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
+  {{ section.settings.text_font | font_face: font_display: 'swap' }}
+
   .footer {
     margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
   }
@@ -14,8 +16,53 @@
     background-color: {{ section.settings.background_color }};
   }
 
+  #shopify-section-{{ section.id }} .footer-block__heading {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content,
+  #shopify-section-{{ section.id }} .footer-block__contact-text,
+  #shopify-section-{{ section.id }} .footer-block__contact-link,
+  #shopify-section-{{ section.id }} .list-menu__item--link,
+  #shopify-section-{{ section.id }} .copyright__content {
+    font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};
+    font-weight: {{ section.settings.text_font.weight }};
+    font-style: {{ section.settings.text_font.style }};
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content.list-unstyled li {
+    margin-bottom: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content.list-unstyled li:last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .list-menu__item--link {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-text,
+  #shopify-section-{{ section.id }} .footer-block__contact-link {
+    font-size: 16px;
+  }
+
   #shopify-section-{{ section.id }} .list-menu__item--active {
+    text-decoration: none;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content .list-menu__item--active {
+    color: rgba(var(--color-foreground), 0.75);
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content .list-menu__item--link:hover {
     color: {{ section.settings.active_link_color }};
+    text-decoration: none;
   }
 
   #shopify-section-{{ section.id }} .footer__blocks-wrapper {
@@ -94,6 +141,22 @@
 
   #shopify-section-{{ section.id }} .footer__list-social--bottom {
     justify-content: flex-start;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social {
+    gap: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social .list-social__link {
+    border-radius: 50%;
+    border: 2px solid #000000;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social .list-social__link:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
   }
 
   @media screen and (min-width: 990px) {
@@ -234,7 +297,7 @@
                       {%- if block.settings.phone != blank -%}
                         <a href="tel:{{ block.settings.phone | remove: ' ' }}" class="footer-block__contact-link">
                           <span class="footer-block__contact-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2Z"/></svg>
                           </span>
                           {{ block.settings.phone }}
                         </a>
@@ -242,7 +305,7 @@
                       {%- if block.settings.email != blank -%}
                         <a href="mailto:{{ block.settings.email }}" class="footer-block__contact-link">
                           <span class="footer-block__contact-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 2v.01L12 12l8-5.99V6H4Zm16 12V8.24l-7.4 5.55a1 1 0 0 1-1.2 0L4 8.24V18h16Z"/></svg>
                           </span>
                           {{ block.settings.email }}
                         </a>
@@ -422,13 +485,13 @@
         {%- if section.settings.show_policy -%}
           <ul class="policies list-unstyled">
             {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
+              {%- unless policy == blank or policy.url contains 'privacy-policy' -%}
                 <li>
                   <small class="copyright__content"
                     ><a href="{{ policy.url }}">{{ policy.title | escape }}</a></small
                   >
                 </li>
-              {%- endif -%}
+              {%- endunless -%}
             {%- endfor -%}
           </ul>
         {%- endif -%}
@@ -587,6 +650,12 @@
       "id": "active_link_color",
       "label": "Active link color",
       "default": "#FF7A93"
+    },
+    {
+      "type": "font_picker",
+      "id": "text_font",
+      "label": "Text font",
+      "default": "poppins_n4"
     },
     {
       "type": "header",

@@ -177,8 +177,8 @@
   max-width: var(--hbs-content-max-width, 480px);
   color: var(--hbs-heading-color, #ffffff);
   font-size: var(--hbs-heading-size-mobile, 2.8rem);
-  font-weight: 600;
-  line-height: 1.15;
+  font-weight: 500;
+  line-height: 68px;
   letter-spacing: 0;
   margin: 0 0 1rem;
   text-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.35);
@@ -213,11 +213,14 @@
   display: inline-block;
   background-color: var(--hbs-btn-bg, #fd8db9);
   color: var(--hbs-btn-text, #ffffff);
-  font-size: var(--hbs-btn-font-size, 1.4rem);
-  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  font-style: semi-bold;
   border-radius: var(--hbs-btn-radius, 30px);
   padding: 1.2rem 2.8rem;
   text-decoration: none;
+  text-transform: uppercase;
   border: none;
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;

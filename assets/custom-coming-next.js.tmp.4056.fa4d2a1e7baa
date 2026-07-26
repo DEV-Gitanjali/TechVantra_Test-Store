@@ -23,7 +23,6 @@ if (!customElements.get('coming-next-carousel')) {
       this.isDragging = false;
       this.autoplayTimer = null;
       this.scrollAnimationFrame = null;
-      this.userInteracted = false;
 
       if (!this.track || this.slides.length === 0 || this.isGrid) return;
 
@@ -72,15 +71,7 @@ if (!customElements.get('coming-next-carousel')) {
 
       if (this.dragEnabled) this.bindDrag();
 
-      this.resizeObserverPrimed = false;
-      this.resizeObserver = new ResizeObserver(() => {
-        if (!this.resizeObserverPrimed) {
-          this.resizeObserverPrimed = true;
-          return;
-        }
-        if (!this.userInteracted) return;
-        this.updateActive();
-      });
+      this.resizeObserver = new ResizeObserver(() => this.updateActive());
       this.resizeObserver.observe(this.track);
     }
 
@@ -107,7 +98,6 @@ if (!customElements.get('coming-next-carousel')) {
 
       this.track.addEventListener('pointerdown', (event) => {
         if (event.pointerType !== 'mouse') return;
-        this.userInteracted = true;
         this.cancelScrollAnimation();
         this.isDragging = true;
         startX = event.clientX;
@@ -121,7 +111,6 @@ if (!customElements.get('coming-next-carousel')) {
     }
 
     onScroll() {
-      if (!this.userInteracted) return;
       if (this.scrollRaf) cancelAnimationFrame(this.scrollRaf);
       this.scrollRaf = requestAnimationFrame(() => this.updateActive());
     }
@@ -209,7 +198,6 @@ if (!customElements.get('coming-next-carousel')) {
     }
 
     goTo(index) {
-      this.userInteracted = true;
       let target = index;
       if (this.loop) {
         target = (index + this.slides.length) % this.slides.length;
