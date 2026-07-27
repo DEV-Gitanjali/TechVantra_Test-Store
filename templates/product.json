@@ -38,6 +38,17 @@
           "type": "quantity_selector",
           "settings": {}
         },
+        "personalization_field": {
+          "type": "personalization_field",
+          "settings": {
+            "label": "Name of the Child*",
+            "label_color": "#FF6F91",
+            "placeholder": "Enter your Child's Full Name",
+            "property_name": "Child's Name",
+            "required": true,
+            "error_message": "This is a required field"
+          }
+        },
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
@@ -45,8 +56,19 @@
             "show_gift_card_recipient": true
           }
         },
+        "pickup_info": {
+          "type": "pickup_info",
+          "settings": {
+            "store_name": "Sruthi's Design Solutions",
+            "ready_time": "Usually Ready In 2-4 Days",
+            "link_text": "View Store Information",
+            "link_url": "",
+            "background_color": "#F5F5F5"
+          }
+        },
         "product_addons": {
           "type": "product_addons",
+          "disabled": true,
           "settings": {
             "heading": "Add Ons",
             "heading_color": "#ff6f91",
@@ -76,14 +98,15 @@
         "complementary_WYVrnd": {
           "type": "complementary",
           "settings": {
-            "block_heading": "Pairs well with",
-            "make_collapsible_row": false,
-            "icon": "price_tag",
+            "block_heading": "Add Ons",
+            "make_collapsible_row": true,
+            "icon": "none",
             "product_list_limit": 10,
             "products_per_page": 4,
             "pagination_style": "counter",
             "image_ratio": "square",
-            "enable_quick_add": false
+            "enable_quick_add": true,
+            "caption_text": "Choose from the above Add Ons to make your Binder Extra Special"
           }
         }
       },
@@ -92,8 +115,10 @@
         "title",
         "price",
         "variant_picker",
+        "personalization_field",
         "quantity_selector",
         "buy_buttons",
+        "pickup_info",
         "product_addons",
         "description",
         "share",
@@ -146,6 +171,7 @@
     },
     "video_gJXM4b": {
       "type": "video",
+      "disabled": true,
       "name": "t:sections.video.presets.name",
       "settings": {
         "heading": "",

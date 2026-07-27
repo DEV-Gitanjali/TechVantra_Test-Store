@@ -183,13 +183,100 @@
     #MainProduct-{{ section.id }} .product-addons__caption {
       margin: 1.6rem 0 0;
       font-size: 1.3rem;
-      color: rgba(var(--color-foreground), 0.7);
+      color: rgba(var(--color-foreground), 0.45);
     }
 
     @media screen and (max-width: 749px) {
       #MainProduct-{{ section.id }} .product-addons__grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    #MainProduct-{{ section.id }} .product-personalization__label {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      color: var(--product-personalization-label-color, #ff6f91);
+    }
+
+    #MainProduct-{{ section.id }} .product-personalization__input {
+      display: block;
+      width: 100%;
+      padding: 1.4rem 1.6rem;
+      border: 0.1rem solid transparent;
+      border-radius: 0.8rem;
+      background-color: rgba(var(--color-foreground), 0.06);
+      font-size: 1.4rem;
+      color: rgb(var(--color-foreground));
+    }
+
+    #MainProduct-{{ section.id }} .product-personalization__input::placeholder {
+      color: rgba(var(--color-foreground), 0.5);
+    }
+
+    #MainProduct-{{ section.id }} .product-personalization.has-error .product-personalization__input {
+      border-color: #e0293e;
+    }
+
+    #MainProduct-{{ section.id }} .product-personalization__error {
+      display: none;
+      margin-top: 0.8rem;
+      color: #e0293e;
+      font-size: 1.3rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-personalization.has-error .product-personalization__error {
+      display: block;
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      padding: 1.6rem;
+      border-radius: 1.2rem;
+      background-color: var(--product-pickup-info-bg, #f5f5f5);
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__icon {
+      display: flex;
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      color: rgb(var(--color-foreground));
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__content {
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__title {
+      margin: 0 0 0.6rem;
+      font-weight: 600;
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+      font-size: 1.3rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__ready {
+      color: rgba(var(--color-foreground), 0.65);
+    }
+
+    #MainProduct-{{ section.id }} .product-pickup-info__link {
+      color: currentColor;
+      text-decoration: underline;
     }
   {%- endstyle -%}
 
@@ -832,6 +919,11 @@
                               </label>
                             {%- endfor -%}
                           </product-addons>
+                          {%- if block.settings.caption_text != blank -%}
+                            <p class="product-addons__caption">
+                              {{ block.settings.caption_text | replace: '[Product]', product.title }}
+                            </p>
+                          {%- endif -%}
                           {%- if block.settings.make_collapsible_row -%}
                             </details>
                           {%- endif -%}
@@ -906,6 +998,60 @@
                       {%- endif -%}
                     </div>
                   {%- endif -%}
+                {%- when 'personalization_field' -%}
+                  <script src="{{ 'product-personalization.js' | asset_url }}" defer="defer"></script>
+                  <div
+                    class="product-personalization"
+                    style="--product-personalization-label-color: {{ block.settings.label_color }};"
+                    {{ block.shopify_attributes }}
+                  >
+                    <label
+                      class="product-personalization__label"
+                      for="Personalization-{{ block.id }}-{{ section.id }}"
+                    >
+                      {{ block.settings.label }}
+                    </label>
+                    <input
+                      type="text"
+                      class="product-personalization__input"
+                      id="Personalization-{{ block.id }}-{{ section.id }}"
+                      name="properties[{{ block.settings.property_name }}]"
+                      placeholder="{{ block.settings.placeholder | escape }}"
+                      form="{{ product_form_id }}"
+                      data-error-message="{{ block.settings.error_message | escape }}"
+                      {% if block.settings.required %}
+                        required
+                      {% endif %}
+                    >
+                    <span class="product-personalization__error" role="alert"></span>
+                  </div>
+                {%- when 'pickup_info' -%}
+                  <div
+                    class="product-pickup-info"
+                    style="--product-pickup-info-bg: {{ block.settings.background_color }};"
+                    {{ block.shopify_attributes }}
+                  >
+                    <span class="product-pickup-info__icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                    </span>
+                    <div class="product-pickup-info__content">
+                      {%- if block.settings.store_name != blank -%}
+                        <p class="product-pickup-info__title">
+                          Pickup available at {{ block.settings.store_name }}
+                        </p>
+                      {%- endif -%}
+                      <div class="product-pickup-info__row">
+                        {%- if block.settings.ready_time != blank -%}
+                          <span class="product-pickup-info__ready">{{ block.settings.ready_time }}</span>
+                        {%- endif -%}
+                        {%- if block.settings.link_text != blank -%}
+                          <a class="product-pickup-info__link" href="{{ block.settings.link_url | default: '#' }}">
+                            {{- block.settings.link_text -}}
+                          </a>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
                 {%- when 'icon-with-text' -%}
                   {% render 'icon-with-text', block: block %}
               {%- endcase -%}
@@ -1762,6 +1908,13 @@
           "id": "enable_quick_add",
           "label": "t:sections.main-product.blocks.complementary_products.settings.enable_quick_add.label",
           "default": false
+        },
+        {
+          "type": "text",
+          "id": "caption_text",
+          "label": "Caption text",
+          "info": "Use [Product] as a placeholder for the product title. Leave blank to hide.",
+          "default": "Choose from the above Add Ons to make your [Product] Extra Special"
         }
       ]
     },
@@ -1836,6 +1989,84 @@
           "type": "product",
           "id": "addon_4_product",
           "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "personalization_field",
+      "name": "Personalization field",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Field label",
+          "default": "Name of the Child*"
+        },
+        {
+          "type": "color",
+          "id": "label_color",
+          "label": "Label color",
+          "default": "#FF6F91"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "Placeholder text",
+          "default": "Enter your Child's Full Name"
+        },
+        {
+          "type": "text",
+          "id": "property_name",
+          "label": "Cart property name",
+          "info": "Shown against the order line item, e.g. \"Child's Name\".",
+          "default": "Child's Name"
+        },
+        {
+          "type": "checkbox",
+          "id": "required",
+          "label": "Required field",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "error_message",
+          "label": "Error message",
+          "default": "This is a required field"
+        }
+      ]
+    },
+    {
+      "type": "pickup_info",
+      "name": "Pickup info",
+      "settings": [
+        {
+          "type": "text",
+          "id": "store_name",
+          "label": "Store name",
+          "default": "Sruthi's Design Solutions"
+        },
+        {
+          "type": "text",
+          "id": "ready_time",
+          "label": "Ready time text",
+          "default": "Usually Ready In 2-4 Days"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "View Store Information"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#F5F5F5"
         }
       ]
     },
