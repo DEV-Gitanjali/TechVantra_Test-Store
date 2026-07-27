@@ -27,6 +27,10 @@
           "type": "price",
           "settings": {}
         },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -34,20 +38,38 @@
             "swatch_shape": "circle"
           }
         },
-        "quantity_selector": {
-          "type": "quantity_selector",
+        "zippy_zipcode_validator_zippy_widget_Cbf3CN": {
+          "type": "shopify://apps/zippy-zipcode-validator/blocks/zippy_widget/14b4faf5-2197-4ce1-b361-3bf431fbc80f",
           "settings": {}
         },
         "personalization_field": {
           "type": "personalization_field",
           "settings": {
             "label": "Name of the Child*",
-            "label_color": "#FF6F91",
+            "label_color": "#ff6f91",
             "placeholder": "Enter your Child's Full Name",
             "property_name": "Child's Name",
             "required": true,
             "error_message": "This is a required field"
           }
+        },
+        "complementary_WYVrnd": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Add Ons",
+            "make_collapsible_row": true,
+            "icon": "none",
+            "product_list_limit": 10,
+            "products_per_page": 4,
+            "pagination_style": "counter",
+            "image_ratio": "square",
+            "enable_quick_add": true,
+            "caption_text": "Choose from the above Add Ons to make your Binder Extra Special"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
         },
         "buy_buttons": {
           "type": "buy_buttons",
@@ -63,7 +85,7 @@
             "ready_time": "Usually Ready In 2-4 Days",
             "link_text": "View Store Information",
             "link_url": "",
-            "background_color": "#F5F5F5"
+            "background_color": "#f5f5f5"
           }
         },
         "product_addons": {
@@ -81,10 +103,6 @@
             "addon_4_product": ""
           }
         },
-        "description": {
-          "type": "description",
-          "settings": {}
-        },
         "share": {
           "type": "share",
           "settings": {
@@ -95,18 +113,22 @@
             "help_link": ""
           }
         },
-        "complementary_WYVrnd": {
-          "type": "complementary",
+        "collapsible_tab_3KbJrG": {
+          "type": "collapsible_tab",
           "settings": {
-            "block_heading": "Add Ons",
-            "make_collapsible_row": true,
-            "icon": "none",
-            "product_list_limit": 10,
-            "products_per_page": 4,
-            "pagination_style": "counter",
-            "image_ratio": "square",
-            "enable_quick_add": true,
-            "caption_text": "Choose from the above Add Ons to make your Binder Extra Special"
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "content": "",
+            "page": ""
+          }
+        },
+        "collapsible_tab_dp3ejN": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "content": "",
+            "page": ""
           }
         }
       },
@@ -114,15 +136,18 @@
         "vendor",
         "title",
         "price",
+        "description",
         "variant_picker",
+        "zippy_zipcode_validator_zippy_widget_Cbf3CN",
         "personalization_field",
+        "complementary_WYVrnd",
         "quantity_selector",
         "buy_buttons",
         "pickup_info",
         "product_addons",
-        "description",
         "share",
-        "complementary_WYVrnd"
+        "collapsible_tab_3KbJrG",
+        "collapsible_tab_dp3ejN"
       ],
       "settings": {
         "enable_sticky_info": true,
@@ -151,8 +176,58 @@
         "padding_bottom": 0
       }
     },
+    "video_gJXM4b": {
+      "type": "video",
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_video_looping": false,
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "cover_image": "shopify://shop_images/e008498778af9788f701397fc9a2fd3ee33d8009.jpg",
+        "description": "",
+        "full_width": true,
+        "color_scheme": "",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "custom_product_review": {
+      "type": "custom-product-review",
+      "settings": {
+        "heading": "Customer Review",
+        "heading_color": "#1e3a8a",
+        "background_color": "#ffffff",
+        "empty_state_text": "Be the first to write a review",
+        "write_review_button_text": "Write a Review",
+        "button_color": "#1e8fd5",
+        "button_text_color": "#ffffff",
+        "form_heading": "Write a Review",
+        "rating_label": "Rating",
+        "title_label": "Review Title",
+        "title_placeholder": "Give Your Review a title",
+        "title_max_length": 100,
+        "body_label": "Review Title",
+        "body_placeholder": "Write Your Comments Here",
+        "picture_label": "Picture/Video (optional)",
+        "name_label": "Name (displayed publicly like",
+        "name_example": "John Smith)",
+        "name_placeholder": "Enter Your Name Publicly",
+        "email_label": "Email",
+        "email_placeholder": "Enter Your Email Private",
+        "legal_text": "<p>How we use your data: We'll only contact you about the review you left, and only if necessary.</p>",
+        "cancel_button_text": "Cancel Review",
+        "submit_button_text": "Submit Review",
+        "submit_button_color": "#1a1a1a",
+        "submit_button_text_color": "#ffffff",
+        "success_message": "Thanks! Your review has been sent.",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
     "related-products": {
       "type": "related-products",
+      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "heading_size": "h2",
@@ -168,29 +243,13 @@
         "padding_top": 36,
         "padding_bottom": 28
       }
-    },
-    "video_gJXM4b": {
-      "type": "video",
-      "disabled": true,
-      "name": "t:sections.video.presets.name",
-      "settings": {
-        "heading": "",
-        "heading_size": "h1",
-        "enable_video_looping": false,
-        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "cover_image": "shopify://shop_images/e008498778af9788f701397fc9a2fd3ee33d8009.jpg",
-        "description": "",
-        "full_width": true,
-        "color_scheme": "",
-        "padding_top": 0,
-        "padding_bottom": 0
-      }
     }
   },
   "order": [
     "main",
     "disclosures",
-    "related-products",
-    "video_gJXM4b"
+    "video_gJXM4b",
+    "custom_product_review",
+    "related-products"
   ]
 }

@@ -9,13 +9,18 @@ pickup-availability[available] {
 .pickup-availability-preview {
   align-items: flex-start;
   display: flex;
-  gap: 0.2rem;
-  padding: 1rem 2rem 0 0;
+  gap: 1.2rem;
+  padding: 1.6rem;
+  margin: 1rem 0 0;
+  border-radius: 1.2rem;
+  background-color: rgba(var(--color-foreground), 0.04);
 }
 
-.pickup-availability-preview .icon {
+.pickup-availability-preview .icon,
+.pickup-availability-preview__icon {
   flex-shrink: 0;
-  height: 1.8rem;
+  height: 2rem;
+  width: 2rem;
 }
 
 .pickup-availability-preview .icon-unavailable {
@@ -23,11 +28,23 @@ pickup-availability[available] {
   margin-top: 0.1rem;
 }
 
+.pickup-availability-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.pickup-availability-row .caption {
+  margin: 0;
+}
+
 .pickup-availability-button {
   background-color: transparent;
   color: rgba(var(--color-foreground), 0.75);
   letter-spacing: 0.06rem;
-  padding: 0 0 0.2rem;
+  padding: 0;
   text-align: left;
   text-decoration: underline;
 }
@@ -38,6 +55,10 @@ pickup-availability[available] {
 
 .pickup-availability-info * {
   margin: 0 0 0.6rem;
+}
+
+.pickup-availability-info .caption-large {
+  font-weight: 600;
 }
 
 pickup-availability-drawer {

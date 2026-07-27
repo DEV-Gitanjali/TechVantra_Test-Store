@@ -51,6 +51,21 @@
     #MainProduct-{{ section.id }} .page-width {
       max-width: 100%;
       padding-left: 3.2rem;
+      padding-right: 3.2rem;
+    }
+
+    #MainProduct-{{ section.id }} .product__info-container {
+      max-width: 100%;
+    }
+
+    #MainProduct-{{ section.id }} .product-media-container.constrain-height {
+      --constrained-min-height: 400px;
+    }
+
+    @media screen and (min-width: 750px) {
+      #MainProduct-{{ section.id }} .product-media-container.constrain-height {
+        --constrained-min-height: 600px;
+      }
     }
 
     #MainProduct-{{ section.id }} .product-form__quantity-row {
@@ -278,6 +293,32 @@
       color: currentColor;
       text-decoration: underline;
     }
+
+    #MainProduct-{{ section.id }} .product__breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.2rem;
+      font-size: 1.3rem;
+    }
+
+    #MainProduct-{{ section.id }} .product__breadcrumb a {
+      color: rgba(var(--color-foreground), 0.6);
+      text-decoration: none;
+    }
+
+    #MainProduct-{{ section.id }} .product__breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    #MainProduct-{{ section.id }} .product__breadcrumb span[aria-hidden] {
+      color: rgba(var(--color-foreground), 0.4);
+    }
+
+    #MainProduct-{{ section.id }} .product__breadcrumb-current {
+      color: {{ section.settings.breadcrumb_color }};
+      font-weight: 500;
+    }
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -318,6 +359,11 @@
     <div class="page-width">
       <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
         <div class="grid__item product__media-wrapper">
+          <nav class="product__breadcrumb" aria-label="breadcrumb">
+            <a href="{{ routes.root_url }}">{{ section.settings.breadcrumb_home_label }}</a>
+            <span aria-hidden="true">&gt;</span>
+            <span class="product__breadcrumb-current" aria-current="page">{{ product.title }}</span>
+          </nav>
           {% render 'product-media-gallery', variant_images: variant_images %}
         </div>
         <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
@@ -2706,6 +2752,18 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_home_label",
+      "label": "Breadcrumb \"Home\" label",
+      "default": "Home"
+    },
+    {
+      "type": "color",
+      "id": "breadcrumb_color",
+      "label": "Breadcrumb current page color",
+      "default": "#FF6F91"
     },
     {
       "type": "header",
