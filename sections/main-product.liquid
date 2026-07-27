@@ -37,6 +37,160 @@
         padding-bottom: {{ section.settings.padding_bottom }}px;
       }
     }
+
+    #MainProduct-{{ section.id }} .product__media-list {
+      column-gap: 0.8rem;
+      row-gap: 1rem;
+    }
+
+    #MainProduct-{{ section.id }} .product__media-list .grid__item {
+      width: calc(50% - 0.4rem);
+      max-width: calc(50% - 0.4rem);
+    }
+
+    #MainProduct-{{ section.id }} .page-width {
+      max-width: 100%;
+      padding-left: 3.2rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-form__quantity-row {
+      display: flex;
+      align-items: stretch;
+      gap: 1.2rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-form__quantity-row .product-form__quantity {
+      flex: 0 0 auto;
+      margin-bottom: 0;
+    }
+
+    #MainProduct-{{ section.id }} .product-form__quantity-row > div:last-child {
+      flex: 1 1 auto;
+    }
+
+    #MainProduct-{{ section.id }} .product-form__quantity-row .product-form,
+    #MainProduct-{{ section.id }} .product-form__quantity-row .product-form__buttons {
+      max-width: none;
+      height: 100%;
+    }
+
+    #MainProduct-{{ section.id }} .product-form__quantity-row .product-form__submit {
+      height: 100%;
+    }
+
+    #MainProduct-{{ section.id }} .product-share {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-share__label {
+      font-weight: 500;
+    }
+
+    #MainProduct-{{ section.id }} .product-share__icons {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    #MainProduct-{{ section.id }} .product-share__icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.6rem;
+      height: 3.6rem;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background-color: var(--product-share-icon-bg, #1a2b4a);
+      color: var(--product-share-icon-color, #ffffff);
+      transition: opacity 0.2s ease;
+    }
+
+    #MainProduct-{{ section.id }} .product-share__icon:hover {
+      opacity: 0.85;
+    }
+
+    #MainProduct-{{ section.id }} .product-share__icon svg {
+      width: 1.6rem;
+      height: 1.6rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-share__help {
+      margin-left: auto;
+      color: currentColor;
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__heading {
+      margin: 0 0 1.2rem;
+      color: var(--product-addons-heading-color, #ff6f91);
+      font-weight: 600;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.6rem 2.4rem;
+      background-color: var(--product-addons-bg, #f5f5f5);
+      border: 0.1rem solid var(--product-addons-border, #e0e0e0);
+      border-radius: 1.2rem;
+      padding: 1.6rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__checkbox {
+      width: 1.8rem;
+      height: 1.8rem;
+      flex-shrink: 0;
+      accent-color: #1a1a1a;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__thumb {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      flex-shrink: 0;
+      border-radius: 0.8rem;
+      overflow: hidden;
+      background-color: rgba(var(--color-foreground), 0.06);
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__thumb img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__label {
+      font-size: 1.4rem;
+    }
+
+    #MainProduct-{{ section.id }} .product-addons__caption {
+      margin: 1.6rem 0 0;
+      font-size: 1.3rem;
+      color: rgba(var(--color-foreground), 0.7);
+    }
+
+    @media screen and (max-width: 749px) {
+      #MainProduct-{{ section.id }} .product-addons__grid {
+        grid-template-columns: 1fr;
+      }
+    }
   {%- endstyle -%}
 
   <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
@@ -87,6 +241,9 @@
             {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
             {%- for block in section.blocks -%}
+              {%- if block.type == 'quantity_selector' -%}
+                <div class="product-form__quantity-row">
+              {%- endif -%}
               {%- case block.type -%}
                 {%- when '@app' -%}
                   {% render block %}
@@ -471,10 +628,81 @@
                     </button>
                   </modal-opener>
                 {%- when 'share' -%}
-                  {% liquid
+                  {%- liquid
                     assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
-                    render 'share-button', block: block, share_link: share_url
-                  %}
+                    assign share_text = product.title | escape
+                  -%}
+                  <div
+                    class="product-share"
+                    style="--product-share-icon-bg: {{ block.settings.icon_background }}; --product-share-icon-color: {{ block.settings.icon_color }};"
+                    {{ block.shopify_attributes }}
+                  >
+                    {%- if block.settings.share_label != blank -%}
+                      <span class="product-share__label">{{ block.settings.share_label }}</span>
+                    {%- endif -%}
+                    <ul class="product-share__icons list-unstyled" role="list">
+                      <li>
+                        <a
+                          class="product-share__icon"
+                          href="https://www.facebook.com/sharer/sharer.php?u={{ share_url | url_encode }}"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="{{ 'general.social.links.facebook' | t | default: 'Facebook' }}"
+                        >
+                          {{- 'icon-facebook.svg' | inline_asset_content -}}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          class="product-share__icon"
+                          href="https://twitter.com/intent/tweet?url={{ share_url | url_encode }}&text={{ share_text | url_encode }}"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="{{ 'general.social.links.twitter' | t | default: 'Twitter' }}"
+                        >
+                          {{- 'icon-twitter.svg' | inline_asset_content -}}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          class="product-share__icon"
+                          href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url | url_encode }}"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="LinkedIn"
+                        >
+                          <svg viewBox="0 0 448 512" fill="currentColor"><path d="M100.28 448H7.4V148.9h92.88zm-46.44-340a53.34 53.34 0 1 1 53.33-53.34A53.35 53.35 0 0 1 53.84 108zM447.9 448h-92.68V302.4c0-34.7-.7-79.3-48.29-79.3-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3z"/></svg>
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          class="product-share__icon"
+                          href="{{ settings.social_instagram_link | default: 'https://instagram.com' }}"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="{{ 'general.social.links.instagram' | t | default: 'Instagram' }}"
+                        >
+                          {{- 'icon-instagram.svg' | inline_asset_content -}}
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          class="product-share__icon"
+                          href="https://pinterest.com/pin/create/button/?url={{ share_url | url_encode }}&description={{ share_text | url_encode }}"
+                          target="_blank"
+                          rel="noopener"
+                          aria-label="{{ 'general.social.links.pinterest' | t | default: 'Pinterest' }}"
+                        >
+                          {{- 'icon-pinterest.svg' | inline_asset_content -}}
+                        </a>
+                      </li>
+                    </ul>
+                    {%- if block.settings.help_text != blank -%}
+                      <a class="product-share__help" href="{{ block.settings.help_link | default: '#' }}">
+                        {{- block.settings.help_text -}}
+                      </a>
+                    {%- endif -%}
+                  </div>
 
                 {%- when 'disclosures' -%}
                   {%- render 'product-disclosures',
@@ -499,6 +727,11 @@
                     section_id: section.id,
                     show_pickup_availability: true
                   -%}
+              {%- endcase -%}
+              {%- if block.type == 'buy_buttons' -%}
+                </div>
+              {%- endif -%}
+              {%- case block.type -%}
                 {%- when 'rating' -%}
                   {%- if product.metafields.reviews.rating.value != blank -%}
                     <div class="rating-wrapper">
@@ -560,119 +793,45 @@
                           <div class="summary__title">
                             {%- if block.settings.make_collapsible_row -%}
                               {% render 'icon-accordion', icon: block.settings.icon %}
-                              <h2 class="h4 accordion__title">{{ block.settings.block_heading }}</h2>
+                              <h2 class="h4 accordion__title product-addons__heading">{{ block.settings.block_heading }}</h2>
                             {%- else -%}
-                              <h2 class="h3 accordion__title">{{ block.settings.block_heading }}</h2>
+                              <h2 class="h3 accordion__title product-addons__heading">{{ block.settings.block_heading }}</h2>
                             {%- endif -%}
                           </div>
                           {%- if block.settings.make_collapsible_row -%}
                             {{- 'icon-caret.svg' | inline_asset_content -}}
                             </summary>
                           {%- endif -%}
-                          <slideshow-component class="slider-mobile-gutter">
-                            {%- assign number_of_slides = recommendations.products_count
-                              | plus: 0.0
-                              | divided_by: block.settings.products_per_page
-                              | ceil
-                            -%}
-                            <div
-                              id="Slider-{{ block.id }}"
-                              class="contains-card contains-card--product complementary-slider grid grid--1-col slider slider--everywhere"
-                              role="list"
-                              {% if number_of_slides > 1 %}
-                                aria-label="{{ 'general.slider.name' | t }}"
-                              {% endif %}
-                            >
-                              {% assign skip_card_product_styles = false %}
-                              {%- for i in (1..number_of_slides) -%}
-                                <div
-                                  id="Slide-{{ block.id }}-{{ forloop.index }}"
-                                  class="complementary-slide complementary-slide--{{ settings.card_style }} grid__item slider__slide slideshow__slide"
-                                  tabindex="-1"
-                                  role="group"
-                                  {% if number_of_slides > 1 %}
-                                    aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
-                                    aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                          <script src="{{ 'product-addons.js' | asset_url }}" defer="defer"></script>
+                          <product-addons class="product-addons__grid">
+                            {%- for recommended_product in recommendations.products limit: block.settings.product_list_limit -%}
+                              {%- assign recommended_variant = recommended_product.selected_or_first_available_variant -%}
+                              <label class="product-addons__item">
+                                <input
+                                  type="checkbox"
+                                  class="product-addons__checkbox"
+                                  data-variant-id="{{ recommended_variant.id }}"
+                                  {% if recommended_variant.available == false %}
+                                    disabled
                                   {% endif %}
                                 >
-                                  <ul class="list-unstyled" role="list">
-                                    {%- for product in recommendations.products
-                                      limit: block.settings.products_per_page
-                                      offset: continue
-                                    -%}
-                                      <li>
-                                        {%- if block.settings.enable_quick_add -%}
-                                          {% assign quick_add = 'standard' %}
-                                        {%- else -%}
-                                          {% assign quick_add = 'none' %}
-                                        {%- endif -%}
-                                        {% render 'card-product',
-                                          card_product: product,
-                                          media_aspect_ratio: block.settings.image_ratio,
-                                          show_secondary_image: false,
-                                          lazy_load: false,
-                                          skip_styles: skip_card_product_styles,
-                                          quick_add: quick_add,
-                                          section_id: section.id,
-                                          horizontal_class: true,
-                                          horizontal_quick_add: true
-                                        %}
-                                      </li>
-                                      {%- assign skip_card_product_styles = true -%}
-                                    {%- endfor -%}
-                                  </ul>
-                                </div>
-                              {%- endfor -%}
-                            </div>
-                            {%- if number_of_slides > 1 -%}
-                              <div class="slider-buttons">
-                                <button
-                                  type="button"
-                                  class="slider-button slider-button--prev"
-                                  name="previous"
-                                  aria-label="{{ 'general.slider.previous_slide' | t }}"
-                                >
-                                  <span class="svg-wrapper">
-                                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                                  </span>
-                                </button>
-                                <div class="slider-counter slider-counter--{{ block.settings.pagination_style }}{% if block.settings.pagination_style == 'counter' or block.settings.pagination_style == 'numbers' %} caption{% endif %}">
-                                  {%- if block.settings.pagination_style == 'counter' -%}
-                                    <span class="slider-counter--current">1</span>
-                                    <span aria-hidden="true"> / </span>
-                                    <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-                                    <span class="slider-counter--total">{{ number_of_slides }}</span>
-                                  {%- else -%}
-                                    <div class="slideshow__control-wrapper">
-                                      {%- for i in (1..number_of_slides) -%}
-                                        <button
-                                          class="slider-counter__link slider-counter__link--{{ block.settings.pagination_style }} link"
-                                          aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
-                                          aria-controls="Slider-{{ block.id }}"
-                                        >
-                                          {%- if block.settings.pagination_style == 'numbers' -%}
-                                            {{ forloop.index -}}
-                                          {%- else -%}
-                                            <span class="dot"></span>
-                                          {%- endif -%}
-                                        </button>
-                                      {%- endfor -%}
-                                    </div>
+                                <span class="product-addons__thumb">
+                                  {%- if recommended_product.featured_image -%}
+                                    <img
+                                      src="{{ recommended_product.featured_image | image_url: width: 100 }}"
+                                      alt="{{ recommended_product.title | escape }}"
+                                      width="40"
+                                      height="40"
+                                      loading="lazy"
+                                    >
                                   {%- endif -%}
-                                </div>
-                                <button
-                                  type="button"
-                                  class="slider-button slider-button--next"
-                                  name="next"
-                                  aria-label="{{ 'general.slider.next_slide' | t }}"
-                                >
-                                  <span class="svg-wrapper">
-                                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                                  </span>
-                                </button>
-                              </div>
-                            {%- endif -%}
-                          </slideshow-component>
+                                </span>
+                                <span class="product-addons__label">
+                                  {{ recommended_product.title }} ({{ recommended_variant.price | money }})
+                                </span>
+                              </label>
+                            {%- endfor -%}
+                          </product-addons>
                           {%- if block.settings.make_collapsible_row -%}
                             </details>
                           {%- endif -%}
@@ -686,6 +845,67 @@
                       <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
                     {%- endif -%}
                   </product-recommendations>
+                {%- when 'product_addons' -%}
+                  {%- liquid
+                    assign addon_products = ''
+                    for i in (1..4)
+                      assign addon_key = 'addon_' | append: i | append: '_product'
+                      assign addon_product = block.settings[addon_key]
+                      if addon_product != blank
+                        assign addon_products = addon_products | append: i | append: ','
+                      endif
+                    endfor
+                  -%}
+                  {%- if addon_products != blank -%}
+                    <script src="{{ 'product-addons.js' | asset_url }}" defer="defer"></script>
+                    <div
+                      class="product-addons"
+                      style="--product-addons-heading-color: {{ block.settings.heading_color }}; --product-addons-bg: {{ block.settings.background_color }}; --product-addons-border: {{ block.settings.border_color }};"
+                      {{ block.shopify_attributes }}
+                    >
+                      {%- if block.settings.heading != blank -%}
+                        <h3 class="product-addons__heading">{{ block.settings.heading }}</h3>
+                      {%- endif -%}
+                      <product-addons class="product-addons__grid">
+                        {%- for i in (1..4) -%}
+                          {%- assign addon_key = 'addon_' | append: i | append: '_product' -%}
+                          {%- assign addon_product = block.settings[addon_key] -%}
+                          {%- if addon_product != blank -%}
+                            {%- assign addon_variant = addon_product.selected_or_first_available_variant -%}
+                            <label class="product-addons__item">
+                              <input
+                                type="checkbox"
+                                class="product-addons__checkbox"
+                                data-variant-id="{{ addon_variant.id }}"
+                                {% if addon_variant.available == false %}
+                                  disabled
+                                {% endif %}
+                              >
+                              <span class="product-addons__thumb">
+                                {%- if addon_product.featured_image -%}
+                                  <img
+                                    src="{{ addon_product.featured_image | image_url: width: 100 }}"
+                                    alt="{{ addon_product.title | escape }}"
+                                    width="40"
+                                    height="40"
+                                    loading="lazy"
+                                  >
+                                {%- endif -%}
+                              </span>
+                              <span class="product-addons__label">
+                                {{ addon_product.title }} ({{ addon_variant.price | money }})
+                              </span>
+                            </label>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </product-addons>
+                      {%- if block.settings.caption_text != blank -%}
+                        <p class="product-addons__caption">
+                          {{ block.settings.caption_text | replace: '[Product]', product.title }}
+                        </p>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
                 {%- when 'icon-with-text' -%}
                   {% render 'icon-with-text', block: block %}
               {%- endcase -%}
@@ -958,6 +1178,29 @@
           "id": "share_label",
           "label": "t:sections.main-product.blocks.share.settings.text.label",
           "default": "t:sections.main-product.blocks.share.settings.text.default"
+        },
+        {
+          "type": "color",
+          "id": "icon_background",
+          "label": "Icon background color",
+          "default": "#E5E5E5"
+        },
+        {
+          "type": "color",
+          "id": "icon_color",
+          "label": "Icon color",
+          "default": "#1A1A1A"
+        },
+        {
+          "type": "text",
+          "id": "help_text",
+          "label": "Help link label",
+          "default": "Need Help?"
+        },
+        {
+          "type": "url",
+          "id": "help_link",
+          "label": "Help link"
         }
       ]
     },
@@ -1519,6 +1762,80 @@
           "id": "enable_quick_add",
           "label": "t:sections.main-product.blocks.complementary_products.settings.enable_quick_add.label",
           "default": false
+        }
+      ]
+    },
+    {
+      "type": "product_addons",
+      "name": "Add-ons",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Add Ons"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading color",
+          "default": "#FF6F91"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Box background color",
+          "default": "#F5F5F5"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Box border color",
+          "default": "#E0E0E0"
+        },
+        {
+          "type": "text",
+          "id": "caption_text",
+          "label": "Caption text",
+          "info": "Use [Product] as a placeholder for the product title.",
+          "default": "Choose from the above Add Ons to make your [Product] Extra Special"
+        },
+        {
+          "type": "header",
+          "content": "Add-on 1"
+        },
+        {
+          "type": "product",
+          "id": "addon_1_product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Add-on 2"
+        },
+        {
+          "type": "product",
+          "id": "addon_2_product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Add-on 3"
+        },
+        {
+          "type": "product",
+          "id": "addon_3_product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Add-on 4"
+        },
+        {
+          "type": "product",
+          "id": "addon_4_product",
+          "label": "Product"
         }
       ]
     },

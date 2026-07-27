@@ -60,6 +60,10 @@
     color: rgba(var(--color-foreground), 0.75);
   }
 
+  #shopify-section-{{ section.id }} .copyright__content a {
+    text-decoration: underline;
+  }
+
   #shopify-section-{{ section.id }} .footer-block__details-content .list-menu__item--link:hover {
     color: {{ section.settings.active_link_color }};
     text-decoration: none;
@@ -478,7 +482,7 @@
         {%- render 'social-icons', class: 'footer__list-social footer__list-social--bottom' -%}
       {%- endif -%}
       <div class="footer__copyright caption">
-        <small class="copyright__content"
+        <small class="copyright__content copyright__content--brand"
           >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
         </small>
         <small class="copyright__content">{{ powered_by_link }}</small>
