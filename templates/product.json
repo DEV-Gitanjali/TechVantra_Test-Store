@@ -27,6 +27,12 @@
           "type": "price",
           "settings": {}
         },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "static_rating": 5
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -113,20 +119,20 @@
             "help_link": ""
           }
         },
-        "collapsible_tab_3KbJrG": {
-          "type": "collapsible_tab",
-          "settings": {
-            "heading": "Collapsible row",
-            "icon": "check_mark",
-            "content": "",
-            "page": ""
-          }
-        },
         "collapsible_tab_dp3ejN": {
           "type": "collapsible_tab",
           "settings": {
-            "heading": "Collapsible row",
-            "icon": "check_mark",
+            "heading": "Description",
+            "icon": "none",
+            "content": "<p>Take the ggs from the Tray and Crack it open onto the Pan, sprinkle some salt and pepper and take out the omelette with the Spatula.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_3KbJrG": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Product details",
+            "icon": "none",
             "content": "",
             "page": ""
           }
@@ -136,6 +142,7 @@
         "vendor",
         "title",
         "price",
+        "rating",
         "description",
         "variant_picker",
         "zippy_zipcode_validator_zippy_widget_Cbf3CN",
@@ -146,13 +153,15 @@
         "pickup_info",
         "product_addons",
         "share",
-        "collapsible_tab_3KbJrG",
-        "collapsible_tab_dp3ejN"
+        "collapsible_tab_dp3ejN",
+        "collapsible_tab_3KbJrG"
       ],
       "settings": {
         "enable_sticky_info": true,
         "color_scheme": "scheme-1",
-        "media_size": "large",
+        "breadcrumb_home_label": "Home",
+        "breadcrumb_color": "#ff6f91",
+        "media_size": "medium",
         "constrain_to_viewport": true,
         "media_fit": "cover",
         "gallery_layout": "stacked",
@@ -184,11 +193,11 @@
         "heading_size": "h1",
         "enable_video_looping": false,
         "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "cover_image": "shopify://shop_images/e008498778af9788f701397fc9a2fd3ee33d8009.jpg",
+        "cover_image": "shopify://shop_images/little-children-reading-bedtime-story-home_2_1.png",
         "description": "",
         "full_width": true,
         "color_scheme": "",
-        "padding_top": 0,
+        "padding_top": 100,
         "padding_bottom": 0
       }
     },

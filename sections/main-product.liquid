@@ -51,7 +51,7 @@
     #MainProduct-{{ section.id }} .page-width {
       max-width: 100%;
       padding-left: 3.2rem;
-      padding-right: 3.2rem;
+      padding-right: 1.6rem;
     }
 
     #MainProduct-{{ section.id }} .product__info-container {
@@ -136,7 +136,7 @@
     }
 
     #MainProduct-{{ section.id }} .product-share__help {
-      margin-left: auto;
+      /* margin-left: auto; */
       color: currentColor;
       text-decoration: underline;
       font-weight: 500;
@@ -197,7 +197,7 @@
 
     #MainProduct-{{ section.id }} .product-addons__caption {
       margin: 1.6rem 0 0;
-      font-size: 1.3rem;
+      font-size: 14PX;
       color: rgba(var(--color-foreground), 0.45);
     }
 
@@ -867,7 +867,7 @@
               {%- case block.type -%}
                 {%- when 'rating' -%}
                   {%- if product.metafields.reviews.rating.value != blank -%}
-                    <div class="rating-wrapper">
+                    <a href="#customer-reviews" class="rating-wrapper">
                       {% liquid
                         assign rating_decimal = 0
                         assign decimal = product.metafields.reviews.rating.value.rating | modulo: 1
@@ -901,7 +901,21 @@
                           {{ 'accessibility.total_reviews' | t -}}
                         </span>
                       </p>
-                    </div>
+                    </a>
+                  {%- elsif block.settings.static_rating > 0 -%}
+                    <a href="#customer-reviews" class="rating-wrapper">
+                      <div
+                        class="rating"
+                        role="img"
+                        aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: block.settings.static_rating, rating_max: 5 }}"
+                      >
+                        <span
+                          aria-hidden="true"
+                          class="rating-star"
+                          style="--rating: {{ block.settings.static_rating | floor }}; --rating-max: 5; --rating-decimal: {{ block.settings.static_rating | modulo: 1 }};"
+                        ></span>
+                      </div>
+                    </a>
                   {%- endif -%}
                 {%- when 'complementary' -%}
                   <product-recommendations
@@ -1682,6 +1696,16 @@
         {
           "type": "paragraph",
           "content": "t:sections.main-product.blocks.rating.settings.paragraph.content"
+        },
+        {
+          "type": "range",
+          "id": "static_rating",
+          "label": "Fallback star rating",
+          "info": "Shown only when the product has no reviews-app rating metafield set.",
+          "min": 0,
+          "max": 5,
+          "step": 0.5,
+          "default": 5
         }
       ]
     },

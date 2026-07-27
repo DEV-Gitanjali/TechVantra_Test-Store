@@ -32,11 +32,11 @@ product-info {
   }
 
   .product__info-wrapper {
-    padding: 0 0 0 5rem;
+    padding: 0 0 0 3rem;
   }
 
   .product__info-wrapper--extra-padding {
-    padding: 0 0 0 8rem;
+    padding: 0 0 0 7rem;
   }
 
   .product--right .product__info-wrapper {
@@ -250,6 +250,14 @@ a.product__text {
   margin-bottom: 1.5rem;
 }
 
+.product__title h1,
+.product__title .h1 {
+  color: #123c64;
+  font-size: 4.4rem;
+  line-height: 5rem;
+  letter-spacing: -0.02em;
+}
+
 .product__title > * {
   margin: 0;
 }
@@ -287,6 +295,180 @@ a.product__text {
   display: none;
 }
 
+/* Product price - Figma: sale price first (bold, dark), then compare-at price (light, struck-through) */
+.product .price--on-sale .price__sale {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.product .price--on-sale .price__sale > span:has(.price-item--regular) {
+  order: 2;
+}
+
+.product .price--on-sale .price-item--sale {
+  order: 1;
+  font-size: 26px;
+  font-weight: 700;
+  color: rgb(var(--color-foreground));
+}
+
+.product .price--on-sale .price__sale .price-item--regular {
+  font-size: 18px;
+  font-weight: 400;
+  color: rgba(var(--color-foreground), 0.5);
+}
+
+.product .rating-wrapper .rating-star {
+  --color-rating-star: #ffc107;
+  --font-size: 2.5;
+  --letter-spacing: 1.1;
+}
+
+a.rating-wrapper {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Color swatch picker - Figma: bold label, larger swatches, bigger selected-ring */
+.product-form__input--swatch .form__label {
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: rgb(var(--color-foreground));
+}
+
+.product .product-form__input--swatch .swatch-input__input + .swatch-input__label {
+  --swatch-input--size: 3rem;
+  margin: 0.7rem 1rem 0.2rem 0;
+}
+
+@media screen and (min-width: 750px) {
+  .product .product-form__input--swatch .swatch-input__input + .swatch-input__label {
+    --swatch-input--size: 3rem;
+  }
+}
+
+.product .product-form__input--swatch .swatch-input__input:checked + .swatch-input__label {
+  outline-width: 0.2rem;
+  outline-offset: 0.3rem;
+}
+
+/* Pill picker (e.g. Pattern) - Figma: bold label, rounded-rect pills, light-gray unselected fill */
+.product-form__input--pill .form__label {
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: rgb(var(--color-foreground));
+}
+
+.product .product-form__input--pill input[type='radio'] + label {
+  border: none;
+  border-radius: 0.8rem;
+  background-color: #f5f5f5;
+  color: rgb(var(--color-foreground));
+  padding: 1.8rem 2.4rem;
+}
+
+/* Zippy pincode-checker app block - Figma: single joined bar, black "Check" button */
+#shopify-block-zippy_zipcode_validator_zippy_widget_Cbf3CN {
+  display: flex !important;
+  align-items: stretch !important;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2) !important;
+  border-radius: 0.6rem !important;
+  overflow: hidden !important;
+  gap: 0 !important;
+}
+
+#shopify-block-zippy_zipcode_validator_zippy_widget_Cbf3CN input {
+  flex: 1 1 auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: rgb(var(--color-background)) !important;
+  color: rgb(var(--color-foreground)) !important;
+  text-transform: none !important;
+  padding: 1.4rem 1.8rem !important;
+  font-size: 1.4rem !important;
+}
+
+#shopify-block-zippy_zipcode_validator_zippy_widget_Cbf3CN button,
+#shopify-block-zippy_zipcode_validator_zippy_widget_Cbf3CN input[type='submit'] {
+  flex: 0 0 auto !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background-color: #000 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  padding: 1.4rem 2.8rem !important;
+  white-space: nowrap !important;
+}
+
+/* Quantity selector - Figma: rounded corners, muted +/- buttons, bold number */
+.product .product-form__quantity-row {
+  align-items: center !important;
+}
+
+.product .quantity {
+  --inputs-radius: 0.8rem;
+  --inputs-radius-outset: 0.9rem;
+  height: 5.6rem !important;
+  min-height: 5.6rem;
+}
+
+.product .product-form__quantity-row .product-form,
+.product .product-form__quantity-row .product-form__buttons,
+.product .product-form__quantity-row .product-form__submit {
+  height: 5.6rem !important;
+}
+
+.product .quantity__label {
+  display: none;
+}
+
+.product .quantity__button {
+  color: rgba(var(--color-foreground), 0.4);
+}
+
+.product .quantity__input {
+  font-weight: 700;
+  opacity: 1;
+  color: rgb(var(--color-foreground));
+}
+
+/* Add to cart button - Figma: pink pill, bold white label */
+.product-form__submit.button {
+  background-color: #ff6f91 !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.15rem !important;
+  border-radius: 0.8rem !important;
+  min-height: 5.6rem !important;
+}
+
+.product-form__submit.button::before,
+.product-form__submit.button::after {
+  box-shadow: none !important;
+  border-radius: 0.8rem !important;
+}
+
+/* Video banner section - shorter height */
+#shopify-section-video_gJXM4b .video-section__media {
+  --ratio-percent: 14% !important;
+}
+
+/* Video banner play button - translucent frosted-glass overlay */
+.video-section__media .deferred-media__poster-button {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  border: none !important;
+  color: #fff !important;
+}
+
 @media screen and (min-width: 750px) {
   .product__info-container {
     max-width: 60rem;
@@ -320,6 +502,10 @@ a.product__text {
 
 .product__tax {
   margin-top: -1.4rem;
+}
+
+.product__tax::before {
+  content: 'Tax included. ';
 }
 
 .product--no-media .share-button {
@@ -1491,4 +1677,9 @@ a.product__text {
   .recipient-form > input[type='checkbox']:checked + label .icon-checkmark {
     border: none;
   }
+}
+
+.product__description{
+   font-size: 14px;
+   line-height: 148%;
 }
