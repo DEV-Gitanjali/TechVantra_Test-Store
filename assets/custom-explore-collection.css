@@ -44,6 +44,61 @@
   }
 }
 
+/* Mobile: swipeable carousel instead of a stack. Native scroll snapping, so the
+   gesture stays as smooth as the browser's own and it needs no script. */
+@media screen and (max-width: 749px) {
+  /* 44px on a 68px line box wraps onto two widely spaced lines at phone width. */
+  .explore-collection__heading {
+    margin: 0 0 20px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .explore-collection__subheading {
+    margin: 0 auto 20px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .explore-collection__label {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .explore-collection__grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Room for the cards' drop shadow, which a scroll container would clip. */
+    padding-bottom: 6px;
+  }
+
+  .explore-collection__label{
+    font-size: 24px !important;
+  }
+
+  .explore-collection__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .explore-collection__item {
+    /* Less than full width, so the next card peeks in and the row reads as
+       swipeable rather than as a single image. */
+    flex: 0 0 var(--explore-collection-mobile-card, 80%);
+    scroll-snap-align: start;
+  }
+
+  /* A lone card has nothing to swipe to - let it fill the row. */
+  .explore-collection__item:only-child {
+    flex-basis: 100%;
+  }
+}
+
 .explore-collection__item {
   display: flex;
   flex-direction: column;

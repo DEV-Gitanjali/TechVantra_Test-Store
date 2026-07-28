@@ -17,8 +17,8 @@
         "image_PHDX73": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/image_827.png",
-            "image_width": 100,
+            "image": "shopify://shop_images/image_827__2_-removebg-preview_5f99ca8b-755f-4069-8d22-f4c526d2831a.png",
+            "image_width": 180,
             "alignment": "center"
           }
         },
@@ -78,8 +78,9 @@
       ],
       "settings": {
         "color_scheme": "scheme-1",
-        "background_color": "#B3E7E7",
+        "background_color": "#b3e7e7",
         "active_link_color": "#ff7a93",
+        "text_font": "poppins_n4",
         "newsletter_enable": false,
         "newsletter_heading": "Subscribe to our emails",
         "enable_follow_on_shop": true,

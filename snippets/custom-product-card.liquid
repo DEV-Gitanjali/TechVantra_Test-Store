@@ -9,6 +9,7 @@
   - show_secondary_image: {Boolean} Show secondary image on hover. Default: false
   - show_vendor: {Boolean} Default: false
   - show_rating: {Boolean} Default: false
+  - hide_badges: {Boolean} Suppress the Best Seller / New / Sale / Sold out pills. Default: false
   - extend_height: {Boolean} Card fills available container height. Default: true
   - lazy_load: {Boolean} Default: true
   - skip_styles: {Boolean} Skip stylesheet output when rendered in a loop. Default: false
@@ -127,25 +128,27 @@
           <span class="visually-hidden">{{ card_product.title | escape }}</span>
         </a>
 
-        <div class="custom-card__badges">
-          {%- if card_product.available == false -%}
-            <span class="custom-badge custom-badge--sold-out color-{{ settings.sold_out_badge_color_scheme }}">
-              {{- 'products.product.sold_out' | t -}}
-            </span>
-          {%- else -%}
-            {%- if is_bestseller -%}
-              <span class="custom-badge custom-badge--bestseller">Best Seller</span>
-            {%- endif -%}
-            {%- if is_new -%}
-              <span class="custom-badge custom-badge--new">New</span>
-            {%- endif -%}
-            {%- if is_on_sale -%}
-              <span class="custom-badge custom-badge--sale color-{{ settings.sale_badge_color_scheme }}">
-                {{- 'products.product.on_sale' | t -}}
+        {%- unless hide_badges -%}
+          <div class="custom-card__badges">
+            {%- if card_product.available == false -%}
+              <span class="custom-badge custom-badge--sold-out color-{{ settings.sold_out_badge_color_scheme }}">
+                {{- 'products.product.sold_out' | t -}}
               </span>
+            {%- else -%}
+              {%- if is_bestseller -%}
+                <span class="custom-badge custom-badge--bestseller">Best Seller</span>
+              {%- endif -%}
+              {%- if is_new -%}
+                <span class="custom-badge custom-badge--new">New</span>
+              {%- endif -%}
+              {%- if is_on_sale -%}
+                <span class="custom-badge custom-badge--sale color-{{ settings.sale_badge_color_scheme }}">
+                  {{- 'products.product.on_sale' | t -}}
+                </span>
+              {%- endif -%}
             {%- endif -%}
-          {%- endif -%}
-        </div>
+          </div>
+        {%- endunless -%}
 
         <div class="custom-card__info">
           {%- if show_vendor -%}

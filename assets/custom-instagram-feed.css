@@ -25,6 +25,54 @@
   }
 }
 
+/* Mobile: swipeable slider instead of a two-column grid. Native scroll snapping,
+   so the gesture is the browser's own and it needs no script. */
+@media screen and (max-width: 749px) {
+  /* 44px is set for the desktop width; on a phone it breaks onto two lines. */
+  .instagram-feed__heading {
+    margin: 0 0 20px;
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .instagram-feed__grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .instagram-feed__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .instagram-feed__item {
+    /* Just under half, so a sliver of the next post shows and the row reads as
+       swipeable rather than as a fixed pair. */
+    flex: 0 0 var(--instagram-feed-mobile-card, 45%);
+    scroll-snap-align: start;
+  }
+
+  /* A lone post has nothing to swipe to - let it fill the row. */
+  .instagram-feed__item:only-child {
+    flex-basis: 100%;
+  }
+
+  /* Touch screens have no hover, so the icon and tint the desktop reveals on
+     hover would never appear. Show that state permanently instead. */
+  .instagram-feed__tint {
+    opacity: var(--instagram-feed-overlay-opacity, 0.55);
+  }
+
+  .instagram-feed__icon {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 .instagram-feed__link {
   position: relative;
   display: block;

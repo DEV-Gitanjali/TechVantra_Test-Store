@@ -2,7 +2,9 @@
 
 .coming-next__wrapper {
   display: flex;
-  align-items: center;
+  /* Top aligned, not centred: the track is far taller than the intro, so
+     centring drops the heading to the bottom of the images. */
+  align-items: flex-start;
   gap: 80px;
 }
 
@@ -10,15 +12,25 @@
   flex: 0 0 400px;
   max-width: 400px;
   margin-left:2rem;
+  /* Centre the text against the images, not against the track. The track also
+     reserves room below the cards for the active card's label and title, so
+     centring on the whole row drops the heading well under the images. Instead
+     the intro spans exactly the image band - the track's 12px top padding plus a
+     featured card - and centres its content inside that. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 12px;
+  min-height: calc(var(--coming-next-featured-h, 460px) + 12px);
 }
 
 .coming-next__heading {
-  margin: 0 0 -23px;
+  margin: 0 0 -10px;
   font-family: 'Fredoka', var(--font-heading-family);
   font-weight: 500;
   font-style: normal;
   font-size: 44px;
-  line-height: 90px;
+  /* line-height: 90px; */
   letter-spacing: normal;
 }
 
@@ -138,6 +150,19 @@
   position: relative;
   overflow: hidden;
   border-radius: 16px;
+}
+
+/* Side cards sit centred against the featured card: the slides are all one fixed
+   frame with the card pinned to the top, so a shorter card needs half the height
+   difference as an offset. Eased on the same curve as the card's own resize, so a
+   card that becomes active travels up to the top smoothly rather than jumping. */
+.coming-next__slide .coming-next__card {
+  margin-top: calc((var(--coming-next-featured-h, 460px) - var(--coming-next-side-h, 320px)) / 2);
+  transition: margin-top var(--coming-next-transition, 400ms) cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.coming-next__slide.is-active .coming-next__card {
+  margin-top: 0;
 }
 
 .coming-next__image-wrap {
@@ -297,12 +322,44 @@ a.coming-next__title:hover {
 @media screen and (max-width: 749px) {
   .coming-next__wrapper {
     flex-direction: column;
+    /* Column layout: stretch so the intro keeps full width - flex-start would
+       shrink it to fit its text. */
+    align-items: stretch;
     gap: 24px;
   }
 
   .coming-next__intro {
     flex: 1 1 auto;
     max-width: none;
+    /* Stacked above the cards on mobile - no image band to centre against. */
+    display: block;
+    padding-top: 0;
+    min-height: 0;
+  }
+
+  /* 44px on a 90px line box wraps onto two widely spaced lines at phone width,
+     and the -23px pull that offsets that line box drags the subheading up into
+     it. Reset both along with the size. */
+  .coming-next__heading {
+    margin: 0 0 10px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .coming-next__subheading {
+    margin: 0 0 20px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .coming-next__label {
+    font-size: 12px !important;
+    line-height: 18px !important;
+  }
+
+  .coming-next__title {
+    font-size: 24px !important;
+    line-height: 30px !important;
   }
 
   .coming-next__track-wrapper[data-mobile-layout='stacked'] .coming-next__track {
@@ -322,6 +379,12 @@ a.coming-next__title:hover {
   .coming-next__track-wrapper[data-mobile-layout='stacked'] .coming-next__image-wrap,
   .coming-next__track-wrapper[data-mobile-layout='stacked'] .coming-next__slide.is-active .coming-next__image-wrap {
     height: var(--coming-next-featured-h, 460px);
+  }
+
+  /* Stacked: every card is already featured height, so there is nothing to
+     centre against - the offset would just push them down. */
+  .coming-next__track-wrapper[data-mobile-layout='stacked'] .coming-next__card {
+    margin-top: 0;
   }
 
   .coming-next__track-wrapper[data-mobile-layout='stacked'] .coming-next__dots {

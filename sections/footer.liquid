@@ -489,7 +489,10 @@
         {%- if section.settings.show_policy -%}
           <ul class="policies list-unstyled">
             {%- for policy in shop.policies -%}
-              {%- unless policy == blank or policy.url contains 'privacy-policy' -%}
+              {%- unless policy == blank
+                or policy.url contains 'privacy-policy'
+                or policy.url contains 'shipping-policy'
+              -%}
                 <li>
                   <small class="copyright__content"
                     ><a href="{{ policy.url }}">{{ policy.title | escape }}</a></small

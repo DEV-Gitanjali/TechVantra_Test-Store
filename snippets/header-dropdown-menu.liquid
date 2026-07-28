@@ -10,6 +10,25 @@
     {%- for link in section.settings.menu.links -%}
       <li>
         {%- if link.links != blank -%}
+          {%- liquid
+            # Same fix as header-mega-menu: link.child_active matches any child that
+            # is merely a parent of the current URL, so several menus (or all of
+            # them) get underlined at once. Compare against the current page exactly.
+            assign menu_active = false
+            if link.current
+              assign menu_active = true
+            endif
+            for childlink in link.links
+              if childlink.current
+                assign menu_active = true
+              endif
+              for grandchildlink in childlink.links
+                if grandchildlink.current
+                  assign menu_active = true
+                endif
+              endfor
+            endfor
+          -%}
           <header-menu>
             <details id="Details-HeaderMenu-{{ forloop.index }}">
               <summary
@@ -17,7 +36,7 @@
                 class="header__menu-item list-menu__item link focus-inset"
               >
                 <span
-                  {%- if link.child_active %}
+                  {%- if menu_active %}
                     class="header__active-menu-item"
                   {% endif %}
                 >
