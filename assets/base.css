@@ -3646,3 +3646,48 @@ details-disclosure > details {
     transform: translateX(100%) scaleX(0);
   }
 }
+
+.product__media {
+  border-radius: 15px;
+}
+.badge{
+  border-radius: 5px !important;
+  margin-top: 10px;
+} 
+
+.product__tax {
+  color: #7B7B7B;
+}
+
+.zipcode_bar_title_1511 object {
+  display: none !important;
+}
+.delhivery{
+   font-size: 16px!important;
+   font-weight: 600!important;
+   letter-spacing : 0.3%!important;
+   line-height: 100% !important;
+
+}
+.powered-by-zippy{
+   display: none !important;
+}
+.formide .pin {
+  text-transform: Capitalize !important;
+  width:223px !important;
+  /* height: 60px !important; */
+  border:2px solid #000 !important;
+}
+
+.product-review__heading{
+  font-size:44px !important;
+}
+.product-review__empty-text{
+   font-size: 18px !important;
+}
+
+.product-review__form-heading{
+  font-size: 30px !important;
+  margin-top: 20px !important;
+  color: #0A3463;
+}
