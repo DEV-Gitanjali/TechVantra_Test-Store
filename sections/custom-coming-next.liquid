@@ -83,6 +83,29 @@
   #shopify-section-{{ section.id }} .coming-next__card {
     border-radius: {{ section.settings.border_radius }}px;
   }
+
+  {%- comment -%}
+    Every slide gets one fixed frame: tall enough for a featured card plus its
+    label and title. Without it the row's height follows whichever card is active
+    - the card grows, its text appears, and the whole section (and the intro
+    column beside it) shifts up and down on every slide. Set here rather than in
+    script so it holds from the first paint.
+  {%- endcomment -%}
+  {%- if section.settings.desktop_layout == 'carousel' -%}
+    @media screen and (min-width: 750px) {
+      #shopify-section-{{ section.id }} .coming-next__slide {
+        height: calc(var(--coming-next-featured-h, 460px) + var(--coming-next-text-space, 84px));
+      }
+    }
+  {%- endif -%}
+
+  {%- if section.settings.mobile_layout == 'carousel' -%}
+    @media screen and (max-width: 749px) {
+      #shopify-section-{{ section.id }} .coming-next__slide {
+        height: calc(var(--coming-next-featured-h, 460px) + var(--coming-next-text-space, 84px));
+      }
+    }
+  {%- endif -%}
 {%- endstyle -%}
 
 <div class="coming-next">
