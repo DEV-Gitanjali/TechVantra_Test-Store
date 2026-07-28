@@ -1,5 +1,7 @@
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'custom-product-card.css' | asset_url | stylesheet_tag }}
+{{ 'custom-collection-toolbar.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 
 {% if section.settings.image_shape == 'blob' %}
@@ -36,116 +38,263 @@
   }
 {%- endstyle -%}
 
-<collection-component
-  view-event-payload="{{ collection | standard_event_data: 'view' | escape }}"
-  data-collection-id="{{ collection.id }}"
->
+{%- liquid
+  # Page size. Liquid can't read query parameters, so the "Show: N" control switches
+  # between alternate collection templates (?view=show-18 -> collection.show-18.json)
+  # and the count is read back out of the template suffix.
+  assign products_per_page = section.settings.products_per_page
+  assign template_suffix = template.suffix | default: ''
+  if template_suffix contains 'show-'
+    assign suffix_per_page = template_suffix | remove: 'show-' | times: 1
+    if suffix_per_page > 0
+      assign products_per_page = suffix_per_page
+    endif
+  endif
+-%}
+
+<collection-component view-event-payload="{{ collection | standard_event_data: 'view' | escape }}" data-collection-id="{{ collection.id }}">
   <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
-    {%- paginate collection.products by section.settings.products_per_page -%}
-      {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
-      {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
-        <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
-          <form class="facets-vertical-form" id="FacetSortForm">
-            <div class="facet-filters sorting caption">
-              <div class="facet-filters__field">
-                <h2 class="facet-filters__label caption-large text-body">
-                  <label for="SortBy">{{ 'products.facets.sort_by_label' | t }}</label>
-                </h2>
-                <div class="select">
-                  {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
-                  <select
-                    name="sort_by"
-                    class="facet-filters__sort select__select caption-large"
-                    id="SortBy"
-                    aria-describedby="a11y-refresh-page-message"
-                  >
-                    {%- for option in collection.sort_options -%}
-                      <option
-                        value="{{ option.value | escape }}"
-                        {% if option.value == sort_by %}
-                          selected="selected"
-                        {% endif %}
-                      >
-                        {{ option.name | escape }}
-                      </option>
-                    {%- endfor -%}
-                  </select>
-                  <span class="svg-wrapper">
-                    {{- 'icon-caret.svg' | inline_asset_content -}}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div class="product-count-vertical light" role="status">
-              <h2 class="product-count__text text-body">
-                <span id="ProductCountDesktop">
-                  {%- if collection.results_count -%}
-                    {{
-                      'templates.search.results_with_count'
-                      | t: terms: collection.terms, count: collection.results_count
-                    }}
-                  {%- elsif collection.products_count == collection.all_products_count -%}
-                    {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
-                  {%- else -%}
-                    {{
-                      'products.facets.product_count'
-                      | t: product_count: collection.products_count, count: collection.all_products_count
-                    }}
-                  {%- endif -%}
-                </span>
-              </h2>
-              {%- render 'loading-spinner' -%}
-            </div>
-          </form>
-        </facet-filters-form>
-      {%- endif -%}
-
+    {%- paginate collection.products by products_per_page -%}
       <div class="{% if section.settings.filter_type == 'vertical' %} facets-vertical page-width{% endif %}">
         {{ 'component-facets.css' | asset_url | stylesheet_tag }}
+        {{ 'custom-facets.css' | asset_url | stylesheet_tag }}
         <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+        <script src="{{ 'custom-facets.js' | asset_url }}" defer="defer"></script>
+        <script src="{{ 'custom-collection-toolbar.js' | asset_url }}" defer="defer"></script>
+        <script>
+          /* Inline copy of custom-facets.js — guarantees the facet enhancements
+             (Hide/Show toggle, Applied Filter, draggable price slider) run even
+             if the external asset is stale-cached. Idempotent + shares the
+             observer guard, so running alongside the external file is safe. */
+          (function () {
+            function reorganizeAppliedFilter(wrapper) {
+              var applied = wrapper.querySelector('.active-facets-desktop');
+              if (!applied) return;
+              var clearWrap = applied.querySelector(
+                '.active-facets-vertical-filter .active-facets__button-wrapper'
+              );
+              if (clearWrap && clearWrap.parentElement !== applied) applied.appendChild(clearWrap);
+              if (clearWrap) {
+                var label = clearWrap.querySelector('.active-facets__button-remove span');
+                if (label && label.textContent.trim() !== 'Clear Filter') label.textContent = 'Clear Filter';
+              }
+              var pills = applied.querySelectorAll(
+                ':scope > facet-remove:not(.active-facets__button-wrapper)'
+              ).length;
+              applied.dataset.hasAppliedFilters = pills > 0 ? 'true' : 'false';
+            }
+
+            function initToggle(wrapper) {
+              var heading = wrapper.querySelector('.facets__heading--vertical');
+              if (!heading || heading.dataset.filterToggleInit === 'true') return;
+              heading.dataset.filterToggleInit = 'true';
+              heading.setAttribute('role', 'button');
+              heading.setAttribute('aria-expanded', 'true');
+              heading.setAttribute('tabindex', '0');
+              heading.textContent = 'Hide Filter';
+              heading.style.cursor = 'pointer';
+              var toggle = function () {
+                var c = wrapper.classList.toggle('facets-vertical--collapsed');
+                heading.setAttribute('aria-expanded', String(!c));
+                heading.textContent = c ? 'Show Filter' : 'Hide Filter';
+              };
+              heading.addEventListener('click', function (e) { e.preventDefault(); toggle(); });
+              heading.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') { e.preventDefault(); toggle(); }
+              });
+            }
+
+            function initPriceSection(wrapper) {
+              wrapper.querySelectorAll('.facets__price').forEach(function (pc) {
+                if (pc.dataset.priceInit === 'true') return;
+                pc.dataset.priceInit = 'true';
+                var fields = pc.querySelectorAll(':scope > .field');
+                if (fields.length < 2) return;
+                var standalone = pc.querySelector(':scope > .field-currency');
+                var currencyText = standalone ? standalone.textContent.trim() : '';
+                if (currencyText) {
+                  fields.forEach(function (field) {
+                    if (!field.querySelector('.field-currency')) {
+                      var c = document.createElement('span');
+                      c.className = 'field-currency';
+                      c.textContent = currencyText;
+                      field.insertBefore(c, field.firstChild);
+                    }
+                  });
+                }
+                if (standalone) standalone.remove();
+
+                var inputs = pc.querySelectorAll('.field__input');
+                var minInput = inputs[0], maxInput = inputs[1];
+                if (!minInput || !maxInput) return;
+                var absMax = parseFloat(maxInput.getAttribute('data-max') || minInput.getAttribute('data-max')) || 100;
+                var absMin = parseFloat(minInput.getAttribute('data-min')) || 0;
+                if (absMax <= absMin) absMax = absMin + 1;
+
+                var slider = document.createElement('div');
+                slider.className = 'facets__price-slider';
+                slider.innerHTML =
+                  '<div class="facets__price-slider-track">' +
+                  '<div class="facets__price-slider-progress"></div>' +
+                  '<button type="button" class="facets__price-slider-thumb" data-thumb="min" aria-label="Minimum price"></button>' +
+                  '<button type="button" class="facets__price-slider-thumb" data-thumb="max" aria-label="Maximum price"></button>' +
+                  '</div>';
+                pc.insertBefore(slider, pc.firstChild);
+
+                var track = slider.querySelector('.facets__price-slider-track');
+                var progress = slider.querySelector('.facets__price-slider-progress');
+                var thumbMin = slider.querySelector('[data-thumb="min"]');
+                var thumbMax = slider.querySelector('[data-thumb="max"]');
+
+                function num(s) { var n = parseFloat(String(s).replace(/[^0-9.\-]/g, '')); return isNaN(n) ? null : n; }
+                function vals() { var a = num(minInput.value), b = num(maxInput.value); return { min: a == null ? absMin : a, max: b == null ? absMax : b }; }
+                function pct(v) { return ((v - absMin) / (absMax - absMin)) * 100; }
+                function fromPct(p) { return absMin + (p / 100) * (absMax - absMin); }
+                function clamp(p) { return Math.max(0, Math.min(100, p)); }
+                function render() {
+                  var v = vals(), mn = clamp(pct(v.min)), mx = clamp(pct(v.max));
+                  thumbMin.style.left = mn + '%'; thumbMax.style.left = mx + '%';
+                  progress.style.left = mn + '%'; progress.style.right = (100 - mx) + '%';
+                }
+                function commit() {
+                  minInput.dispatchEvent(new Event('change', { bubbles: true }));
+                  maxInput.dispatchEvent(new Event('change', { bubbles: true }));
+                  minInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                function startDrag(which, ev) {
+                  ev.preventDefault();
+                  var rect = track.getBoundingClientRect();
+                  function move(x) {
+                    var p = clamp(((x - rect.left) / rect.width) * 100), nv = Math.round(fromPct(p)), v = vals();
+                    if (which === 'min') { if (nv > v.max) nv = v.max; minInput.value = nv; }
+                    else { if (nv < v.min) nv = v.min; maxInput.value = nv; }
+                    render();
+                  }
+                  function mm(e) { move(e.clientX); }
+                  function tm(e) { if (e.touches && e.touches[0]) move(e.touches[0].clientX); }
+                  function up() {
+                    document.removeEventListener('mousemove', mm); document.removeEventListener('mouseup', up);
+                    document.removeEventListener('touchmove', tm); document.removeEventListener('touchend', up);
+                    document.body.classList.remove('is-dragging-price'); commit();
+                  }
+                  document.body.classList.add('is-dragging-price');
+                  document.addEventListener('mousemove', mm); document.addEventListener('mouseup', up);
+                  document.addEventListener('touchmove', tm, { passive: false }); document.addEventListener('touchend', up);
+                  var sx = ev.clientX !== undefined ? ev.clientX : (ev.touches && ev.touches[0] && ev.touches[0].clientX);
+                  if (sx !== undefined) move(sx);
+                }
+                thumbMin.addEventListener('mousedown', function (e) { startDrag('min', e); });
+                thumbMax.addEventListener('mousedown', function (e) { startDrag('max', e); });
+                thumbMin.addEventListener('touchstart', function (e) { startDrag('min', e); }, { passive: false });
+                thumbMax.addEventListener('touchstart', function (e) { startDrag('max', e); }, { passive: false });
+                track.addEventListener('mousedown', function (e) {
+                  var rect = track.getBoundingClientRect(), p = ((e.clientX - rect.left) / rect.width) * 100, v = vals();
+                  var mid = (pct(v.min) + pct(v.max)) / 2; startDrag(p < mid ? 'min' : 'max', e);
+                });
+                function bindKeys(thumb, which) {
+                  thumb.addEventListener('keydown', function (e) {
+                    var step = Math.max(1, Math.round((absMax - absMin) / 100)), v = vals(), cur = which === 'min' ? v.min : v.max;
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') cur -= step;
+                    else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') cur += step;
+                    else if (e.key === 'Home') cur = absMin;
+                    else if (e.key === 'End') cur = absMax;
+                    else return;
+                    e.preventDefault();
+                    cur = Math.round(Math.max(absMin, Math.min(absMax, cur)));
+                    if (which === 'min' && cur > v.max) cur = v.max;
+                    if (which === 'max' && cur < v.min) cur = v.min;
+                    (which === 'min' ? minInput : maxInput).value = cur; render(); commit();
+                  });
+                }
+                bindKeys(thumbMin, 'min'); bindKeys(thumbMax, 'max');
+                minInput.addEventListener('input', render);
+                maxInput.addEventListener('input', render);
+                render();
+              });
+            }
+
+            function init() {
+              var wrapper = document.querySelector('.facets-vertical');
+              if (!wrapper) return;
+              reorganizeAppliedFilter(wrapper);
+              initToggle(wrapper);
+              initPriceSection(wrapper);
+            }
+
+            function boot() {
+              init();
+              if (!window.__facetsEnhancerObserver) {
+                var t;
+                var obs = new MutationObserver(function () { clearTimeout(t); t = setTimeout(init, 120); });
+                var target = document.querySelector('.facets-vertical');
+                if (target) { obs.observe(target, { childList: true, subtree: true }); window.__facetsEnhancerObserver = obs; }
+              }
+            }
+
+            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+            else boot();
+          })();
+        </script>
         {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
           <aside
             aria-labelledby="verticalTitle"
             class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
             id="main-collection-filters"
-            data-id="{{ section.id }}"
-          >
-            {% render 'facets',
-              results: collection,
-              enable_filtering: section.settings.enable_filtering,
-              enable_sorting: section.settings.enable_sorting,
-              filter_type: section.settings.filter_type,
-              paginate: paginate
+            data-id="{{ section.id }}">
+            {% render 'facets'
+              ,
+ results: collection
+              ,
+ enable_filtering: section.settings.enable_filtering
+              ,
+ enable_sorting: section.settings.enable_sorting
+              ,
+ filter_type: section.settings.filter_type
+              ,
+ paginate: paginate
             %}
           </aside>
+        {%- endif -%}
+
+        {%- if section.settings.filter_type == 'vertical' -%}
+          {% render 'custom-collection-toolbar'
+            ,
+ results: collection
+            ,
+ enable_sorting: section.settings.enable_sorting
+            ,
+ products_per_page: products_per_page
+            ,
+ default_per_page: section.settings.products_per_page
+            ,
+ template_suffix: template_suffix
+          %}
         {%- endif -%}
 
         <div
           class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           id="ProductGridContainer"
           {% if settings.animations_reveal_on_scroll %}
-            data-cascade
-          {% endif %}
-        >
+          data-cascade
+          {% endif %}>
           {%- if collection.products.size == 0 -%}
-            <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
+            <div
+              class="collection collection--empty page-width"
+              id="product-grid"
+              data-id="{{ section.id }}">
               <div class="loading-overlay gradient"></div>
               <div class="title-wrapper center">
                 <h2 class="title title--primary">
                   {{ 'sections.collection_template.empty' | t -}}
                   <br>
-                  {{
-                    'sections.collection_template.use_fewer_filters_html'
-                    | t: link: collection.url, class: 'underlined-link link'
+                  {{ 'sections.collection_template.use_fewer_filters_html'
+ | t: link: collection.url, class: 'underlined-link link'
                   }}
                 </h2>
               </div>
             </div>
           {%- else -%}
-            <div
-              class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
-            >
+            <div class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}">
               <div class="loading-overlay gradient"></div>
               <ul
                 id="product-grid"
@@ -154,8 +303,7 @@
                   grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
                   grid--{{ section.settings.columns_desktop }}-col-desktop
                   {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
-                "
-              >
+                ">
                 {% assign skip_card_product_styles = false %}
                 {%- for product in collection.products -%}
                   {% assign lazy_load = false %}
@@ -165,22 +313,32 @@
                   <li
                     class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                     {% if settings.animations_reveal_on_scroll %}
-                      data-cascade
-                      style="--animation-order: {{ forloop.index }};"
-                    {% endif %}
-                  >
-                    {% render 'card-product',
-                      card_product: product,
-                      media_aspect_ratio: section.settings.image_ratio,
-                      image_shape: section.settings.image_shape,
-                      show_secondary_image: section.settings.show_secondary_image,
-                      show_vendor: section.settings.show_vendor,
-                      show_rating: section.settings.show_rating,
-                      lazy_load: lazy_load,
-                      skip_styles: skip_card_product_styles,
-                      quick_add: section.settings.quick_add,
-                      section_id: section.id,
-                      product_view_context: 'collection'
+                    data-cascade
+                    style="--animation-order: {{ forloop.index }};"
+                    {% endif %}>
+                    {% render 'custom-product-card'
+                      ,
+ card_product: product
+                      ,
+ media_aspect_ratio: section.settings.image_ratio
+                      ,
+ image_shape: section.settings.image_shape
+                      ,
+ show_secondary_image: section.settings.show_secondary_image
+                      ,
+ show_vendor: section.settings.show_vendor
+                      ,
+ show_rating: section.settings.show_rating
+                      ,
+ lazy_load: lazy_load
+                      ,
+ skip_styles: skip_card_product_styles
+                      ,
+ quick_add: section.settings.quick_add
+                      ,
+ section_id: section.id
+                      ,
+ product_view_context: 'collection'
                     %}
                   </li>
                   {%- assign skip_card_product_styles = true -%}
@@ -188,7 +346,9 @@
               </ul>
 
               {%- if paginate.pages > 1 -%}
-                {% render 'pagination', paginate: paginate, anchor: '' %}
+                {% render 'pagination'
+                  , paginate: paginate
+                  , anchor: '' %}
               {%- endif -%}
             </div>
           {%- endif -%}
@@ -202,215 +362,191 @@
 </collection-component>
 
 {% schema %}
-{
-  "name": "t:sections.main-collection-product-grid.name",
-  "class": "section",
-  "settings": [
-    {
-      "type": "range",
-      "id": "products_per_page",
-      "min": 8,
-      "max": 36,
-      "step": 4,
-      "default": 16,
-      "label": "t:sections.main-collection-product-grid.settings.products_per_page.label"
-    },
-    {
-      "type": "range",
-      "id": "columns_desktop",
-      "min": 1,
-      "max": 6,
-      "step": 1,
-      "default": 4,
-      "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
-    },
-    {
-      "type": "select",
-      "id": "columns_mobile",
-      "default": "2",
-      "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
-      "options": [
-        {
-          "value": "1",
-          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
-        },
-        {
-          "value": "2",
-          "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
-        }
-      ]
-    },
-    {
-      "type": "color_scheme",
-      "id": "color_scheme",
-      "label": "t:sections.all.colors.label",
-      "info": "t:sections.all.colors.has_cards_info",
-      "default": "scheme-1"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.main-collection-product-grid.settings.header__3.content"
-    },
-    {
-      "type": "select",
-      "id": "image_ratio",
-      "options": [
-        {
-          "value": "adapt",
-          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
-        },
-        {
-          "value": "portrait",
-          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
-        },
-        {
-          "value": "square",
-          "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
-        }
-      ],
-      "default": "adapt",
-      "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
-    },
-    {
-      "type": "select",
-      "id": "image_shape",
-      "options": [
-        {
-          "value": "default",
-          "label": "t:sections.all.image_shape.options__1.label"
-        },
-        {
-          "value": "arch",
-          "label": "t:sections.all.image_shape.options__2.label"
-        },
-        {
-          "value": "blob",
-          "label": "t:sections.all.image_shape.options__3.label"
-        },
-        {
-          "value": "chevronleft",
-          "label": "t:sections.all.image_shape.options__4.label"
-        },
-        {
-          "value": "chevronright",
-          "label": "t:sections.all.image_shape.options__5.label"
-        },
-        {
-          "value": "diamond",
-          "label": "t:sections.all.image_shape.options__6.label"
-        },
-        {
-          "value": "parallelogram",
-          "label": "t:sections.all.image_shape.options__7.label"
-        },
-        {
-          "value": "round",
-          "label": "t:sections.all.image_shape.options__8.label"
-        }
-      ],
-      "default": "default",
-      "label": "t:sections.all.image_shape.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_secondary_image",
-      "default": false,
-      "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_vendor",
-      "default": false,
-      "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_rating",
-      "default": false,
-      "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
-      "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
-    },
-    {
-      "type": "select",
-      "id": "quick_add",
-      "default": "none",
-      "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
-      "options": [
-        {
-          "value": "none",
-          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
-        },
-        {
-          "value": "standard",
-          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
-        },
-        {
-          "value": "bulk",
-          "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
-        }
-      ]
-    },
-    {
-      "type": "header",
-      "content": "t:sections.main-collection-product-grid.settings.header__1.content"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_filtering",
-      "default": true,
-      "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
-      "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
-    },
-    {
-      "type": "select",
-      "id": "filter_type",
-      "options": [
-        {
-          "value": "horizontal",
-          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
-        },
-        {
-          "value": "vertical",
-          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__2.label"
-        },
-        {
-          "value": "drawer",
-          "label": "t:sections.main-collection-product-grid.settings.filter_type.options__3.label"
-        }
-      ],
-      "default": "horizontal",
-      "label": "t:sections.main-collection-product-grid.settings.filter_type.label"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_sorting",
-      "default": true,
-      "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
-    },
-    {
-      "type": "header",
-      "content": "t:sections.all.padding.section_padding_heading"
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_top",
-      "default": 36
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 4,
-      "unit": "px",
-      "label": "t:sections.all.padding.padding_bottom",
-      "default": 36
-    }
-  ]
-}
+  {
+    "name": "t:sections.main-collection-product-grid.name",
+    "class": "section",
+    "settings": [
+      {
+        "type": "range",
+        "id": "products_per_page",
+        "min": 3,
+        "max": 36,
+        "step": 3,
+        "default": 9,
+        "label": "t:sections.main-collection-product-grid.settings.products_per_page.label",
+        "info": "Default page size. The \"Show\" dropdown on the storefront switches between 9 / 18 / 27 / 36 using the collection.show-* templates."
+      },
+      {
+        "type": "range",
+        "id": "columns_desktop",
+        "min": 1,
+        "max": 6,
+        "step": 1,
+        "default": 4,
+        "label": "t:sections.main-collection-product-grid.settings.columns_desktop.label"
+      },
+      {
+        "type": "select",
+        "id": "columns_mobile",
+        "default": "2",
+        "label": "t:sections.main-collection-product-grid.settings.columns_mobile.label",
+        "options": [
+          {
+            "value": "1",
+            "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__1.label"
+          }, {
+            "value": "2",
+            "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
+          }
+        ]
+      },
+      {
+        "type": "color_scheme",
+        "id": "color_scheme",
+        "label": "t:sections.all.colors.label",
+        "info": "t:sections.all.colors.has_cards_info",
+        "default": "scheme-1"
+      }, {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.header__3.content"
+      }, {
+        "type": "select",
+        "id": "image_ratio",
+        "options": [
+          {
+            "value": "adapt",
+            "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__1.label"
+          }, {
+            "value": "portrait",
+            "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__2.label"
+          }, {
+            "value": "square",
+            "label": "t:sections.main-collection-product-grid.settings.image_ratio.options__3.label"
+          }
+        ],
+        "default": "adapt",
+        "label": "t:sections.main-collection-product-grid.settings.image_ratio.label"
+      }, {
+        "type": "select",
+        "id": "image_shape",
+        "options": [
+          {
+            "value": "default",
+            "label": "t:sections.all.image_shape.options__1.label"
+          },
+          {
+            "value": "arch",
+            "label": "t:sections.all.image_shape.options__2.label"
+          },
+          {
+            "value": "blob",
+            "label": "t:sections.all.image_shape.options__3.label"
+          },
+          {
+            "value": "chevronleft",
+            "label": "t:sections.all.image_shape.options__4.label"
+          }, {
+            "value": "chevronright",
+            "label": "t:sections.all.image_shape.options__5.label"
+          }, {
+            "value": "diamond",
+            "label": "t:sections.all.image_shape.options__6.label"
+          }, {
+            "value": "parallelogram",
+            "label": "t:sections.all.image_shape.options__7.label"
+          }, {
+            "value": "round",
+            "label": "t:sections.all.image_shape.options__8.label"
+          }
+        ],
+        "default": "default",
+        "label": "t:sections.all.image_shape.label"
+      }, {
+        "type": "checkbox",
+        "id": "show_secondary_image",
+        "default": false,
+        "label": "t:sections.main-collection-product-grid.settings.show_secondary_image.label"
+      }, {
+        "type": "checkbox",
+        "id": "show_vendor",
+        "default": false,
+        "label": "t:sections.main-collection-product-grid.settings.show_vendor.label"
+      }, {
+        "type": "checkbox",
+        "id": "show_rating",
+        "default": false,
+        "label": "t:sections.main-collection-product-grid.settings.show_rating.label",
+        "info": "t:sections.main-collection-product-grid.settings.show_rating.info"
+      }, {
+        "type": "select",
+        "id": "quick_add",
+        "default": "none",
+        "label": "t:sections.main-collection-product-grid.settings.quick_add.label",
+        "options": [
+          {
+            "value": "none",
+            "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_1"
+          }, {
+            "value": "standard",
+            "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_2"
+          }, {
+            "value": "bulk",
+            "label": "t:sections.main-collection-product-grid.settings.quick_add.options.option_3"
+          }
+        ]
+      }, {
+        "type": "header",
+        "content": "t:sections.main-collection-product-grid.settings.header__1.content"
+      }, {
+        "type": "checkbox",
+        "id": "enable_filtering",
+        "default": true,
+        "label": "t:sections.main-collection-product-grid.settings.enable_filtering.label",
+        "info": "t:sections.main-collection-product-grid.settings.enable_filtering.info"
+      }, {
+        "type": "select",
+        "id": "filter_type",
+        "options": [
+          {
+            "value": "horizontal",
+            "label": "t:sections.main-collection-product-grid.settings.filter_type.options__1.label"
+          }, {
+            "value": "vertical",
+            "label": "t:sections.main-collection-product-grid.settings.filter_type.options__2.label"
+          }, {
+            "value": "drawer",
+            "label": "t:sections.main-collection-product-grid.settings.filter_type.options__3.label"
+          }
+        ],
+        "default": "horizontal",
+        "label": "t:sections.main-collection-product-grid.settings.filter_type.label"
+      }, {
+        "type": "checkbox",
+        "id": "enable_sorting",
+        "default": true,
+        "label": "t:sections.main-collection-product-grid.settings.enable_sorting.label"
+      }, {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+      }, {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 36
+      }, {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 36
+      }
+    ]
+  }
 {% endschema %}

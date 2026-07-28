@@ -1,0 +1,112 @@
+/* Collection banner — Figma design: full-width rounded hero, image background
+   behind a dark scrim, heading and description centred in white. */
+
+.collection-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--collection-banner-height, 22rem);
+  padding: 3.2rem 2.4rem;
+  border-radius: 2.4rem;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #2b2b2b;
+}
+
+.collection-banner__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+/* Scrim — keeps the copy legible whatever the photo is doing underneath.
+   Gated on the modifier class rather than on an alpha of 0, so an overlay opacity
+   of 0% produces no pseudo-element at all and can't tint the image. */
+.collection-banner--overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, var(--collection-banner-overlay, 0.45));
+  pointer-events: none;
+}
+
+/* No image set — a soft gradient stands in so white text still reads */
+.collection-banner--no-image {
+  background-image: linear-gradient(135deg, #3a3a3a 0%, #1e1e1e 100%);
+}
+
+.collection-banner__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 84rem;
+  margin: 0 auto;
+  text-align: center;
+  color: #ffffff;
+}
+
+.collection-banner__title {
+  margin: 0;
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0;
+  color: #ffffff;
+  word-break: break-word;
+}
+
+.collection-banner__description {
+  margin: 1.2rem auto 0;
+  max-width: 68rem;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* The description comes through the `rte` class, which adds its own spacing */
+.collection-banner__description > *:first-child {
+  margin-top: 0;
+}
+
+.collection-banner__description > *:last-child {
+  margin-bottom: 0;
+}
+
+.collection-banner__description a {
+  color: inherit;
+}
+
+@media screen and (max-width: 989px) {
+  .collection-banner {
+    min-height: var(--collection-banner-height-tablet, 20rem);
+  }
+
+  .collection-banner__title {
+    font-size: 3rem;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  .collection-banner {
+    min-height: var(--collection-banner-height-mobile, 18rem);
+    padding: 2.4rem 1.6rem;
+    border-radius: 1.6rem;
+  }
+
+  .collection-banner__title {
+    font-size: 2.4rem;
+  }
+
+  .collection-banner__description {
+    margin-top: 0.8rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+  }
+}

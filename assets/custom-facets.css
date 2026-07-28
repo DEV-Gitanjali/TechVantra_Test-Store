@@ -1,0 +1,851 @@
+/* Custom Facets — Figma design overrides for vertical filter layout */
+
+/* Column layout — Dawn's .facets-vertical is display:flex, which can only lay the
+   children out in a single row. The Figma puts the toolbar ("Show" / "Sort By" /
+   view toggle) above the product grid but beside the sidebar, so switch to a
+   two-column grid: sidebar spans both rows, toolbar and grid stack in column two. */
+@media screen and (min-width: 750px) {
+  .facets-vertical {
+    display: grid;
+    grid-template-columns: 26rem minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 2rem;
+    align-items: start;
+  }
+
+  .facets-vertical > .facets-wrapper {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    max-width: 26rem;
+    width: 26rem;
+  }
+
+  .facets-vertical > .collection-toolbar {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .facets-vertical > .product-grid-container {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  /* Sidebar width — 30rem gives enough room for the 8-swatch grid and both
+     price inputs without clipping */
+  .facets-vertical {
+    grid-template-columns: 30rem minmax(0, 1fr);
+  }
+
+  .facets-vertical > .facets-wrapper {
+    max-width: 30rem;
+    width: 30rem;
+  }
+}
+
+/* Outer sidebar container — light grey card, flat (no border), soft rounding */
+.facets-vertical .facets-wrapper {
+  background: #f5f5f5;
+  border: 0;
+  border-radius: 2.4rem;
+  padding: 2rem 2rem 1.6rem;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+/* Show/hide toggle — the heading acts as a button */
+.facets-vertical .facets__heading--vertical {
+  cursor: pointer;
+  user-select: none;
+}
+
+.facets-vertical .facets__heading--vertical:focus-visible {
+  outline: 0.2rem solid rgba(30, 30, 30, 0.5);
+  outline-offset: 0.4rem;
+  border-radius: 0.4rem;
+}
+
+/* Sidebar wrapper — smoothly resize on collapse; clip so animating children
+   don't leak past the rounded border. The column width itself is fixed by the
+   grid above, so the sidebar keeps its footprint and the product grid never
+   reflows when Hide/Show Filter is clicked. */
+.facets-vertical .facets-wrapper {
+  overflow: hidden;
+  transition: padding var(--duration-medium, 250ms) ease;
+}
+
+/* Collapsible groups — animate max-height + opacity rather than display:none
+   so the show/hide has a smooth transition. NOTE: we do NOT collapse
+   .active-facets-desktop itself (it contains the "Hide Filter" heading);
+   only its children (pills, Clear-all wrapper, accordions) collapse. */
+.facets-vertical .active-facets-vertical-filter .active-facets__button-wrapper,
+.facets-vertical .active-facets-desktop > facet-remove,
+.facets-vertical .facets__disclosure-vertical {
+  overflow: hidden;
+  transition:
+    max-height var(--duration-medium, 250ms) ease,
+    opacity var(--duration-short, 150ms) ease,
+    margin var(--duration-medium, 250ms) ease,
+    padding var(--duration-medium, 250ms) ease,
+    border-color var(--duration-short, 150ms) ease;
+  max-height: 200rem;
+  opacity: 1;
+}
+
+/* The pseudo-heading "Applied Filter" also fades */
+.facets-vertical .active-facets-desktop::before {
+  transition:
+    opacity var(--duration-short, 150ms) ease,
+    max-height var(--duration-medium, 250ms) ease,
+    margin var(--duration-medium, 250ms) ease;
+  opacity: 1;
+  max-height: 5rem;
+}
+
+/* The dashed divider border on the pills row fades to transparent when collapsed */
+.facets-vertical .active-facets-desktop {
+  transition:
+    padding var(--duration-medium, 250ms) ease,
+    margin var(--duration-medium, 250ms) ease,
+    border-color var(--duration-short, 150ms) ease;
+}
+
+/* Collapsed state — hide everything except the "Hide/Show Filter" heading, smoothly */
+.facets-vertical--collapsed .facets-wrapper {
+  padding-top: 1.6rem;
+  padding-bottom: 1.6rem;
+}
+
+.facets-vertical--collapsed .active-facets-vertical-filter {
+  border-bottom-color: transparent;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.facets-vertical--collapsed .active-facets-vertical-filter .active-facets__button-wrapper,
+.facets-vertical--collapsed .active-facets-desktop > facet-remove,
+.facets-vertical--collapsed .facets__disclosure-vertical {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.facets-vertical--collapsed .active-facets-desktop {
+  padding: 0;
+  margin: 0;
+  border-bottom-color: transparent;
+}
+
+.facets-vertical--collapsed .active-facets-desktop::before {
+  opacity: 0;
+  max-height: 0;
+  margin: 0;
+}
+
+/* Header row: "Filter by" title + Clear all */
+.facets-vertical .active-facets-vertical-filter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 1.4rem;
+  border-bottom: 1px dashed #d5d5d5;
+  margin: 0 0 1.4rem;
+}
+
+/* "Hide Filter" style title with an inline filter icon */
+.facets-vertical .facets__heading--vertical {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #1e1e1e;
+}
+
+.facets-vertical .facets__heading--vertical::before {
+  content: '';
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%231e1e1e' stroke-width='1.5' stroke-linecap='round'><line x1='2' y1='6' x2='9' y2='6'/><line x1='14' y1='6' x2='18' y2='6'/><circle cx='11.5' cy='6' r='2' fill='%231e1e1e'/><line x1='2' y1='14' x2='6' y2='14'/><line x1='11' y1='14' x2='18' y2='14'/><circle cx='8.5' cy='14' r='2' fill='%231e1e1e'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Clear-all link in header */
+.facets-vertical .active-facets-vertical-filter .active-facets__button-remove {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #1e1e1e;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+/* Applied filter pills row */
+.facets-vertical .active-facets-desktop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem 0.6rem;
+  padding: 0 0 1.4rem;
+  margin: 0 0 0.4rem;
+  border-bottom: 1px dashed #d5d5d5;
+}
+
+/* Explicit stacking order so the layout matches the Figma:
+   Row 1: Hide Filter header (from .active-facets-vertical-filter, full-width)
+   Row 2: "Applied Filter" heading (::before)
+   Row 3: [Orange ×] pill  ─ Clear Filter (right-aligned via margin-left auto) */
+.facets-vertical .active-facets-desktop > .active-facets-vertical-filter {
+  order: 1;
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.facets-vertical .active-facets-desktop::before {
+  order: 2;
+}
+
+.facets-vertical .active-facets-desktop > facet-remove {
+  order: 3;
+}
+
+.facets-vertical .active-facets-desktop > .active-facets__button-wrapper {
+  order: 3;
+  margin-left: auto;
+}
+
+/* "Applied Filter" heading — only when at least one pill is present.
+   Uses the data-has-applied-filters attribute set by custom-facets.js
+   (falls back to :has() where supported). */
+.facets-vertical .active-facets-desktop[data-has-applied-filters='true']::before,
+.facets-vertical .active-facets-desktop:has(> facet-remove:not(.active-facets__button-wrapper))::before {
+  content: 'Applied Filter';
+  display: block;
+  width: 100%;
+  margin: 0 0 0.8rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #1e1e1e;
+}
+
+/* No pills → collapse the pills row (dashed divider + Applied Filter heading)
+   so no stub space remains. The "Hide Filter" header row above stays intact. */
+.facets-vertical .active-facets-desktop[data-has-applied-filters='false']:not(:has(> facet-remove:not(.active-facets__button-wrapper))) {
+  padding: 0;
+  margin: 0;
+  border-bottom: 0;
+}
+
+.facets-vertical .active-facets-desktop[data-has-applied-filters='false']:not(:has(> facet-remove:not(.active-facets__button-wrapper))) > .active-facets__button-wrapper {
+  display: none;
+}
+
+/* Individual applied filter pill */
+.facets-vertical .active-facets-desktop .active-facets__button {
+  text-decoration: none;
+  margin: 0;
+}
+
+.facets-vertical .active-facets-desktop .active-facets__button-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 1rem;
+  min-height: 0;
+  min-width: 0;
+  border: 1px solid #d5d5d5;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #1e1e1e;
+  font-size: 1.2rem;
+  font-weight: 500;
+  line-height: 1.3;
+  box-shadow: none;
+}
+
+.facets-vertical .active-facets-desktop .active-facets__button-inner::before,
+.facets-vertical .active-facets-desktop .active-facets__button-inner::after {
+  display: none;
+}
+
+.facets-vertical .active-facets-desktop .active-facets__button-inner .svg-wrapper {
+  display: inline-flex;
+  align-items: center;
+}
+
+.facets-vertical .active-facets-desktop .active-facets__button-inner .svg-wrapper svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* "Clear Filter" text link inline with pills */
+.facets-vertical .active-facets-desktop .active-facets__button-wrapper {
+  margin-left: auto;
+}
+
+.facets-vertical .active-facets-desktop .active-facets__button-wrapper .active-facets__button-remove {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #1e1e1e;
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+/* Filter section accordions */
+.facets-vertical .facets__disclosure-vertical {
+  border-top: 0;
+  border-bottom: 1px dashed #d5d5d5;
+  padding: 1.4rem 0;
+  margin: 0;
+}
+
+.facets-vertical .facets__disclosure-vertical:last-of-type {
+  border-bottom: 0;
+  padding-bottom: 0.6rem;
+}
+
+.facets-vertical .facets__disclosure-vertical > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.facets-vertical .facets__disclosure-vertical > summary::-webkit-details-marker {
+  display: none;
+}
+
+.facets-vertical .facets__disclosure-vertical > summary::marker {
+  content: '';
+}
+
+.facets-vertical .facets__disclosure-vertical > summary > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.facets-vertical .facets__disclosure-vertical .facets__summary-label,
+.facets-vertical .facets__disclosure-vertical > summary > div > span:not(.facets__selected):not(.facets__and-helptext) {
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #1e1e1e;
+}
+
+.facets-vertical .facets__disclosure-vertical .facets__selected {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #7a7a7a;
+  margin-left: 0.4rem;
+}
+
+/* Hide Dawn's filled caret and draw a thin stroke chevron via ::after
+   (matches Figma's thinner V-chevron look). Uses two CSS borders on a
+   rotated square — no SVG parsing needed, renders in every browser. */
+.facets-vertical .facets__disclosure-vertical > summary svg {
+  display: none !important;
+}
+
+.facets-vertical .facets__disclosure-vertical > summary > div::after {
+  content: '';
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: 0 0 auto;
+  border-right: 2px solid #1e1e1e;
+  border-bottom: 2px solid #1e1e1e;
+  transform: rotate(45deg);
+  margin-top: -0.4rem;
+  transition: transform var(--duration-short, 150ms) ease;
+  box-sizing: border-box;
+}
+
+.facets-vertical .facets__disclosure-vertical[open] > summary > div::after {
+  transform: rotate(-135deg);
+  margin-top: 0.3rem;
+}
+
+/* Panel content */
+.facets-vertical .facets__display-vertical {
+  padding: 1.2rem 0 0.4rem;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Text checkbox list */
+.facets-vertical .facets__list--vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+}
+
+.facets-vertical .facets__list--vertical .facets__item {
+  margin: 0;
+  padding: 0;
+}
+
+.facets-vertical .facets__list--vertical .facet-checkbox {
+  padding: 0.4rem 0;
+  font-size: 1.3rem;
+  color: #1e1e1e;
+}
+
+/* Swatch (color) grid — override list layout with responsive grid */
+.facets-vertical .facets-layout-list--swatch {
+  display: grid !important;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 0.8rem 0.6rem;
+  padding: 0.6rem 0 0;
+}
+
+.facets-vertical .facets-layout-list--swatch .facets__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.facets-vertical .facets-layout-list--swatch .facet-checkbox {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  display: block;
+  width: 100%;
+  max-width: 3rem;
+  aspect-ratio: 1 / 1;
+}
+
+/* Hide the label text — swatches speak for themselves */
+.facets-vertical .facets-layout-list--swatch .facet-checkbox__text {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.facets-vertical .facets-layout-list--swatch .swatch-input-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* Transparent full-size input overlay so the whole circle is the click target
+   (and Dawn's default checkbox box never shows) */
+.facets-vertical .facets-layout-list--swatch .swatch-input__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Label must fill the wrapper so the swatch (width/height:100%) has a sized
+   parent — this is what makes the colour actually render */
+.facets-vertical .facets-layout-list--swatch .swatch-input__label {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 50%;
+  outline: none;
+}
+
+/* The colour circle itself */
+.facets-vertical .facets-layout-list--swatch .swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: none;
+}
+
+/* Keyboard focus ring (label outline is suppressed above) */
+.facets-vertical .facets-layout-list--swatch .swatch-input__input:focus-visible + .swatch-input__label {
+  outline: 0.2rem solid rgba(30, 30, 30, 0.5);
+  outline-offset: 0.3rem;
+}
+
+/* Selected swatch — ring around */
+.facets-vertical .facets-layout-list--swatch .facet-checkbox.active .swatch-input-wrapper::after,
+.facets-vertical .facets-layout-list--swatch .swatch-input-wrapper:has(input:checked)::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1.5px solid #1e1e1e;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Price range section */
+.facets-vertical .facets__header-vertical {
+  padding: 0.2rem 0 1rem;
+  border: 0;
+}
+
+.facets-vertical .facets__header-vertical .facets__selected {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #7a7a7a;
+  margin: 0;
+}
+
+/* Price section: real draggable slider (injected by custom-facets.js) +
+   two bordered input boxes side by side with the currency ₹ inside each */
+.facets-vertical .facets__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* Functional draggable range slider — full-width row above the fields.
+   Flex layout with a 0.7rem gutter each side (= thumb radius) so the thumbs
+   at 0%/100% sit fully inside and never clip. The track is the positioning
+   context; thumbs + progress are absolutely positioned within it. */
+.facets-vertical .facets__price-slider {
+  order: -1;
+  width: 100%;
+  height: 1.4rem;
+  margin: 0.2rem 0 1.4rem;
+  padding: 0 0.7rem;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  touch-action: none;
+}
+
+.facets-vertical .facets__price-slider-track {
+  position: relative;
+  flex: 1 1 auto;
+  height: 2px;
+  background: rgba(30, 30, 30, 0.22);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.facets-vertical .facets__price-slider-progress {
+  position: absolute;
+  top: 0;
+  height: 2px;
+  background: #1e1e1e;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+/* Thumb centres on its % position (within the track) via translate(-50%) */
+.facets-vertical .facets__price-slider-thumb {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 1.4rem;
+  height: 1.4rem;
+  padding: 0;
+  background: #1e1e1e;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transform: translate(-50%, -50%);
+  cursor: grab;
+  z-index: 1;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.facets-vertical .facets__price-slider-thumb:active {
+  cursor: grabbing;
+}
+
+.facets-vertical .facets__price-slider-thumb:focus-visible {
+  outline: 0.2rem solid rgba(30, 30, 30, 0.5);
+  outline-offset: 0.3rem;
+}
+
+body.is-dragging-price {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grabbing;
+}
+
+/* Leftover standalone currency (before JS moves it into fields) is hidden */
+.facets-vertical .facets__price > .field-currency {
+  display: none;
+}
+
+.facets-vertical .facets__price .field {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0 0.6rem 0 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid #d5d5d5;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Currency prefix inside each field (moved in by custom-facets.js) */
+.facets-vertical .facets__price .field .field-currency {
+  display: inline-flex;
+  align-items: center;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: #7a7a7a;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+}
+
+.facets-vertical .facets__price .field::before,
+.facets-vertical .facets__price .field::after {
+  display: none;
+  content: none;
+}
+
+.facets-vertical .facets__price .field:focus-within {
+  border-color: #1e1e1e;
+}
+
+.facets-vertical .facets__price .field__input {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  padding: 0.9rem 0.2rem;
+  font-size: 1.3rem;
+  line-height: 1;
+  min-height: 0;
+  height: auto;
+  color: #1e1e1e;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  outline: none;
+}
+
+.facets-vertical .facets__price .field__input::placeholder {
+  color: #b5b5b5;
+  opacity: 1;
+}
+
+/* Hide the floating "From" / "To" labels — placeholders convey the same,
+   keep them for screen readers */
+.facets-vertical .facets__price .field__label {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  top: auto;
+  left: auto;
+}
+
+.facets-vertical .facets__price .field__label {
+  font-size: 1.2rem;
+  color: #7a7a7a;
+  left: 0.8rem;
+  top: 0.6rem;
+}
+
+.facets-vertical .facets__price .field__currency {
+  font-size: 1.3rem;
+  color: #1e1e1e;
+  padding-inline: 0.4rem 0;
+}
+
+/* Slider bar */
+.facets-vertical price-range .price-range__slider,
+.facets-vertical price-range .slider {
+  height: 2px;
+  background: #1e1e1e;
+  margin: 0.6rem 0 1.4rem;
+  border-radius: 999px;
+}
+
+.facets-vertical price-range .slider__thumb,
+.facets-vertical price-range .slider .slider__handle {
+  width: 1.4rem;
+  height: 1.4rem;
+  background: #1e1e1e;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Reset link in price panel (horizontal only in original — hidden on vertical) */
+.facets-vertical .facets__header-vertical .facets__reset {
+  display: none;
+}
+
+/* Show-more button */
+.facets-vertical .button-show-more {
+  font-size: 1.2rem;
+  color: #1e1e1e;
+  margin-top: 0.8rem;
+  padding: 0;
+}
+
+/* Focus states */
+.facets-vertical .facets__disclosure-vertical > summary:focus-visible {
+  outline: 0.2rem solid rgba(30, 30, 30, 0.4);
+  outline-offset: 0.3rem;
+  border-radius: 0.4rem;
+}
+
+/* Colour swatches rendered by the `custom-facet-swatch` snippet. The snippet always
+   resolves a real colour (Shopify swatch first, then the value label), so the circle
+   never falls back to Dawn's empty `.swatch--unavailable` look. */
+.custom-facet-swatch {
+  border-color: rgba(0, 0, 0, 0.12);
+  border-style: solid;
+}
+
+/* Mobile "Filter and sort" bar.
+   Dawn colours this trigger with rgba(var(--color-link), var(--alpha-link)), and
+   --color-link is derived from the scheme's secondary button label — which is #ffffff
+   on schemes 3-5. That renders white-on-light-grey against the sidebar card, so the
+   label and icon disappear. Pin them to the same ink as the rest of the facet UI.
+   The icon is a single path with fill="currentColor", so `color` covers both. */
+.facets-container .mobile-facets__open,
+.facets-container .mobile-facets__open:hover {
+  color: #1e1e1e;
+}
+
+/* Mobile drawer — same swatch grid as the desktop sidebar */
+.mobile-facets .facets-layout-list--swatch {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 1.2rem 0.8rem;
+  padding: 1.2rem 2rem;
+}
+
+.mobile-facets .facets-layout-list--swatch .mobile-facets__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-facets .facets-layout-list--swatch .facets__label {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 3.2rem;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-facets .facets-layout-list--swatch .facet-checkbox__text {
+  position: absolute;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.mobile-facets .facets-layout-list--swatch .swatch-input-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.mobile-facets .facets-layout-list--swatch .swatch-input__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.mobile-facets .facets-layout-list--swatch .swatch-input__label {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 50%;
+  outline: none;
+}
+
+.mobile-facets .facets-layout-list--swatch .swatch {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  aspect-ratio: auto;
+  border-radius: 50%;
+}
+
+.mobile-facets .facets-layout-list--swatch .swatch-input-wrapper:has(input:checked)::after,
+.mobile-facets .facets-layout-list--swatch .facets__label.active .swatch-input-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1.5px solid #1e1e1e;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Motion-safety */
+@media (prefers-reduced-motion: reduce) {
+  .facets-vertical .facets__disclosure-vertical > summary svg {
+    transition: none;
+  }
+}
