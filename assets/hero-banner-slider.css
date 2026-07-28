@@ -178,7 +178,7 @@
   color: var(--hbs-heading-color, #ffffff);
   font-size: var(--hbs-heading-size-mobile, 2.8rem);
   font-weight: 500;
-  line-height: 68px;
+  /* line-height: 68px; */
   letter-spacing: 0;
   margin: 0 0 1rem;
   text-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.35);
