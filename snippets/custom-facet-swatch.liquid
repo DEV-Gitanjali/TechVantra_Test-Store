@@ -1,0 +1,98 @@
+{% comment %}
+  Renders a colour swatch checkbox for a single facet value.
+
+  Uses the Shopify swatch (image or colour) when the merchant has configured one in
+  Settings > Products > Options. When they haven't, `value.swatch` is nil and Dawn's
+  `swatch` snippet renders an empty circle with no background at all — which is why the
+  Colour filter showed blank swatches. This snippet falls back to a colour resolved from
+  the value label instead, so the filter always shows real colours.
+
+  Accepts:
+  - id: {String} unique input id
+  - name: {String} input name (value.param_name)
+  - value: {String} input value
+  - label: {String} human readable value label — used for the colour fallback
+  - swatch: {SwatchDrop} the swatch drop (optional)
+  - product_form_id: {String} id of the form the input belongs to
+  - checked: {Boolean} default checked status
+  - disabled: {Boolean} default disabled status
+
+  Usage:
+    {% render 'custom-facet-swatch',
+      id: input_id,
+      name: value.param_name,
+      value: value.value,
+      label: value.label,
+      swatch: value.swatch,
+      product_form_id: 'FacetFiltersForm',
+      checked: value.active,
+      disabled: is_disabled
+    %}
+{% endcomment %}
+
+{%- liquid
+  assign swatch_background = null
+  assign swatch_focal_point = null
+
+  if swatch.image
+    assign swatch_image_url = swatch.image | image_url: width: 60
+    assign swatch_background = 'url(' | append: swatch_image_url | append: ')'
+    assign swatch_focal_point = swatch.image.presentation.focal_point
+  elsif swatch.color
+    assign swatch_background = 'rgb(' | append: swatch.color.rgb | append: ')'
+  endif
+
+  unless swatch_background
+    # Fallback map. Entries are `name~css-colour`, most specific first, because the
+    # second pass matches on "contains" (so "navy blue" must be listed before "blue").
+    assign color_key = label | downcase | strip | replace: '_', ' ' | replace: '-', ' ' | replace: '/', ' '
+    assign color_map = 'multi colour~conic-gradient(#ff4d4d,#ffd24d,#4dd964,#4dc4ff,#b06bff,#ff4d4d)|multicolour~conic-gradient(#ff4d4d,#ffd24d,#4dd964,#4dc4ff,#b06bff,#ff4d4d)|multi color~conic-gradient(#ff4d4d,#ffd24d,#4dd964,#4dc4ff,#b06bff,#ff4d4d)|multicolor~conic-gradient(#ff4d4d,#ffd24d,#4dd964,#4dc4ff,#b06bff,#ff4d4d)|rainbow~conic-gradient(#ff4d4d,#ffd24d,#4dd964,#4dc4ff,#b06bff,#ff4d4d)|assorted~conic-gradient(#ff4d4d,#ffd24d,#4dd964,#4dc4ff,#b06bff,#ff4d4d)|rose gold~#b76e79|light blue~#a8d8ea|dark blue~#1b3a6b|navy blue~#1b2a4a|sky blue~#87ceeb|royal blue~#2f5fd0|baby blue~#bcd9f1|powder blue~#b0e0e6|light pink~#f7c8d8|baby pink~#f6cdd8|hot pink~#ff5fa2|dark pink~#c94f7c|light green~#a8dda8|dark green~#1f5c34|olive green~#7a8b3a|mint green~#a8e6cf|lime green~#88d642|forest green~#2b6a3f|sea green~#2e8b57|light grey~#d5d5d5|dark grey~#4a4a4a|light gray~#d5d5d5|dark gray~#4a4a4a|off white~#f4f1ea|light yellow~#f7e9a0|dark brown~#4b3621|light brown~#b98b5e|tangerine~#f28500|turquoise~#3fc7c0|periwinkle~#a5b4e8|terracotta~#c96f4a|mahogany~#7a3b2e|lavender~#c3b1e1|burgundy~#7b1e33|charcoal~#3b3f45|magenta~#d6338f|mustard~#e0b62b|crimson~#d62839|scarlet~#e23b2e|apricot~#f7b26a|caramel~#c68e3c|emerald~#2fa06a|sapphire~#0f52ba|seafoam~#9fe2bf|maroon~#7d2437|amber~#f0a500|azure~#3a8dde|beige~#e8dcc4|bisque~#ffe4c4|blush~#f2c4c4|bronze~#b08d57|camel~#c19a6b|cobalt~#2a52be|coral~#f4795b|cream~#f5ead6|denim~#4a6fa5|indigo~#4b3f8f|ivory~#fffff0|khaki~#c3b091|lilac~#c6a8d8|mauve~#c09ab2|mocha~#7b5b45|natural~#e6dbc6|orchid~#c77bc4|peach~#f9c3a0|pearl~#f0ead6|pewter~#8f8f8f|sienna~#a0522d|silver~#c4c4c4|violet~#8b5cf6|umber~#635147|jade~#3ba58a|mint~#b7e4cd|navy~#1b2a4a|nude~#e6c3a5|ochre~#cc7722|olive~#7a8b3a|onyx~#2b2b2b|opal~#dfe9ea|plum~#8e4585|ruby~#9b111e|rust~#b7410e|sage~#a3b18a|salmon~#f08f7c|sand~#e0d3b1|sepia~#704214|slate~#64748b|stone~#a9a49b|taupe~#b0a08f|wine~#722f37|gold~#d4af37|aqua~#00c2c7|cyan~#22c3e0|teal~#0f8b8d|tan~#d2b48c|ecru~#dcd3bd|purple~#7d4fa8|orange~#f47b20|yellow~#f2cf3f|green~#4caf50|blue~#2f6fd0|brown~#8b5a2b|black~#1c1c1c|white~#ffffff|grey~#9a9a9a|gray~#9a9a9a|pink~#ef7fa8|red~#e03131|clear~rgba(0, 0, 0, 0.06)|transparent~rgba(0, 0, 0, 0.06)' | split: '|'
+
+    for color_pair in color_map
+      assign color_parts = color_pair | split: '~'
+      if color_parts[0] == color_key
+        assign swatch_background = color_parts[1]
+        break
+      endif
+    endfor
+
+    unless swatch_background
+      for color_pair in color_map
+        assign color_parts = color_pair | split: '~'
+        if color_key contains color_parts[0]
+          assign swatch_background = color_parts[1]
+          break
+        endif
+      endfor
+    endunless
+
+    unless swatch_background
+      assign swatch_background = '#e3e3e3'
+    endunless
+  endunless
+-%}
+
+<input
+  type="checkbox"
+  id="{{ id }}"
+  name="{{ name }}"
+  value="{{ value }}"
+  form="{{ product_form_id }}"
+  class="swatch-input__input"
+  {% if checked %}
+    checked
+  {% endif %}
+  {% if disabled %}
+    disabled
+  {% endif %}
+>
+<label
+  for="{{ id }}"
+  title="{{ label | escape }}"
+  class="swatch-input__label"
+>
+  <span
+    class="swatch custom-facet-swatch"
+    style="--swatch--background: {{ swatch_background }};{% if swatch_focal_point %} --swatch-focal-point: {{ swatch_focal_point }};{% endif %}"
+  ></span>
+</label>

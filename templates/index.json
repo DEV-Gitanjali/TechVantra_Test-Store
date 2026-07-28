@@ -1,75 +1,575 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero_banner_slider_36bnrm": {
+      "type": "hero-banner-slider",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "slide_dVc34D": {
+          "type": "slide",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "media_type": "image",
+            "desktop_image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "heading": "Creative Playtime With Building Blocks",
+            "description": "Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.",
+            "button_text": "Show Now",
+            "button_link": "",
+            "content_position": "left",
+            "vertical_alignment": "bottom",
+            "heading_color": "#ffffff",
+            "description_color": "#ffffff",
+            "button_bg_color": "#fd8db9",
+            "button_text_color": "#ffffff",
+            "button_hover_bg_color": "#e85a91",
+            "button_hover_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 25,
+            "heading_font_size_desktop": 48,
+            "heading_font_size_mobile": 28,
+            "description_font_size_desktop": 16,
+            "description_font_size_mobile": 13,
+            "button_font_size": 14,
+            "content_padding_left": 40,
+            "content_padding_right": 40,
+            "content_max_width": 480,
+            "button_border_radius": 50
           }
         },
-        "button": {
-          "type": "buttons",
+        "slide_T9QnrM": {
+          "type": "slide",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "media_type": "image",
+            "desktop_image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "heading": "Creative Playtime With Building Blocks",
+            "description": "Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.",
+            "button_text": "Show Now",
+            "button_link": "",
+            "content_position": "left",
+            "vertical_alignment": "bottom",
+            "heading_color": "#ffffff",
+            "description_color": "#ffffff",
+            "button_bg_color": "#fd8db9",
+            "button_text_color": "#ffffff",
+            "button_hover_bg_color": "#e85a91",
+            "button_hover_text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 0,
+            "heading_font_size_desktop": 48,
+            "heading_font_size_mobile": 28,
+            "description_font_size_desktop": 16,
+            "description_font_size_mobile": 13,
+            "button_font_size": 14,
+            "content_padding_left": 40,
+            "content_padding_right": 40,
+            "content_max_width": 480,
+            "button_border_radius": 30
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "slide_dVc34D",
+        "slide_T9QnrM"
       ],
+      "name": "Hero banner slider",
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "color_scheme": "",
+        "height_desktop": 600,
+        "height_tablet": 500,
+        "height_mobile": 420,
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "enable_autoplay": true,
+        "autoplay_speed": 5,
+        "infinite_loop": true,
+        "transition_speed": 600,
+        "fade_effect": false,
+        "show_arrows": true,
+        "show_pagination": false,
+        "show_counter": true,
+        "pause_on_hover": true,
+        "enable_touch_swipe": true
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "shop_by_age_9kLp2Q": {
+      "type": "custom-shop-by-age",
+      "blocks": {
+        "age_group_1a": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "0-1 Years",
+            "link": "shopify://collections"
+          }
+        },
+        "age_group_2b": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "1-2 Years",
+            "link": ""
+          }
+        },
+        "age_group_3c": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "2-3 Years",
+            "link": ""
+          }
+        },
+        "age_group_4d": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "3-4 Years",
+            "link": ""
+          }
+        },
+        "age_group_5e": {
+          "type": "age_group",
+          "settings": {
+            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
+            "label": "4-5 Years",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "age_group_1a",
+        "age_group_2b",
+        "age_group_3c",
+        "age_group_4d",
+        "age_group_5e"
+      ],
+      "name": "Custom shop by age",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
+        "heading": "Shop By Age",
+        "heading_size": "h1",
+        "heading_color": "#008b8b",
+        "color_scheme": "scheme-1",
+        "circle_size_desktop": 160,
+        "circle_size_mobile": 100,
+        "item_spacing": 32,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "shop_by_theme_4mNb7R": {
+      "type": "custom-shop-by-theme",
+      "blocks": {
+        "theme_card_1a": {
+          "type": "theme_card",
+          "settings": {
+            "image": "shopify://shop_images/image_831.png",
+            "label": "My First Binders",
+            "link": "shopify://collections"
+          }
+        },
+        "theme_card_2b": {
+          "type": "theme_card",
+          "settings": {
+            "image": "shopify://shop_images/image_832.png",
+            "label": "Story Themes",
+            "link": ""
+          }
+        },
+        "theme_card_3c": {
+          "type": "theme_card",
+          "settings": {
+            "image": "shopify://shop_images/image_830.png",
+            "label": "Custom Books",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "theme_card_1a",
+        "theme_card_2b",
+        "theme_card_3c"
+      ],
+      "name": "Custom shop by theme",
+      "settings": {
+        "heading": "Shop By Theme",
+        "heading_size": "h1",
+        "heading_color": "#159a8d",
+        "subheading": "<p>Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.</p>",
+        "color_scheme": "scheme-1",
+        "columns_desktop": 3,
+        "card_radius": 16,
+        "item_spacing": 24,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_mkMmja": {
+      "type": "featured-collection",
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "collection": "frontpage",
+        "products_to_show": 8,
+        "title": "Our Best Products",
+        "heading_size": "h1",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "all",
-        "products_to_show": 8,
         "columns_desktop": 4,
-        "color_scheme": "scheme-1",
         "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
+        "color_scheme": "",
+        "image_ratio": "portrait",
         "image_shape": "default",
-        "show_secondary_image": true,
+        "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
-        "quick_add": "none",
+        "quick_add": "standard",
         "columns_mobile": "2",
-        "padding_top": 44,
+        "swipe_on_mobile": false,
+        "padding_top": 36,
         "padding_bottom": 36
+      }
+    },
+    "explore_collection_7pXq9Z": {
+      "type": "custom-explore-collection",
+      "blocks": {
+        "collection_card_1a": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "link": "",
+            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
+            "video_url": "",
+            "label": "Play Dough"
+          }
+        },
+        "collection_card_2b": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "link": "",
+            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
+            "video_url": "",
+            "label": "Soft Toys"
+          }
+        },
+        "collection_card_3c": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "link": "",
+            "image": "shopify://shop_images/medium-shot-smiley-girl-having-fun.png",
+            "video_url": "",
+            "label": "Winter Wear"
+          }
+        },
+        "collection_card_4d": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "link": "",
+            "image": "shopify://shop_images/little-girl-with-apron-painting.png",
+            "video_url": "",
+            "label": "Painting"
+          }
+        }
+      },
+      "block_order": [
+        "collection_card_1a",
+        "collection_card_2b",
+        "collection_card_3c",
+        "collection_card_4d"
+      ],
+      "name": "Custom explore collection",
+      "settings": {
+        "heading": "Explore More Collection",
+        "heading_size": "h1",
+        "heading_color": "#000000",
+        "subheading": "",
+        "background_color": "#ffaece",
+        "columns_desktop": 4,
+        "card_radius": 0,
+        "item_spacing": 18,
+        "mobile_card_width": 80,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "customer_reviews_5wZk3T": {
+      "type": "custom-customer-reviews",
+      "blocks": {
+        "review_1a": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/image_438.png",
+            "name": "Emily R.",
+            "location": "California, USA",
+            "rating": 5,
+            "review": "We were looking for screen-free learning options, and these books are just magical. They make storytime exciting and truly engage curious little minds."
+          }
+        },
+        "review_2b": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/smiling-young-brunette-caucasian-girl-looks-camera-olive-green_1.png",
+            "name": "Michael S",
+            "location": "Seattle, Washington",
+            "rating": 5,
+            "review": "I love how these activities encourage real-world thinking, problem-solving, and imagination. No screens needed, and my kids never even miss them!"
+          }
+        },
+        "review_3c": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/brunette-young-woman-with-healthy-beauty-skin-smiles-gently-shows-white-perfect-teeth_1.png",
+            "name": "James W.",
+            "location": "San Diego, California",
+            "rating": 5,
+            "review": "The colors, shapes, and textures are perfect for little hands. I noticed a real boost in my daughter's imagination after playing with these toys every day."
+          }
+        },
+        "review_KjBxhW": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/smiling-young-brunette-caucasian-girl-looks-camera-olive-green_1.png",
+            "name": "Michael S",
+            "location": "Seattle, Washington",
+            "rating": 5,
+            "review": "I love how these activities encourage real-world thinking, problem-solving, and imagination. No screens needed, and my kids never even miss them!"
+          }
+        },
+        "review_jBQgQY": {
+          "type": "review",
+          "settings": {
+            "avatar": "shopify://shop_images/brunette-young-woman-with-healthy-beauty-skin-smiles-gently-shows-white-perfect-teeth_1.png",
+            "name": "James W.",
+            "location": "San Diego, California",
+            "rating": 5,
+            "review": "The colors, shapes, and textures are perfect for little hands. I noticed a real boost in my daughter's imagination after playing with these toys every day."
+          }
+        }
+      },
+      "block_order": [
+        "review_1a",
+        "review_2b",
+        "review_3c",
+        "review_KjBxhW",
+        "review_jBQgQY"
+      ],
+      "name": "Custom customer reviews",
+      "settings": {
+        "heading": "Our Customer Reviews",
+        "heading_size": "h1",
+        "heading_color": "#159a8d",
+        "subheading": "<p>Real stories from real families — discover how our designs are making a difference in children's lives, one joyful moment at a time.</p>",
+        "background_color": "#ffffff",
+        "show_arrows": true,
+        "slides_desktop": 3,
+        "slides_tablet": 2,
+        "enable_loop": true,
+        "enable_autoplay": false,
+        "autoplay_speed": 5,
+        "card_radius": 20,
+        "item_spacing": 24,
+        "show_divider": true,
+        "divider_color": "#8c8c8c",
+        "divider_thickness": 3,
+        "divider_style": "dashed",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "coming_next_2hTf8L": {
+      "type": "custom-coming-next",
+      "blocks": {
+        "coming_card_1a": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "image": "shopify://shop_images/fc40c3270f88bd83fe05e811de81946be8590f94.jpg",
+            "image_fit": "cover",
+            "label": "New Launch: Super Soon",
+            "title": "Christmas Gifts",
+            "link": "",
+            "feature_card": false
+          }
+        },
+        "coming_card_2b": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "image": "shopify://shop_images/907be32b73956e81ceb36078f75c74769d051bc2.jpg",
+            "image_fit": "cover",
+            "label": "New Launch: Super Soon",
+            "title": "Art & Craft",
+            "link": "",
+            "feature_card": true
+          }
+        },
+        "coming_card_3c": {
+          "type": "collection_card",
+          "settings": {
+            "collection": "",
+            "image": "shopify://shop_images/02e5a824dbaa1c580bdc6d2610fed79d679b70e5.jpg",
+            "image_fit": "cover",
+            "label": "New Launch: Super Soon",
+            "title": "Game Night",
+            "link": "",
+            "feature_card": false
+          }
+        }
+      },
+      "block_order": [
+        "coming_card_1a",
+        "coming_card_2b",
+        "coming_card_3c"
+      ],
+      "name": "Custom coming next",
+      "settings": {
+        "heading": "What's Coming Next",
+        "heading_size": "h2",
+        "heading_color": "#159a8d",
+        "subheading": "<p>Fun and exciting adventure just for kids! 🎉 Get ready to discover brand-new surprises</p>",
+        "background_color": "#ffffff",
+        "content_width": "full_width",
+        "container_width": 1200,
+        "spacing_horizontal": 0,
+        "card_gap": 20,
+        "border_radius": 16,
+        "desktop_layout": "carousel",
+        "mobile_layout": "carousel",
+        "enable_animation": true,
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "featured_card_width": 460,
+        "featured_card_height": 540,
+        "side_card_width": 270,
+        "side_card_height": 280,
+        "show_arrows": true,
+        "show_pagination": false,
+        "enable_autoplay": false,
+        "autoplay_speed": 4,
+        "enable_infinite_loop": true,
+        "enable_drag": true,
+        "transition_speed": 400,
+        "label_font_size": 12,
+        "label_font_weight": "400",
+        "label_color": "#8c8c8c",
+        "label_text_transform": "none",
+        "title_font_size_desktop": 22,
+        "title_font_size_mobile": 18,
+        "title_font_weight": "600",
+        "title_color": "#1a1a1a",
+        "title_line_height": 26,
+        "enable_arrow": true,
+        "arrow_color": "#1a1a1a",
+        "enable_overlay": false,
+        "overlay_color": "#000000",
+        "overlay_opacity": 30
+      }
+    },
+    "image_with_content_9fRt2K": {
+      "type": "custom-image-with-content",
+      "settings": {
+        "image": "shopify://shop_images/image_841.png",
+        "image_position": "left",
+        "image_width": 500,
+        "image_radius": 15,
+        "name": "Sruthi Sankar",
+        "name_size": "h1",
+        "name_color": "#008b8b",
+        "bio": "<p>I am an Architect by profession and a crafter by passion. During Covid I had to find a way to entertain and educate my son and stumbled upon this concept. Luckily being from a Textile Industry background I could find all the resources at hands reach and began designing my own collections. Exposing my samples to the outside world showed me the real potential and gave me the confidence to bring Felt Barn to the Market<br/><br/>Creative Head & Owner of Felt Barn by Sruthi Sankar</p>",
+        "bio_color": "#000000",
+        "role_text": "",
+        "role_color": "#000000",
+        "button_label": "Get In Touch",
+        "button_link": "",
+        "button_bg_color": "#fd8db9",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#fd8db9",
+        "button_hover_text_color": "#ffffff",
+        "background_color": "#cff2f7",
+        "column_gap": 44,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "instagram_feed_6mLp8Q": {
+      "type": "custom-instagram-feed",
+      "blocks": {
+        "instagram_post_1a": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_831.png",
+            "link": ""
+          }
+        },
+        "instagram_post_2b": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_832.png",
+            "link": ""
+          }
+        },
+        "instagram_post_3c": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_830.png",
+            "link": ""
+          }
+        },
+        "instagram_post_4d": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
+            "link": ""
+          }
+        },
+        "instagram_post_5e": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "instagram_post_1a",
+        "instagram_post_2b",
+        "instagram_post_3c",
+        "instagram_post_4d",
+        "instagram_post_5e"
+      ],
+      "name": "Instagram feed",
+      "settings": {
+        "heading": "We're on Instagram",
+        "heading_size": "h1",
+        "heading_color": "#159a8d",
+        "background_color": "#ffffff",
+        "columns_desktop": 5,
+        "item_spacing": 4,
+        "open_in_new_tab": true,
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "icon_color": "#ffffff",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "hero_banner_slider_36bnrm",
+    "shop_by_age_9kLp2Q",
+    "shop_by_theme_4mNb7R",
+    "featured_collection_mkMmja",
+    "explore_collection_7pXq9Z",
+    "customer_reviews_5wZk3T",
+    "coming_next_2hTf8L",
+    "image_with_content_9fRt2K",
+    "instagram_feed_6mLp8Q"
   ]
 }

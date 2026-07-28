@@ -1,0 +1,422 @@
+{{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+{{ 'component-slider.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign social_icons = true
+  if settings.social_facebook_link == blank and settings.social_instagram_link == blank and settings.social_youtube_link == blank and settings.social_tiktok_link == blank and settings.social_twitter_link == blank and settings.social_pinterest_link == blank and settings.social_snapchat_link == blank and settings.social_tumblr_link == blank and settings.social_vimeo_link == blank
+    assign social_icons = false
+  endif
+  if section.settings.enable_country_selector or section.settings.enable_language_selector
+    assign language_country_selector = true
+  endif
+  if section.blocks.size > 0
+    assign announcement_bar = true
+  endif
+-%}
+
+{% if social_icons %}
+  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{%- if section.blocks.size == 1 -%}
+  {%- liquid
+    assign block = section.blocks.first
+    assign bar_bg_color = block.settings.background_color | default: section.settings.custom_background_color
+  -%}
+{%- endif -%}
+
+<div
+  class="utility-bar color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator and section.blocks.size > 0 %} utility-bar--bottom-border{% elsif section.settings.show_line_separator and section.settings.show_social and social_icons%} utility-bar--bottom-border-social-only{% endif %}{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header-localization{% endif %}"
+  {%- if bar_bg_color != blank %}
+  style="background-color: {{ bar_bg_color }};"
+  {%- endif %}
+>
+  <div class="page-width utility-bar__grid{% if announcement_bar and language_country_selector or section.settings.show_social and social_icons %} utility-bar__grid--3-col{% elsif language_country_selector or section.settings.show_social and social_icons %} utility-bar__grid--2-col{% endif %}">
+    {%- if section.settings.show_social and social_icons -%}
+      {%- render 'social-icons' -%}
+    {%- endif -%}
+    {%- if section.blocks.size == 1 -%}
+      {%- liquid
+        assign txt_color = block.settings.text_color | default: section.settings.custom_text_color
+        assign display_text = block.settings.text
+        assign dynamic_value = blank
+        case block.settings.dynamic_source
+          when 'country_count'
+            assign dynamic_value = localization.available_countries.size
+          when 'shop_name'
+            assign dynamic_value = shop.name
+          when 'cart_count'
+            assign dynamic_value = cart.item_count
+          when 'metafield'
+            if block.settings.metafield_namespace != blank and block.settings.metafield_key != blank
+              assign dynamic_value = shop.metafields[block.settings.metafield_namespace][block.settings.metafield_key]
+            endif
+        endcase
+        if dynamic_value != blank
+          assign display_text = display_text | replace: '{{value}}', dynamic_value
+        endif
+      -%}
+      <div
+        class="announcement-bar{% if section.settings.show_social %} announcement-bar--one-announcement{% endif %}"
+        role="region"
+        aria-label="{{ 'sections.header.announcement' | t }}"
+        {%- if txt_color != blank %}
+        style="color: {{ txt_color }};"
+        {%- endif %}
+        {{ block.shopify_attributes }}
+      >
+        {%- if display_text != blank -%}
+          {%- if block.settings.link != blank -%}
+            <a
+              href="{{ block.settings.link }}"
+              class="announcement-bar__link link link--text focus-inset animate-arrow"
+            >
+          {%- endif -%}
+          <p class="announcement-bar__message h5">
+            {%- if block.settings.icon != blank -%}
+              <img
+                class="announcement-bar__icon"
+                src="{{ block.settings.icon | image_url: width: 40 }}"
+                alt=""
+                width="20"
+                height="20"
+                loading="eager"
+              >
+            {%- endif -%}
+            <span>{{ display_text | escape }}</span>
+            {%- if block.settings.link != blank -%}
+              {{- 'icon-arrow.svg' | inline_asset_content -}}
+            {%- endif -%}
+          </p>
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    {%- elsif section.blocks.size > 1 -%}
+      <slideshow-component
+        class="announcement-bar"
+        role="region"
+        aria-roledescription="{{ 'sections.announcements.carousel' | t }}"
+        aria-label="{{ 'sections.announcements.announcement_bar' | t }}"
+      >
+        <div class="announcement-bar-slider slider-buttons">
+          <button
+            type="button"
+            class="slider-button slider-button--prev"
+            name="previous"
+            aria-label="{{ 'sections.announcements.previous_announcement' | t }}"
+            aria-controls="Slider-{{ section.id }}"
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+          <div
+            class="grid grid--1-col slider slider--everywhere"
+            id="Slider-{{ section.id }}"
+            aria-live="polite"
+            aria-atomic="true"
+            data-autoplay="{{ section.settings.auto_rotate }}"
+            data-speed="{{ section.settings.change_slides_speed }}"
+          >
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign slide_bg_color = block.settings.background_color | default: section.settings.custom_background_color
+                assign txt_color = block.settings.text_color | default: section.settings.custom_text_color
+                assign display_text = block.settings.text
+                assign dynamic_value = blank
+                case block.settings.dynamic_source
+                  when 'country_count'
+                    assign dynamic_value = localization.available_countries.size
+                  when 'shop_name'
+                    assign dynamic_value = shop.name
+                  when 'cart_count'
+                    assign dynamic_value = cart.item_count
+                  when 'metafield'
+                    if block.settings.metafield_namespace != blank and block.settings.metafield_key != blank
+                      assign dynamic_value = shop.metafields[block.settings.metafield_namespace][block.settings.metafield_key]
+                    endif
+                endcase
+                if dynamic_value != blank
+                  assign display_text = display_text | replace: '{{value}}', dynamic_value
+                endif
+              -%}
+              <div
+                class="slideshow__slide slider__slide grid__item grid--1-col"
+                id="Slide-{{ section.id }}-{{ forloop.index }}"
+                {{ block.shopify_attributes }}
+                role="group"
+                aria-roledescription="{{ 'sections.announcements.announcement' | t }}"
+                aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                tabindex="-1"
+              >
+                <div
+                  class="announcement-bar__announcement"
+                  role="region"
+                  aria-label="{{ 'sections.header.announcement' | t }}"
+                  {%- if txt_color != blank %}
+                  style="color: {{ txt_color }};"
+                  {%- endif %}
+                >
+                  {%- if display_text != blank -%}
+                    {%- if block.settings.link != blank -%}
+                      <a
+                        href="{{ block.settings.link }}"
+                        class="announcement-bar__link link link--text focus-inset animate-arrow"
+                      >
+                    {%- endif -%}
+                    <p class="announcement-bar__message h5">
+                      {%- if block.settings.icon != blank -%}
+                        <img
+                          class="announcement-bar__icon"
+                          src="{{ block.settings.icon | image_url: width: 40 }}"
+                          alt=""
+                          width="20"
+                          height="20"
+                          loading="eager"
+                        >
+                      {%- endif -%}
+                      <span>{{ display_text | escape }}</span>
+                      {%- if block.settings.link != blank -%}
+                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                      {%- endif -%}
+                    </p>
+                    {%- if block.settings.link != blank -%}
+                      </a>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+              </div>
+              {%- if slide_bg_color != blank -%}
+                <style>
+                  .utility-bar:has(#Slide-{{ section.id }}-{{ forloop.index }}[aria-hidden="false"]) {
+                    background-color: {{ slide_bg_color }};
+                  }
+                </style>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <button
+            type="button"
+            class="slider-button slider-button--next"
+            name="next"
+            aria-label="{{ 'sections.announcements.next_announcement' | t }}"
+            aria-controls="Slider-{{ section.id }}"
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
+      </slideshow-component>
+      {%- if request.design_mode -%}
+        <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>
+        <style>
+          /* theme editor power preview fix */
+          .announcement-bar-slider .slider__slide[aria-hidden='true'] {
+            visibility: hidden;
+          }
+        </style>
+      {%- endif -%}
+    {%- endif -%}
+    <div class="localization-wrapper">
+      {%- if section.settings.enable_country_selector and localization.available_countries.size > 1 -%}
+        <localization-form class="small-hide medium-hide">
+          {%- form 'localization', id: 'CustomAnnouncementCountryForm', class: 'localization-form' -%}
+            <div>
+              <h2 class="visually-hidden" id="CustomAnnouncementCountryLabel">{{ 'localization.country_label' | t }}</h2>
+              {%- render 'country-localization', localPosition: 'CustomAnnouncementCountry' -%}
+            </div>
+          {%- endform -%}
+        </localization-form>
+      {% endif %}
+
+      {%- if section.settings.enable_language_selector and localization.available_languages.size > 1 -%}
+        <localization-form class="small-hide medium-hide">
+          {%- form 'localization', id: 'CustomAnnouncementLanguageForm', class: 'localization-form' -%}
+            <div>
+              <h2 class="visually-hidden" id="CustomAnnouncementLanguageLabel">{{ 'localization.language_label' | t }}</h2>
+              {%- render 'language-localization', localPosition: 'CustomAnnouncementLanguage' -%}
+            </div>
+          {%- endform -%}
+        </localization-form>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom announcement bar",
+  "max_blocks": 12,
+  "class": "custom-announcement-bar-section",
+  "enabled_on": {
+    "groups": ["header"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "t:sections.announcement-bar.settings.auto_rotate.label",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "t:sections.announcement-bar.settings.change_slides_speed.label",
+      "default": 5
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-4"
+    },
+    {
+      "type": "header",
+      "content": "Custom colors"
+    },
+    {
+      "type": "paragraph",
+      "content": "Optional. Overrides the color scheme above with exact colors, e.g. to match a Figma design. Acts as the default for every announcement below unless a block sets its own colors."
+    },
+    {
+      "type": "color",
+      "id": "custom_background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "custom_text_color",
+      "label": "Text color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line_separator",
+      "default": true,
+      "label": "t:sections.header.settings.show_line_separator.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.announcement-bar.settings.heading_utilities.content"
+    },
+    {
+      "type": "paragraph",
+         "content": "t:sections.announcement-bar.settings.paragraph.content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social",
+      "default": false,
+      "label": "t:sections.announcement-bar.settings.show_social.label",
+      "info": "t:sections.announcement-bar.settings.show_social.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "default": false,
+      "label": "t:sections.announcement-bar.settings.enable_country_selector.label",
+      "info": "t:sections.announcement-bar.settings.enable_country_selector.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "default": false,
+      "label": "t:sections.announcement-bar.settings.enable_language_selector.label",
+      "info": "t:sections.announcement-bar.settings.enable_language_selector.info"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement-bar.blocks.announcement.name",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "default": "We now Deliver to 47 Countries! Check our Shipping Policy to see the Eligibility and Rates.",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.text.label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "paragraph",
+          "content": "Optional. Overrides the section's custom colors for this announcement only."
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color",
+          "default": "#FD8DB9"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Dynamic text"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add {{value}} anywhere in the Text field above to insert a live value."
+        },
+        {
+          "type": "select",
+          "id": "dynamic_source",
+          "label": "Dynamic value",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "country_count", "label": "Number of countries shipped to" },
+            { "value": "shop_name", "label": "Store name" },
+            { "value": "cart_count", "label": "Items in cart" },
+            { "value": "metafield", "label": "Shop metafield" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "metafield_namespace",
+          "label": "Metafield namespace",
+          "info": "Only used when Dynamic value is \"Shop metafield\"."
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Metafield key",
+          "info": "Only used when Dynamic value is \"Shop metafield\"."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom announcement bar",
+      "blocks": [
+        {
+          "type": "announcement"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,1 +1,263 @@
-{"sections":{"main":{"type":"main-product","blocks":{"vendor":{"type":"text","settings":{"text":"{{ product.vendor }}","text_style":"uppercase"}},"title":{"type":"title","settings":{}},"price":{"type":"price","settings":{}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","swatch_shape":"circle"}},"quantity_selector":{"type":"quantity_selector","settings":{}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":true,"show_gift_card_recipient":true}},"description":{"type":"description","settings":{}},"share":{"type":"share","settings":{"share_label":"Share"}}},"block_order":["vendor","title","price","variant_picker","quantity_selector","buy_buttons","description","share"],"settings":{"enable_sticky_info":true,"color_scheme":"scheme-1","media_size":"large","constrain_to_viewport":true,"media_fit":"contain","gallery_layout":"stacked","mobile_thumbnails":"hide","media_position":"left","image_zoom":"lightbox","hide_variants":true,"enable_video_looping":false,"padding_top":36,"padding_bottom":12}},"disclosures":{"type":"disclosures","settings":{"padding_top":36,"padding_bottom":0}},"related-products":{"type":"related-products","settings":{"heading":"You may also like","heading_size":"h2","products_to_show":4,"columns_desktop":4,"columns_mobile":"2","color_scheme":"scheme-1","image_ratio":"square","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":false,"padding_top":36,"padding_bottom":28}}},"order":["main","disclosures","related-products"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor": {
+          "type": "text",
+          "settings": {
+            "text": "{{ product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "rating": {
+          "type": "rating",
+          "settings": {
+            "static_rating": 5
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "zippy_zipcode_validator_zippy_widget_Cbf3CN": {
+          "type": "shopify://apps/zippy-zipcode-validator/blocks/zippy_widget/14b4faf5-2197-4ce1-b361-3bf431fbc80f",
+          "settings": {}
+        },
+        "personalization_field": {
+          "type": "personalization_field",
+          "settings": {
+            "label": "Name of the Child*",
+            "label_color": "#ff6f91",
+            "placeholder": "Enter your Child's Full Name",
+            "property_name": "Child's Name",
+            "required": true,
+            "error_message": "This is a required field"
+          }
+        },
+        "complementary_WYVrnd": {
+          "type": "complementary",
+          "settings": {
+            "block_heading": "Add Ons",
+            "make_collapsible_row": true,
+            "icon": "none",
+            "product_list_limit": 10,
+            "products_per_page": 4,
+            "pagination_style": "counter",
+            "image_ratio": "square",
+            "enable_quick_add": true,
+            "caption_text": "Choose from the above Add Ons to make your Binder Extra Special"
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true
+          }
+        },
+        "pickup_info": {
+          "type": "pickup_info",
+          "settings": {
+            "store_name": "Sruthi's Design Solutions",
+            "ready_time": "Usually Ready In 2-4 Days",
+            "link_text": "View Store Information",
+            "link_url": "",
+            "background_color": "#f5f5f5"
+          }
+        },
+        "product_addons": {
+          "type": "product_addons",
+          "disabled": true,
+          "settings": {
+            "heading": "Add Ons",
+            "heading_color": "#ff6f91",
+            "background_color": "#f5f5f5",
+            "border_color": "#e0e0e0",
+            "caption_text": "Choose from the above Add Ons to make your [Product] Extra Special",
+            "addon_1_product": "",
+            "addon_2_product": "",
+            "addon_3_product": "",
+            "addon_4_product": ""
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share",
+            "icon_background": "#e5e5e5",
+            "icon_color": "#1a1a1a",
+            "help_text": "Need Help?",
+            "help_link": ""
+          }
+        },
+        "collapsible_tab_dp3ejN": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Description",
+            "icon": "none",
+            "content": "<p>Take the ggs from the Tray and Crack it open onto the Pan, sprinkle some salt and pepper and take out the omelette with the Spatula.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_tab_3KbJrG": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Product details",
+            "icon": "none",
+            "content": "",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "rating",
+        "description",
+        "variant_picker",
+        "zippy_zipcode_validator_zippy_widget_Cbf3CN",
+        "personalization_field",
+        "complementary_WYVrnd",
+        "quantity_selector",
+        "buy_buttons",
+        "pickup_info",
+        "product_addons",
+        "share",
+        "collapsible_tab_dp3ejN",
+        "collapsible_tab_3KbJrG"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "scheme-1",
+        "breadcrumb_home_label": "Home",
+        "breadcrumb_color": "#ff6f91",
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "gallery_layout": "stacked",
+        "mobile_thumbnails": "hide",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": true,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "disclosures": {
+      "type": "disclosures",
+      "settings": {
+        "heading": "Disclosures",
+        "heading_size": "h2",
+        "open_by_default": false,
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "video_gJXM4b": {
+      "type": "video",
+      "name": "t:sections.video.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h1",
+        "enable_video_looping": false,
+        "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
+        "cover_image": "shopify://shop_images/little-children-reading-bedtime-story-home_2_1.png",
+        "description": "",
+        "full_width": true,
+        "color_scheme": "",
+        "padding_top": 100,
+        "padding_bottom": 0
+      }
+    },
+    "custom_product_review": {
+      "type": "custom-product-review",
+      "settings": {
+        "heading": "Customer Review",
+        "heading_color": "#1e3a8a",
+        "background_color": "#ffffff",
+        "empty_state_text": "Be the first to write a review",
+        "write_review_button_text": "Write a Review",
+        "button_color": "#1e8fd5",
+        "button_text_color": "#ffffff",
+        "form_heading": "Write a Review",
+        "rating_label": "Rating",
+        "title_label": "Review Title",
+        "title_placeholder": "Give Your Review a title",
+        "title_max_length": 100,
+        "body_label": "Review Title",
+        "body_placeholder": "Write Your Comments Here",
+        "picture_label": "Picture/Video (optional)",
+        "name_label": "Name (displayed publicly like",
+        "name_example": "John Smith)",
+        "name_placeholder": "Enter Your Name Publicly",
+        "email_label": "Email",
+        "email_placeholder": "Enter Your Email Private",
+        "legal_text": "<p>How we use your data: We'll only contact you about the review you left, and only if necessary.</p>",
+        "cancel_button_text": "Cancel Review",
+        "submit_button_text": "Submit Review",
+        "submit_button_color": "#1a1a1a",
+        "submit_button_text_color": "#ffffff",
+        "success_message": "Thanks! Your review has been sent.",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "color_scheme": "scheme-76d0c761-3762-49cb-a5d5-049bce8c89d8",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "main",
+    "disclosures",
+    "video_gJXM4b",
+    "custom_product_review",
+    "related-products"
+  ]
+}

@@ -1,0 +1,368 @@
+{{ 'custom-product-review.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'custom-product-review.js' | asset_url }}" defer="defer"></script>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .product-review {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  #shopify-section-{{ section.id }} .product-review__heading {
+    color: {{ section.settings.heading_color }};
+  }
+
+  #shopify-section-{{ section.id }} .product-review__write-button {
+    background-color: {{ section.settings.button_color }};
+    color: {{ section.settings.button_text_color }};
+  }
+
+  #shopify-section-{{ section.id }} .product-review__submit {
+    background-color: {{ section.settings.submit_button_color }};
+    color: {{ section.settings.submit_button_text_color }};
+  }
+{%- endstyle -%}
+
+<div class="product-review" id="customer-reviews">
+  <div class="product-review__wrapper page-width section-{{ section.id }}-padding">
+    <div class="product-review__summary">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="product-review__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <div class="product-review__stars" aria-hidden="true">
+        {%- for i in (1..5) -%}
+          {{- 'icon-star.svg' | inline_asset_content -}}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.empty_state_text != blank -%}
+        <p class="product-review__empty-text">{{ section.settings.empty_state_text }}</p>
+      {%- endif -%}
+
+      <button type="button" class="product-review__write-button" data-review-scroll-target="ReviewForm-{{ section.id }}">
+        {{ section.settings.write_review_button_text }}
+      </button>
+    </div>
+
+    <div class="product-review__divider" aria-hidden="true"></div>
+
+    <div class="product-review__form-wrapper" id="ReviewForm-{{ section.id }}">
+      {%- if section.settings.form_heading != blank -%}
+        <h3 class="product-review__form-heading">{{ section.settings.form_heading }}</h3>
+      {%- endif -%}
+
+      {%- assign review_form_id = 'ProductReviewForm-' | append: section.id -%}
+      {%- form 'contact', id: review_form_id, class: 'product-review__form' -%}
+        <input type="hidden" name="contact[tags]" value="product-review">
+        <input type="hidden" name="contact[product]" value="{{ product.title | default: page_title }}">
+        <input type="hidden" name="contact[rating]" value="0" data-review-rating-input>
+
+        {%- if form.posted_successfully? -%}
+          <p class="product-review__success" role="status">
+            {{ section.settings.success_message }}
+          </p>
+        {%- endif -%}
+
+        {%- if form.errors -%}
+          <p class="product-review__error" role="alert">
+            {{ form.errors.messages['form'] | default: 'Please fill in the required fields.' }}
+          </p>
+        {%- endif -%}
+
+        <div class="product-review__field product-review__field--rating">
+          <span class="product-review__label">{{ section.settings.rating_label }}</span>
+          <div class="product-review__rating-stars" data-review-rating-stars role="radiogroup" aria-label="{{ section.settings.rating_label }}">
+            {%- for i in (1..5) -%}
+              <button
+                type="button"
+                class="product-review__rating-star"
+                data-review-star
+                data-value="{{ i }}"
+                role="radio"
+                aria-checked="false"
+                aria-label="{{ i }} {{ section.settings.rating_label }}"
+              >
+                {{- 'icon-star.svg' | inline_asset_content -}}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="product-review__field">
+          <span class="product-review__label">
+            {{ section.settings.title_label }}
+            <span class="product-review__counter" data-review-counter>({{ section.settings.title_max_length }})</span>
+          </span>
+          <input
+            type="text"
+            name="contact[review_title]"
+            class="product-review__input"
+            placeholder="{{ section.settings.title_placeholder }}"
+            maxlength="{{ section.settings.title_max_length }}"
+            data-review-title-input
+          >
+        </div>
+
+        <div class="product-review__field">
+          <span class="product-review__label">{{ section.settings.body_label }}</span>
+          <textarea
+            name="contact[body]"
+            class="product-review__textarea"
+            placeholder="{{ section.settings.body_placeholder }}"
+            rows="5"
+          ></textarea>
+        </div>
+
+        <div class="product-review__field product-review__field--center">
+          <span class="product-review__label">{{ section.settings.picture_label }}</span>
+          <label class="product-review__upload">
+            <input type="file" accept="image/*,video/*" class="visually-hidden" data-review-file-input>
+            <span class="product-review__upload-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            </span>
+          </label>
+        </div>
+
+        <div class="product-review__field">
+          <span class="product-review__label">
+            {{ section.settings.name_label }}
+            <span class="product-review__name-example">{{ section.settings.name_example }}</span>
+          </span>
+          <input type="text" name="contact[name]" class="product-review__input" placeholder="{{ section.settings.name_placeholder }}" required>
+        </div>
+
+        <div class="product-review__field">
+          <span class="product-review__label">{{ section.settings.email_label }}</span>
+          <input type="email" name="contact[email]" class="product-review__input" placeholder="{{ section.settings.email_placeholder }}" required>
+        </div>
+
+        {%- if section.settings.legal_text != blank -%}
+          <div class="product-review__legal">{{ section.settings.legal_text }}</div>
+        {%- endif -%}
+
+        <div class="product-review__actions">
+          <button type="reset" class="product-review__cancel" data-review-cancel>
+            {{ section.settings.cancel_button_text }}
+          </button>
+          <button type="submit" class="product-review__submit">
+            {{ section.settings.submit_button_text }}
+          </button>
+        </div>
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom product review",
+  "tag": "section",
+  "class": "section custom-product-review-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Customer Review"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1E3A8A"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "empty_state_text",
+      "label": "Empty state text",
+      "default": "Be the first to write a review"
+    },
+    {
+      "type": "text",
+      "id": "write_review_button_text",
+      "label": "\"Write a review\" button text",
+      "default": "Write a Review"
+    },
+    {
+      "type": "color",
+      "id": "button_color",
+      "label": "Button background color",
+      "default": "#1E8FD5"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Review form"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Write a Review"
+    },
+    {
+      "type": "text",
+      "id": "rating_label",
+      "label": "Rating label",
+      "default": "Rating"
+    },
+    {
+      "type": "text",
+      "id": "title_label",
+      "label": "Review title field label",
+      "default": "Review Title"
+    },
+    {
+      "type": "text",
+      "id": "title_placeholder",
+      "label": "Review title placeholder",
+      "default": "Give Your Review a title"
+    },
+    {
+      "type": "range",
+      "id": "title_max_length",
+      "label": "Review title max length",
+      "min": 20,
+      "max": 200,
+      "step": 10,
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "body_label",
+      "label": "Review body field label",
+      "default": "Review Title"
+    },
+    {
+      "type": "text",
+      "id": "body_placeholder",
+      "label": "Review body placeholder",
+      "default": "Write Your Comments Here"
+    },
+    {
+      "type": "text",
+      "id": "picture_label",
+      "label": "Picture upload label",
+      "default": "Picture/Video (optional)",
+      "info": "Uploads are visual only — files aren't attached to the emailed review since this form doesn't use an app backend."
+    },
+    {
+      "type": "text",
+      "id": "name_label",
+      "label": "Name field label",
+      "default": "Name (displayed publicly like"
+    },
+    {
+      "type": "text",
+      "id": "name_example",
+      "label": "Name example text",
+      "default": "John Smith)"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name field placeholder",
+      "default": "Enter Your Name Publicly"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email field label",
+      "default": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email field placeholder",
+      "default": "Enter Your Email Private"
+    },
+    {
+      "type": "richtext",
+      "id": "legal_text",
+      "label": "Legal text",
+      "default": "<p>How we use your data: We'll only contact you about the review you left, and only if necessary.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cancel_button_text",
+      "label": "Cancel button text",
+      "default": "Cancel Review"
+    },
+    {
+      "type": "text",
+      "id": "submit_button_text",
+      "label": "Submit button text",
+      "default": "Submit Review"
+    },
+    {
+      "type": "color",
+      "id": "submit_button_color",
+      "label": "Submit button background color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "color",
+      "id": "submit_button_text_color",
+      "label": "Submit button text color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success message",
+      "default": "Thanks! Your review has been sent."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom product review"
+    }
+  ]
+}
+{% endschema %}

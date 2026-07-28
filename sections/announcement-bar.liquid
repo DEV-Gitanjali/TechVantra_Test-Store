@@ -18,34 +18,77 @@
   {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 {% endif %}
 
+{%- if section.blocks.size == 1 -%}
+  {%- liquid
+    assign block = section.blocks.first
+    assign bar_bg_color = block.settings.background_color | default: section.settings.custom_background_color
+  -%}
+{%- endif -%}
+
 <div
   class="utility-bar color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator and section.blocks.size > 0 %} utility-bar--bottom-border{% elsif section.settings.show_line_separator and section.settings.show_social and social_icons%} utility-bar--bottom-border-social-only{% endif %}{% if section.settings.enable_country_selector or section.settings.enable_language_selector %} header-localization{% endif %}"
+  {%- if bar_bg_color != blank %}
+  style="background-color: {{ bar_bg_color }};"
+  {%- endif %}
 >
   <div class="page-width utility-bar__grid{% if announcement_bar and language_country_selector or section.settings.show_social and social_icons %} utility-bar__grid--3-col{% elsif language_country_selector or section.settings.show_social and social_icons %} utility-bar__grid--2-col{% endif %}">
     {%- if section.settings.show_social and social_icons -%}
       {%- render 'social-icons' -%}
     {%- endif -%}
     {%- if section.blocks.size == 1 -%}
+      {%- liquid
+        assign txt_color = block.settings.text_color | default: section.settings.custom_text_color
+        assign display_text = block.settings.text
+        assign dynamic_value = blank
+        case block.settings.dynamic_source
+          when 'country_count'
+            assign dynamic_value = localization.available_countries.size
+          when 'shop_name'
+            assign dynamic_value = shop.name
+          when 'cart_count'
+            assign dynamic_value = cart.item_count
+          when 'metafield'
+            if block.settings.metafield_namespace != blank and block.settings.metafield_key != blank
+              assign dynamic_value = shop.metafields[block.settings.metafield_namespace][block.settings.metafield_key]
+            endif
+        endcase
+        if dynamic_value != blank
+          assign display_text = display_text | replace: '{{value}}', dynamic_value
+        endif
+      -%}
       <div
         class="announcement-bar{% if section.settings.show_social %} announcement-bar--one-announcement{% endif %}"
         role="region"
         aria-label="{{ 'sections.header.announcement' | t }}"
-        {{ section.blocks.first.shopify_attributes }}
+        {%- if txt_color != blank %}
+        style="color: {{ txt_color }};"
+        {%- endif %}
+        {{ block.shopify_attributes }}
       >
-        {%- if section.blocks.first.settings.text != blank -%}
-          {%- if section.blocks.first.settings.link != blank -%}
+        {%- if display_text != blank -%}
+          {%- if block.settings.link != blank -%}
             <a
-              href="{{ section.blocks.first.settings.link }}"
+              href="{{ block.settings.link }}"
               class="announcement-bar__link link link--text focus-inset animate-arrow"
             >
           {%- endif -%}
           <p class="announcement-bar__message h5">
-            <span>{{ section.blocks.first.settings.text | escape }}</span>
-            {%- if section.blocks.first.settings.link != blank -%}
+            {%- if block.settings.icon != blank -%}
+              <img
+                class="announcement-bar__icon"
+                src="{{ block.settings.icon | image_url: width: 40 }}"
+                alt=""
+                width="20"
+                height="20"
+                loading="eager"
+              >
+            {%- endif -%}
+            <span>{{ display_text | escape }}</span>
+            {%- if block.settings.link != blank -%}
               {{- 'icon-arrow.svg' | inline_asset_content -}}
             {%- endif -%}
           </p>
-          {%- if section.blocks.first.settings.link != blank -%}
+          {%- if block.settings.link != blank -%}
             </a>
           {%- endif -%}
         {%- endif -%}
@@ -78,6 +121,27 @@
             data-speed="{{ section.settings.change_slides_speed }}"
           >
             {%- for block in section.blocks -%}
+              {%- liquid
+                assign slide_bg_color = block.settings.background_color | default: section.settings.custom_background_color
+                assign txt_color = block.settings.text_color | default: section.settings.custom_text_color
+                assign display_text = block.settings.text
+                assign dynamic_value = blank
+                case block.settings.dynamic_source
+                  when 'country_count'
+                    assign dynamic_value = localization.available_countries.size
+                  when 'shop_name'
+                    assign dynamic_value = shop.name
+                  when 'cart_count'
+                    assign dynamic_value = cart.item_count
+                  when 'metafield'
+                    if block.settings.metafield_namespace != blank and block.settings.metafield_key != blank
+                      assign dynamic_value = shop.metafields[block.settings.metafield_namespace][block.settings.metafield_key]
+                    endif
+                endcase
+                if dynamic_value != blank
+                  assign display_text = display_text | replace: '{{value}}', dynamic_value
+                endif
+              -%}
               <div
                 class="slideshow__slide slider__slide grid__item grid--1-col"
                 id="Slide-{{ section.id }}-{{ forloop.index }}"
@@ -91,8 +155,11 @@
                   class="announcement-bar__announcement"
                   role="region"
                   aria-label="{{ 'sections.header.announcement' | t }}"
+                  {%- if txt_color != blank %}
+                  style="color: {{ txt_color }};"
+                  {%- endif %}
                 >
-                  {%- if block.settings.text != blank -%}
+                  {%- if display_text != blank -%}
                     {%- if block.settings.link != blank -%}
                       <a
                         href="{{ block.settings.link }}"
@@ -100,7 +167,17 @@
                       >
                     {%- endif -%}
                     <p class="announcement-bar__message h5">
-                      <span>{{ block.settings.text | escape }}</span>
+                      {%- if block.settings.icon != blank -%}
+                        <img
+                          class="announcement-bar__icon"
+                          src="{{ block.settings.icon | image_url: width: 40 }}"
+                          alt=""
+                          width="20"
+                          height="20"
+                          loading="eager"
+                        >
+                      {%- endif -%}
+                      <span>{{ display_text | escape }}</span>
                       {%- if block.settings.link != blank -%}
                         {{- 'icon-arrow.svg' | inline_asset_content -}}
                       {%- endif -%}
@@ -111,6 +188,13 @@
                   {%- endif -%}
                 </div>
               </div>
+              {%- if slide_bg_color != blank -%}
+                <style>
+                  .utility-bar:has(#Slide-{{ section.id }}-{{ forloop.index }}[aria-hidden="false"]) {
+                    background-color: {{ slide_bg_color }};
+                  }
+                </style>
+              {%- endif -%}
             {%- endfor -%}
           </div>
           <button
@@ -186,13 +270,31 @@
       "unit": "s",
       "label": "t:sections.announcement-bar.settings.change_slides_speed.label",
       "default": 5
-    },    
+    },
     {
       "type": "color_scheme",
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-4"
-    },  
+    },
+    {
+      "type": "header",
+      "content": "Custom colors"
+    },
+    {
+      "type": "paragraph",
+      "content": "Optional. Overrides the color scheme above with exact colors, e.g. to match a Figma design. Acts as the default for every announcement below unless a block sets its own colors."
+    },
+    {
+      "type": "color",
+      "id": "custom_background_color",
+      "label": "Background color"
+    },
+    {
+      "type": "color",
+      "id": "custom_text_color",
+      "label": "Text color"
+    },
     {
       "type": "checkbox",
       "id": "show_line_separator",
@@ -206,7 +308,7 @@
     {
       "type": "paragraph",
          "content": "t:sections.announcement-bar.settings.paragraph.content"
-    },             
+    },
     {
       "type": "checkbox",
       "id": "show_social",
@@ -244,6 +346,62 @@
           "type": "url",
           "id": "link",
           "label": "t:sections.announcement-bar.blocks.announcement.settings.link.label"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "paragraph",
+          "content": "Optional. Overrides the section's custom colors for this announcement only."
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Background color"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color"
+        },
+        {
+          "type": "header",
+          "content": "Dynamic text"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add {{value}} anywhere in the Text field above to insert a live value."
+        },
+        {
+          "type": "select",
+          "id": "dynamic_source",
+          "label": "Dynamic value",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "country_count", "label": "Number of countries shipped to" },
+            { "value": "shop_name", "label": "Store name" },
+            { "value": "cart_count", "label": "Items in cart" },
+            { "value": "metafield", "label": "Shop metafield" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "metafield_namespace",
+          "label": "Metafield namespace",
+          "info": "Only used when Dynamic value is \"Shop metafield\"."
+        },
+        {
+          "type": "text",
+          "id": "metafield_key",
+          "label": "Metafield key",
+          "info": "Only used when Dynamic value is \"Shop metafield\"."
         }
       ]
     }

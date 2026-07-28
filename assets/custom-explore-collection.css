@@ -1,0 +1,231 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&display=swap');
+
+.explore-collection {
+  position: relative;
+}
+
+.explore-collection__wrapper {
+  position: relative;
+  text-align: center;
+}
+
+.explore-collection__heading {
+  margin: 0 0 3rem;
+  font-family: 'Fredoka', var(--font-heading-family);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 44px;
+  line-height: 68px;
+  letter-spacing: normal;
+}
+
+.explore-collection__subheading {
+  max-width: 640px;
+  margin: 0 auto 2rem;
+  font-family: 'Proxima Nova', var(--font-body-family);
+  font-size: 16px;
+  line-height: 20px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.explore-collection__grid {
+  display: grid;
+  grid-template-columns: repeat(var(--explore-collection-columns-mobile, 1), 1fr);
+  gap: var(--explore-collection-gap, 24px);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+@media screen and (min-width: 750px) {
+  .explore-collection__grid {
+    grid-template-columns: repeat(var(--explore-collection-columns-desktop, 4), 1fr);
+  }
+}
+
+/* Mobile: swipeable carousel instead of a stack. Native scroll snapping, so the
+   gesture stays as smooth as the browser's own and it needs no script. */
+@media screen and (max-width: 749px) {
+  /* 44px on a 68px line box wraps onto two widely spaced lines at phone width. */
+  .explore-collection__heading {
+    margin: 0 0 20px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .explore-collection__subheading {
+    margin: 0 auto 20px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .explore-collection__label {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .explore-collection__grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Room for the cards' drop shadow, which a scroll container would clip. */
+    padding-bottom: 6px;
+  }
+
+  .explore-collection__label{
+    font-size: 24px !important;
+  }
+
+  .explore-collection__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .explore-collection__item {
+    /* Less than full width, so the next card peeks in and the row reads as
+       swipeable rather than as a single image. */
+    flex: 0 0 var(--explore-collection-mobile-card, 80%);
+    scroll-snap-align: start;
+  }
+
+  /* A lone card has nothing to swipe to - let it fill the row. */
+  .explore-collection__item:only-child {
+    flex-basis: 100%;
+  }
+}
+
+.explore-collection__item {
+  display: flex;
+  flex-direction: column;
+}
+
+.explore-collection__card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--explore-collection-radius, 0px);
+  aspect-ratio: 3 / 4;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.explore-collection__link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  color: currentColor;
+  text-decoration: none;
+}
+
+.explore-collection__image,
+.explore-collection__placeholder {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.explore-collection__play {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: #111111;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.explore-collection__play:hover,
+.explore-collection__play:focus-visible {
+  background: #ffffff;
+  transform: translate(-50%, -50%) scale(1.06);
+}
+
+.explore-collection__play-icon {
+  display: flex;
+  width: 18px;
+  height: 18px;
+}
+
+.explore-collection__play-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.explore-collection__label {
+  margin: 14px 0 0;
+  font-family: 'Fredoka', var(--font-heading-family);
+  font-weight: 500;
+  font-style: normal;
+  font-size: 30px;
+  line-height: 20px;
+  color: #000000;
+  text-align: center;
+}
+
+.explore-collection__video-dialog {
+  width: min(90vw, 900px);
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000000;
+}
+
+.explore-collection__video-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.explore-collection__video-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+}
+
+.explore-collection__video-inner video,
+.explore-collection__video-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.explore-collection__video-close {
+  position: absolute;
+  z-index: 3;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #111111;
+  cursor: pointer;
+}
+
+.explore-collection__video-close svg {
+  width: 100%;
+  height: 100%;
+}

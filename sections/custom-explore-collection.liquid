@@ -1,0 +1,411 @@
+{{ 'custom-explore-collection.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .explore-collection {
+    background-color: {{ section.settings.background_color }};
+    {%- if section.settings.background_image != blank -%}
+      background-image: url({{ section.settings.background_image | image_url: width: 3000 }});
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+    {%- endif -%}
+  }
+{%- endstyle -%}
+
+<div class="explore-collection">
+  <div
+    class="explore-collection__wrapper page-width section-{{ section.id }}-padding"
+    style="--explore-collection-gap: {{ section.settings.item_spacing }}px; --explore-collection-radius: {{ section.settings.card_radius }}px; --explore-collection-columns-desktop: {{ section.settings.columns_desktop }}; --explore-collection-mobile-card: {{ section.settings.mobile_card_width }}%;"
+  >
+    {%- if section.settings.heading != blank -%}
+      <h2
+        class="explore-collection__heading {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+        style="color: {{ section.settings.heading_color }};"
+      >
+        {{ section.settings.heading }}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.settings.subheading != blank -%}
+      <div class="explore-collection__subheading{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.subheading }}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="explore-collection__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign card_url = block.settings.link
+            if block.settings.collection != blank
+              assign card_url = block.settings.collection.url
+            endif
+
+            assign card_label = block.settings.label
+            if card_label == blank and block.settings.collection != blank
+              assign card_label = block.settings.collection.title
+            endif
+
+            assign card_image = block.settings.image
+            if card_image == blank and block.settings.video != blank
+              assign card_image = block.settings.video.preview_image
+            endif
+            if card_image == blank and block.settings.collection.featured_image != blank
+              assign card_image = block.settings.collection.featured_image
+            endif
+
+            assign has_video = false
+            if block.settings.video != blank or block.settings.video_url != blank
+              assign has_video = true
+            endif
+          -%}
+          <li
+            class="explore-collection__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            {{ block.shopify_attributes }}
+            {% if settings.animations_reveal_on_scroll %}
+              data-cascade
+              style="--animation-order: {{ forloop.index }};"
+            {% endif %}
+          >
+            <div class="explore-collection__card">
+              {%- if card_url != blank -%}
+                <a href="{{ card_url }}" class="explore-collection__link" aria-label="{{ card_label | escape }}">
+              {%- else -%}
+                <span class="explore-collection__link">
+              {%- endif -%}
+                {%- if card_image != blank -%}
+                  <img
+                    class="explore-collection__image"
+                    srcset="
+                      {{ card_image | image_url: width: 400 }} 400w,
+                      {{ card_image | image_url: width: 600 }} 600w,
+                      {{ card_image | image_url: width: 900 }} 900w
+                    "
+                    src="{{ card_image | image_url: width: 600 }}"
+                    alt="{{ card_image.alt | default: card_label | escape }}"
+                    width="{{ card_image.width }}"
+                    height="{{ card_image.height }}"
+                    loading="lazy"
+                  >
+                {%- else -%}
+                  {{ 'collection-1' | placeholder_svg_tag: 'explore-collection__placeholder placeholder' }}
+                {%- endif -%}
+              {%- if card_url != blank -%}
+                </a>
+              {%- else -%}
+                </span>
+              {%- endif -%}
+
+              {%- if has_video -%}
+                <button
+                  type="button"
+                  class="explore-collection__play"
+                  data-explore-video-trigger
+                  aria-haspopup="dialog"
+                  aria-label="{{ 'sections.video.load_video' | t: description: card_label | default: card_label }}"
+                >
+                  <span class="explore-collection__play-icon icon-wrap">
+                    {{- 'icon-play.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+
+                <dialog class="explore-collection__video-dialog" data-explore-video-dialog>
+                  <button
+                    type="button"
+                    class="explore-collection__video-close"
+                    data-explore-video-close
+                    aria-label="{{ 'accessibility.close' | t }}"
+                  >
+                    {{- 'icon-close.svg' | inline_asset_content -}}
+                  </button>
+                  <div class="explore-collection__video-inner">
+                    {%- if block.settings.video != blank -%}
+                      {{
+                        block.settings.video
+                        | video_tag:
+                          image_size: '1100x',
+                          autoplay: false,
+                          loop: false,
+                          controls: true,
+                          muted: false
+                      }}
+                    {%- elsif block.settings.video_url != blank -%}
+                      {%- if block.settings.video_url.type == 'youtube' -%}
+                        <iframe
+                          class="explore-collection__video-frame js-youtube"
+                          src="https://www.youtube.com/embed/{{ block.settings.video_url.id }}?enablejsapi=1"
+                          allow="autoplay; encrypted-media"
+                          allowfullscreen
+                          title="{{ card_label | escape }}"
+                        ></iframe>
+                      {%- else -%}
+                        <iframe
+                          class="explore-collection__video-frame js-vimeo"
+                          src="https://player.vimeo.com/video/{{ block.settings.video_url.id }}"
+                          allow="autoplay; encrypted-media"
+                          allowfullscreen
+                          title="{{ card_label | escape }}"
+                        ></iframe>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </div>
+                </dialog>
+              {%- endif -%}
+            </div>
+
+            {%- if card_label != blank -%}
+              <p class="explore-collection__label">{{ card_label | escape }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  (function () {
+    var scriptEl = document.currentScript;
+    var wrapper = scriptEl.closest('.explore-collection');
+    if (!wrapper || wrapper.dataset.exploreCollectionInit) return;
+    wrapper.dataset.exploreCollectionInit = 'true';
+
+    wrapper.addEventListener('click', function (event) {
+      var trigger = event.target.closest('[data-explore-video-trigger]');
+      if (trigger) {
+        var card = trigger.closest('.explore-collection__card');
+        var dialog = card && card.querySelector('[data-explore-video-dialog]');
+        if (dialog && typeof dialog.showModal === 'function') {
+          dialog.showModal();
+          var video = dialog.querySelector('video');
+          if (video) {
+            video.currentTime = 0;
+            video.play();
+          }
+        }
+        return;
+      }
+
+      var closeBtn = event.target.closest('[data-explore-video-close]');
+      if (closeBtn) {
+        var openDialog = closeBtn.closest('dialog');
+        if (openDialog) openDialog.close();
+      }
+    });
+
+    wrapper.querySelectorAll('[data-explore-video-dialog]').forEach(function (dialog) {
+      dialog.addEventListener('click', function (event) {
+        var rect = dialog.getBoundingClientRect();
+        var inside = event.clientX >= rect.left
+          && event.clientX <= rect.right
+          && event.clientY >= rect.top
+          && event.clientY <= rect.bottom;
+        if (!inside) dialog.close();
+      });
+
+      dialog.addEventListener('close', function () {
+        var video = dialog.querySelector('video');
+        if (video) video.pause();
+        var iframe = dialog.querySelector('iframe');
+        if (iframe) iframe.src = iframe.src;
+      });
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Custom explore collection",
+  "tag": "section",
+  "class": "section custom-explore-collection-section",
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore More Collection"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading"
+    },
+    {
+      "type": "header",
+      "content": "Section background"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FBD0E0"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Optional. Displays behind the background color, scaled to cover the section."
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "Columns (desktop)",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "card_radius",
+      "label": "Card corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "item_spacing",
+      "label": "Space between cards",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "label": "Card width (mobile carousel)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80,
+      "info": "On mobile the cards become a swipeable carousel. Below 100% the next card peeks in at the edge."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Card links to this collection. Also used to auto-fill the label and image if left blank below."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Used only if no collection is selected above."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Banner image"
+        },
+        {
+          "type": "header",
+          "content": "Video (optional)"
+        },
+        {
+          "type": "paragraph",
+          "content": "Add a video by uploading a file, or by pasting a YouTube/Vimeo link. If both are set, the uploaded video is used. A play button appears on the card and opens the video without leaving the page."
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Upload video"
+        },
+        {
+          "type": "video_url",
+          "id": "video_url",
+          "accept": ["youtube", "vimeo"],
+          "label": "Video link (YouTube or Vimeo)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Collection name"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom explore collection",
+      "blocks": [
+        { "type": "collection_card", "settings": { "label": "Play Dough" } },
+        { "type": "collection_card", "settings": { "label": "Soft Toys" } },
+        { "type": "collection_card", "settings": { "label": "Winter Wear" } },
+        { "type": "collection_card", "settings": { "label": "Painting" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

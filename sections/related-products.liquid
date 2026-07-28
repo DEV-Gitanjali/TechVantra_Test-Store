@@ -1,6 +1,14 @@
-{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{%- comment -%}
+  The card's own assets are loaded here rather than by the snippet: this section's
+  markup is fetched and injected with innerHTML by <product-recommendations>, and
+  innerHTML never executes injected <script> tags. Loading them with the page also
+  means the cards are styled the moment they appear.
+{%- endcomment -%}
+{{ 'custom-product-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-rating.css' | asset_url | stylesheet_tag }}
 {{ 'section-related-products.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'custom-product-card.js' | asset_url }}" defer="defer"></script>
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -17,6 +25,15 @@
       padding-top: {{ section.settings.padding_top }}px;
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
+  }
+
+  {%- comment -%}
+    Section id prefix so this wins over the heading size class (.h1, .h2, ...) the
+    heading still carries from the section setting.
+  {%- endcomment -%}
+  #shopify-section-{{ section.id }} .related-products__heading {
+    font-weight: 500;
+    font-size: 44px;
   }
 {%- endstyle -%}
 
@@ -35,21 +52,21 @@
         class="grid product-grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
         role="list"
       >
-        {% assign skip_card_product_styles = false %}
         {% for recommendation in recommendations.products %}
           <li class="grid__item">
-            {% render 'card-product',
+            {% render 'custom-product-card',
               card_product: recommendation,
               media_aspect_ratio: section.settings.image_ratio,
               image_shape: section.settings.image_shape,
               show_secondary_image: section.settings.show_secondary_image,
               show_vendor: section.settings.show_vendor,
               show_rating: section.settings.show_rating,
-              skip_styles: skip_card_product_styles,
-              product_view_context: 'recommendation'
+              skip_styles: true,
+              section_id: section.id,
+              product_view_context: 'recommendation',
+              hide_badges: true
             %}
           </li>
-          {%- assign skip_card_product_styles = true -%}
         {% endfor %}
       </ul>
     {% endif %}

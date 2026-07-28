@@ -1,8 +1,12 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'custom-product-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
+
+{% comment %}Loaded last: it overrides slider-button rules from component-slider.css{% endcomment %}
+{{ 'custom-featured-collection.css' | asset_url | stylesheet_tag }}
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
@@ -24,6 +28,59 @@
   <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
+{%- liquid
+  assign products_to_display = section.settings.collection.all_products_count
+
+  if section.settings.collection.all_products_count > section.settings.products_to_show
+    assign products_to_display = section.settings.products_to_show
+  endif
+
+  assign columns_mobile_int = section.settings.columns_mobile | plus: 0
+  assign columns_desktop_int = section.settings.columns_desktop | plus: 0
+  # The design is a carousel on mobile too, so this is no longer behind the
+  # "swipe on mobile" setting — that setting defaulted to false, and a saved false
+  # would silently leave a plain stacked grid. Still needs more products than
+  # columns, otherwise there is nothing to swipe to.
+  assign show_mobile_slider = false
+  if products_to_display > columns_mobile_int
+    assign show_mobile_slider = true
+  endif
+
+  assign max_columns_to_show = columns_mobile_int
+  if columns_desktop_int > columns_mobile_int
+    assign max_columns_to_show = columns_desktop_int
+  endif
+
+  # The design is always a carousel, so this is no longer behind an "enable desktop slider"
+  # setting — that setting defaulted to false, and a saved false would silently drop the
+  # arrows. The row still needs more products than columns, otherwise there is nothing to
+  # scroll to and no card left over to peek.
+  assign show_desktop_slider = false
+  if products_to_display > columns_desktop_int
+    assign show_desktop_slider = true
+  endif
+
+  # The design puts the arrows beside the heading, which only works if both sit in one flex
+  # row — and the arrows must stay inside <slider-component> for SliderComponent to find them.
+  # So the heading moves in there too, but only for the desktop slider: that is the one layout
+  # where <slider-component> carries no page-width padding of its own for the header's
+  # `page-width` to collide with. A mobile-only slider keeps Dawn's original arrangement.
+  assign header_in_slider = show_desktop_slider
+
+  # The card sizes itself with an aspect ratio, so 'adapt' would give every product its own
+  # height and leave the row ragged. Resolve one ratio for the whole section instead — with
+  # 'adapt' the first product's image sets the ratio the rest of the row follows.
+  assign card_ratio = 1
+  if section.settings.image_ratio == 'portrait'
+    assign card_ratio = 0.8
+  elsif section.settings.image_ratio == 'adapt'
+    assign first_media = section.settings.collection.products.first.featured_media
+    if first_media.aspect_ratio > 0
+      assign card_ratio = first_media.aspect_ratio
+    endif
+  endif
+-%}
+
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -36,63 +93,161 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* One ratio for every card in the row, so their tops and bottoms line up.
+     Overrides aspect-ratio itself rather than --custom-card-ratio, which the
+     snippet sets inline per product. */
+  #collection-{{ section.id }} .custom-card {
+    aspect-ratio: {{ card_ratio }};
+  }
+
+  {%- if header_in_slider and show_mobile_slider == false %}
+    /* Dawn hides the arrows below 990px via `.slider--desktop:not(.slider--tablet) +
+       .slider-buttons`, which no longer matches now that they precede the slider. Below that
+       breakpoint the row is a plain grid, so the arrows would do nothing. */
+    @media screen and (max-width: 989px) {
+      #collection-{{ section.id }} .slider-buttons {
+        display: none;
+      }
+    }
+
+    /* The gutters normally come from `page-width` on <slider-component>, which is dropped when
+       the header moves inside it. The desktop slider is meant to bleed, but below 990px the
+       row is a plain grid and needs them back. */
+    @media screen and (max-width: 989px) {
+      #collection-{{ section.id }} .product-grid {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+    }
+
+    @media screen and (min-width: 750px) and (max-width: 989px) {
+      #collection-{{ section.id }} .product-grid {
+        padding-left: 5rem;
+        padding-right: 5rem;
+      }
+    }
+  {%- endif %}
+
+  @media screen and (min-width: 990px) {
+    {%- unless section.settings.full_width %}
+      /* Dawn's value is half a grid gap narrower than the page gutter, which would leave the
+         first card slightly left of the heading above it. Use the gutter exactly so the two
+         line up. */
+      #collection-{{ section.id }} slider-component {
+        --desktop-margin-left-first-item: max(5rem, calc((100vw - var(--page-width)) / 2 + 5rem));
+      }
+    {%- endunless %}
+
+    /* The row starts on the left page margin (Dawn's --desktop-margin-left-first-item
+       handles that) and runs off the right edge. Dawn's own width formula leaves roughly
+       60% of the next card showing; this pins it to exactly half.
+
+       Visible width is 100% - margin, and we want
+       {{ section.settings.columns_desktop }}·card + {{ section.settings.columns_desktop }}·gap + 0.5·card to fill it, so
+       card = (100% - margin - {{ section.settings.columns_desktop }}·gap) / {{ section.settings.columns_desktop | plus: 0.5 }}. */
+    #collection-{{ section.id }} .slider--desktop .grid__item {
+      width: calc(
+        (
+            100% - var(--desktop-margin-left-first-item) - {{ section.settings.columns_desktop }} *
+              var(--grid-desktop-horizontal-spacing)
+          ) / {{ section.settings.columns_desktop | plus: 0.5 }}
+      );
+    }
+  }
 {%- endstyle -%}
-
-{%- liquid
-  assign products_to_display = section.settings.collection.all_products_count
-
-  if section.settings.collection.all_products_count > section.settings.products_to_show
-    assign products_to_display = section.settings.products_to_show
-    assign more_in_collection = true
-  endif
-
-  assign columns_mobile_int = section.settings.columns_mobile | plus: 0
-  assign columns_desktop_int = section.settings.columns_desktop | plus: 0
-  assign show_mobile_slider = false
-  if section.settings.swipe_on_mobile and products_to_display > columns_mobile_int
-    assign show_mobile_slider = true
-  endif
-
-  assign max_columns_to_show = columns_mobile_int
-  if columns_desktop_int > columns_mobile_int
-    assign max_columns_to_show = columns_desktop_int
-  endif
-
-  assign show_desktop_slider = false
-  if section.settings.enable_desktop_slider and products_to_display > section.settings.columns_desktop
-    assign show_desktop_slider = true
-  endif
--%}
 
 <div
   class="color-{{ section.settings.color_scheme }} isolate gradient"
 >
   <div
-    class="collection{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %} section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width{% endif %}"
+    class="collection custom-featured-collection{% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %} section-{{ section.id }}-padding{% if section.settings.full_width %} collection--full-width{% endif %}"
     id="collection-{{ section.id }}"
     data-id="{{ section.id }}"
   >
-    <div class="collection__title title-wrapper title-wrapper--no-top-margin page-width{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% endif %}{% if show_desktop_slider %} collection__title--desktop-slider{% endif %}">
-      {%- if section.settings.title != blank -%}
-        <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {{ section.settings.title }}
-        </h2>
-      {%- endif -%}
-      {%- if section.settings.description != blank
-        or section.settings.show_description
-        and section.settings.collection.description != empty
-      -%}
-        <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {%- if section.settings.show_description -%}
-            {{ section.settings.collection.description }}
-          {%- else -%}
-            {{ section.settings.description -}}
-          {%- endif %}
+    {%- capture collection_heading -%}
+      <div class="collection__title title-wrapper title-wrapper--no-top-margin{% unless header_in_slider %} page-width{% endunless %}{% if show_mobile_slider and header_in_slider == false %} title-wrapper--self-padded-tablet-down{% endif %}{% if show_desktop_slider %} collection__title--desktop-slider{% endif %}">
+        {%- if section.settings.title != blank -%}
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+            {{ section.settings.title }}
+          </h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank
+          or section.settings.show_description
+          and section.settings.collection.description != empty
+        -%}
+          <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+            {%- if section.settings.show_description -%}
+              {{ section.settings.collection.description }}
+            {%- else -%}
+              {{ section.settings.description -}}
+            {%- endif %}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endcapture -%}
+
+    {%- unless header_in_slider -%}
+      {{ collection_heading }}
+    {%- endunless -%}
+
+    <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false and header_in_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {%- if header_in_slider -%}
+        <div class="featured-collection__header page-width">
+          {{ collection_heading }}
+          <div class="slider-buttons">
+            <button
+              type="button"
+              class="slider-button slider-button--prev"
+              name="previous"
+              aria-label="{{ 'general.slider.previous_slide' | t }}"
+              aria-controls="Slider-{{ section.id }}"
+            >
+              {%- comment -%}
+                Inlined rather than `'icon-arrow.svg' | inline_asset_content` on purpose: that
+                asset carries class="icon", which Dawn rotates 90deg to turn its caret glyph
+                into an arrow. This one has no such class, so nothing rotates it and the
+                direction cannot be broken by stylesheet order.
+              {%- endcomment -%}
+              <span class="featured-collection__arrow">
+                <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false">
+                  <path
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.537.808a.5.5 0 0 1 .817-.162l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L11.793 5.5H1a.5.5 0 0 1 0-1h10.793L8.646 1.354a.5.5 0 0 1-.109-.546"
+                  />
+                </svg>
+              </span>
+            </button>
+            <button
+              type="button"
+              class="slider-button slider-button--next"
+              name="next"
+              aria-label="{{ 'general.slider.next_slide' | t }}"
+              aria-controls="Slider-{{ section.id }}"
+            >
+              {%- comment -%}
+                Inlined rather than `'icon-arrow.svg' | inline_asset_content` on purpose: that
+                asset carries class="icon", which Dawn rotates 90deg to turn its caret glyph
+                into an arrow. This one has no such class, so nothing rotates it and the
+                direction cannot be broken by stylesheet order.
+              {%- endcomment -%}
+              <span class="featured-collection__arrow">
+                <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false">
+                  <path
+                    fill="currentColor"
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M8.537.808a.5.5 0 0 1 .817-.162l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L11.793 5.5H1a.5.5 0 0 1 0-1h10.793L8.646 1.354a.5.5 0 0 1-.109-.546"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
         </div>
       {%- endif -%}
-    </div>
 
-    <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <ul
         id="Slider-{{ section.id }}"
         data-id="{{ section.id }}"
@@ -117,7 +272,7 @@
                   style="--animation-order: {{ forloop.index }};"
                 {% endif %}
               >
-                {% render 'card-product',
+                {% render 'custom-product-card',
                   card_product: product,
                   media_aspect_ratio: section.settings.image_ratio,
                   image_shape: section.settings.image_shape,
@@ -128,7 +283,8 @@
                   skip_styles: skip_card_product_styles,
                   section_id: section.id,
                   quick_add: section.settings.quick_add,
-                  product_view_context: 'collection'
+                  product_view_context: 'collection',
+                  hide_badges: true
                 %}
               </li>
               {%- assign skip_card_product_styles = true -%}
@@ -153,7 +309,7 @@
                 endcase
               %}
               {%- assign placeholder_image = 'product-apparel-' | append: ridx -%}
-              {% render 'card-product',
+              {% render 'custom-product-card',
                 show_vendor: section.settings.show_vendor,
                 media_aspect_ratio: section.settings.image_ratio,
                 image_shape: section.settings.image_shape,
@@ -164,7 +320,12 @@
           {%- endfor -%}
         {%- endif -%}
       </ul>
-      {%- if show_mobile_slider or show_desktop_slider -%}
+
+      {%- comment -%}
+        Mobile-only slider: the header was left in Dawn's original position, so the arrows stay
+        after the slider where Dawn's `.slider + .slider-buttons` visibility rules can reach them.
+      {%- endcomment -%}
+      {%- if show_mobile_slider and header_in_slider == false -%}
         <div class="slider-buttons">
           <button
             type="button"
@@ -173,16 +334,17 @@
             aria-label="{{ 'general.slider.previous_slide' | t }}"
             aria-controls="Slider-{{ section.id }}"
           >
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
+            <span class="featured-collection__arrow">
+              <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false">
+                <path
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M8.537.808a.5.5 0 0 1 .817-.162l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L11.793 5.5H1a.5.5 0 0 1 0-1h10.793L8.646 1.354a.5.5 0 0 1-.109-.546"
+                />
+              </svg>
             </span>
           </button>
-          <div class="slider-counter caption">
-            <span class="slider-counter--current">1</span>
-            <span aria-hidden="true"> / </span>
-            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-            <span class="slider-counter--total">{{ products_to_display }}</span>
-          </div>
           <button
             type="button"
             class="slider-button slider-button--next"
@@ -190,25 +352,21 @@
             aria-label="{{ 'general.slider.next_slide' | t }}"
             aria-controls="Slider-{{ section.id }}"
           >
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
+            <span class="featured-collection__arrow">
+              <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false">
+                <path
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M8.537.808a.5.5 0 0 1 .817-.162l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 1 1-.708-.708L11.793 5.5H1a.5.5 0 0 1 0-1h10.793L8.646 1.354a.5.5 0 0 1-.109-.546"
+                />
+              </svg>
             </span>
           </button>
         </div>
       {%- endif -%}
     </slider-component>
 
-    {%- if section.settings.show_view_all and more_in_collection -%}
-      <div class="center collection__view-all{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-        <a
-          href="{{ section.settings.collection.url }}"
-          class="{% if section.settings.view_all_style == 'link' %}link underlined-link{% elsif section.settings.view_all_style == 'solid' %}button{% else %}button button--secondary{% endif %}"
-          aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title | escape }}"
-        >
-          {{ 'sections.featured_collection.view_all' | t }}
-        </a>
-      </div>
-    {%- endif -%}
     {% if section.settings.image_shape == 'arch' %}
       {{ 'mask-arch.svg' | inline_asset_content }}
     {%- endif -%}
@@ -235,8 +393,9 @@
       "min": 2,
       "max": 25,
       "step": 1,
-      "default": 4,
-      "label": "t:sections.featured-collection.settings.products_to_show.label"
+      "default": 8,
+      "label": "t:sections.featured-collection.settings.products_to_show.label",
+      "info": "Must be higher than \"Number of columns on desktop\" for the carousel — arrows and the half-card peek only appear when there are more products than columns."
     },     
     {
       "type": "header",
@@ -320,45 +479,12 @@
       "default": 4,
       "label": "t:sections.featured-collection.settings.columns_desktop.label"
     },
-        {
-      "type": "checkbox",
-      "id": "enable_desktop_slider",
-      "label": "t:sections.featured-collection.settings.enable_desktop_slider.label",
-      "default": false
-    },
     {
       "type": "checkbox",
       "id": "full_width",
       "label": "t:sections.featured-collection.settings.full_width.label",
       "default": false
     },
-    {
-      "type": "checkbox",
-      "id": "show_view_all",
-      "default": true,
-      "label": "t:sections.featured-collection.settings.show_view_all.label",
-      "info": "t:sections.featured-collection.settings.show_view_all.info"
-    },
-    {
-      "type": "select",
-      "id": "view_all_style",
-      "label": "t:sections.featured-collection.settings.view_all_style.label",
-      "options": [
-        {
-          "value": "link",
-          "label": "t:sections.featured-collection.settings.view_all_style.options__1.label"
-        },
-        {
-          "value": "outline",
-          "label": "t:sections.featured-collection.settings.view_all_style.options__2.label"
-        },
-        {
-          "value": "solid",
-          "label": "t:sections.featured-collection.settings.view_all_style.options__3.label"
-        }
-      ],
-      "default": "solid"
-    }, 
     {
       "type": "color_scheme",
       "id": "color_scheme",
@@ -489,12 +615,6 @@
         }
       ]
     },    
-    {
-      "type": "checkbox",
-      "id": "swipe_on_mobile",
-      "default": false,
-      "label": "t:sections.featured-collection.settings.swipe_on_mobile.label"
-    },          
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"

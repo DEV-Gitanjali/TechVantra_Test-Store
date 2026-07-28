@@ -1,0 +1,320 @@
+{% comment %}
+  Renders a custom product card matching the Figma design.
+  Drop-in compatible with the `card-product` snippet — accepts the same params.
+
+  Accepts:
+  - card_product: {Object} Product Liquid object (optional)
+  - media_aspect_ratio: {String} "square", "portrait", or "adapt"
+  - image_shape: {String} Kept for API compatibility (unused visually)
+  - show_secondary_image: {Boolean} Show secondary image on hover. Default: false
+  - show_vendor: {Boolean} Default: false
+  - show_rating: {Boolean} Default: false
+  - hide_badges: {Boolean} Suppress the Best Seller / New / Sale / Sold out pills. Default: false
+  - extend_height: {Boolean} Card fills available container height. Default: true
+  - lazy_load: {Boolean} Default: true
+  - skip_styles: {Boolean} Skip stylesheet output when rendered in a loop. Default: false
+  - quick_add: {String} 'none' | 'standard' | 'bulk' — controls whether the CTA opens a modal
+  - section_id: {String} Section ID for unique element IDs
+  - product_view_context: {String} Analytics context for product view
+  - placeholder_image: {String} Placeholder svg name
+
+  Usage:
+    {% render 'custom-product-card', card_product: product, section_id: section.id %}
+{% endcomment %}
+
+{%- unless skip_styles -%}
+  {{ 'custom-product-card.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-rating.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'custom-product-card.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- if card_product and card_product != empty -%}
+  {%- liquid
+    assign ratio = 1
+    if card_product.featured_media and media_aspect_ratio == 'portrait'
+      assign ratio = 0.8
+    elsif card_product.featured_media and media_aspect_ratio == 'adapt'
+      assign ratio = card_product.featured_media.aspect_ratio
+    endif
+    if ratio == 0 or ratio == null
+      assign ratio = 1
+    endif
+
+    assign is_bestseller = false
+    assign is_new = false
+    for tag in card_product.tags
+      assign tag_downcase = tag | downcase
+      if tag_downcase == 'bestseller' or tag_downcase == 'best-seller' or tag_downcase == 'best seller'
+        assign is_bestseller = true
+      endif
+      if tag_downcase == 'new'
+        assign is_new = true
+      endif
+    endfor
+
+    assign is_on_sale = false
+    if card_product.compare_at_price > card_product.price and card_product.available
+      assign is_on_sale = true
+    endif
+
+    assign product_form_id = 'quick-add-' | append: section_id | append: card_product.id
+  -%}
+
+  <product-component
+    view-event-payload="{{ card_product | standard_event_data: 'view', context: product_view_context | escape }}"
+    class="custom-product-component"
+  >
+    <div class="custom-card-wrapper">
+      <div
+        class="custom-card{% if extend_height %} custom-card--extend-height{% endif %}"
+        style="--custom-card-ratio: {{ ratio }};"
+      >
+        <div class="custom-card__media">
+          {%- if card_product.featured_media -%}
+            {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+            <img
+              srcset="
+                {%- if card_product.featured_media.width >= 165 -%}{{ card_product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 533 -%}{{ card_product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 940 -%}{{ card_product.featured_media | image_url: width: 940 }} 940w,{%- endif -%}
+                {%- if card_product.featured_media.width >= 1066 -%}{{ card_product.featured_media | image_url: width: 1066 }} 1066w,{%- endif -%}
+                {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+              "
+              src="{{ card_product.featured_media | image_url: width: 533 }}"
+              sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+              alt="{{ card_product.featured_media.alt | escape }}"
+              class="custom-card__image custom-card__image--primary motion-reduce"
+              {% unless lazy_load == false %}
+                loading="lazy"
+              {% endunless %}
+              width="{{ card_product.featured_media.width }}"
+              height="{{ card_product.featured_media.height }}"
+            >
+            {%- if show_secondary_image and card_product.media[1] != null -%}
+              <img
+                srcset="
+                  {%- if card_product.media[1].width >= 165 -%}{{ card_product.media[1] | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if card_product.media[1].width >= 360 -%}{{ card_product.media[1] | image_url: width: 360 }} 360w,{%- endif -%}
+                  {%- if card_product.media[1].width >= 533 -%}{{ card_product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
+                  {%- if card_product.media[1].width >= 720 -%}{{ card_product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
+                  {%- if card_product.media[1].width >= 940 -%}{{ card_product.media[1] | image_url: width: 940 }} 940w,{%- endif -%}
+                  {%- if card_product.media[1].width >= 1066 -%}{{ card_product.media[1] | image_url: width: 1066 }} 1066w,{%- endif -%}
+                  {{ card_product.media[1] | image_url }} {{ card_product.media[1].width }}w
+                "
+                src="{{ card_product.media[1] | image_url: width: 533 }}"
+                sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 4), (min-width: 750px) calc((100vw - 120px) / 3), calc((100vw - 35px) / 2)"
+                alt="{{ card_product.media[1].alt | escape }}"
+                class="custom-card__image custom-card__image--secondary motion-reduce"
+                loading="lazy"
+                width="{{ card_product.media[1].width }}"
+                height="{{ card_product.media[1].height }}"
+              >
+            {%- endif -%}
+            {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+          {%- else -%}
+            {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg custom-card__placeholder' }}
+          {%- endif -%}
+        </div>
+
+        <a
+          href="{{ card_product.url }}"
+          id="CustomCardLink-{{ section_id }}-{{ card_product.id }}"
+          class="custom-card__link"
+          aria-labelledby="CustomCardTitle-{{ section_id }}-{{ card_product.id }}"
+        >
+          <span class="visually-hidden">{{ card_product.title | escape }}</span>
+        </a>
+
+        {%- unless hide_badges -%}
+          <div class="custom-card__badges">
+            {%- if card_product.available == false -%}
+              <span class="custom-badge custom-badge--sold-out color-{{ settings.sold_out_badge_color_scheme }}">
+                {{- 'products.product.sold_out' | t -}}
+              </span>
+            {%- else -%}
+              {%- if is_bestseller -%}
+                <span class="custom-badge custom-badge--bestseller">Best Seller</span>
+              {%- endif -%}
+              {%- if is_new -%}
+                <span class="custom-badge custom-badge--new">New</span>
+              {%- endif -%}
+              {%- if is_on_sale -%}
+                <span class="custom-badge custom-badge--sale color-{{ settings.sale_badge_color_scheme }}">
+                  {{- 'products.product.on_sale' | t -}}
+                </span>
+              {%- endif -%}
+            {%- endif -%}
+          </div>
+        {%- endunless -%}
+
+        <div class="custom-card__info">
+          {%- if show_vendor -%}
+            <span class="visually-hidden">{{ 'accessibility.vendor' | t }}</span>
+            <div class="custom-card__vendor">{{ card_product.vendor }}</div>
+          {%- endif -%}
+
+          <h3 class="custom-card__title" id="CustomCardTitle-{{ section_id }}-{{ card_product.id }}">
+            {{ card_product.title | escape }}
+          </h3>
+
+          {%- if show_rating and card_product.metafields.reviews.rating.value != blank -%}
+            {%- liquid
+              assign rating_decimal = 0
+              assign decimal = card_product.metafields.reviews.rating.value.rating | modulo: 1
+              if decimal >= 0.3 and decimal <= 0.7
+                assign rating_decimal = 0.5
+              elsif decimal > 0.7
+                assign rating_decimal = 1
+              endif
+            -%}
+            <div
+              class="rating custom-card__rating"
+              role="img"
+              aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_product.metafields.reviews.rating.value, rating_max: card_product.metafields.reviews.rating.value.scale_max }}"
+            >
+              <span
+                aria-hidden="true"
+                class="rating-star"
+                style="--rating: {{ card_product.metafields.reviews.rating.value.rating | floor }}; --rating-max: {{ card_product.metafields.reviews.rating.value.scale_max }}; --rating-decimal: {{ rating_decimal }};"
+              ></span>
+            </div>
+          {%- endif -%}
+
+          <div class="custom-card__price-row">
+            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+          </div>
+
+          <div class="custom-card__actions">
+            {%- if quick_add == 'standard' -%}
+              {%- liquid
+                assign qty_rules = false
+                if card_product.selected_or_first_available_variant.quantity_rule.min > 1 or card_product.selected_or_first_available_variant.quantity_rule.max != null or card_product.selected_or_first_available_variant.quantity_rule.increment > 1
+                  assign qty_rules = true
+                endif
+              -%}
+              {%- if card_product.variants_count > 1 or qty_rules -%}
+                <modal-opener data-modal="#QuickAdd-{{ card_product.id }}">
+                  <button
+                    id="{{ product_form_id }}-submit"
+                    type="submit"
+                    name="add"
+                    class="custom-card__cta custom-card__cta--quick-add"
+                    aria-haspopup="dialog"
+                    aria-labelledby="{{ product_form_id }}-submit CustomCardTitle-{{ section_id }}-{{ card_product.id }}"
+                    data-product-url="{{ card_product.url }}"
+                  >
+                    {{ 'products.product.choose_options' | t }}
+                    {%- render 'loading-spinner' -%}
+                  </button>
+                </modal-opener>
+                <quick-add-modal id="QuickAdd-{{ card_product.id }}" class="quick-add-modal">
+                  <div
+                    role="dialog"
+                    aria-label="{{ 'products.product.choose_product_options' | t: product_name: card_product.title | escape }}"
+                    aria-modal="true"
+                    class="quick-add-modal__content global-settings-popup"
+                    tabindex="-1"
+                  >
+                    <button
+                      id="ModalClose-{{ card_product.id }}"
+                      type="button"
+                      class="quick-add-modal__toggle"
+                      aria-label="{{ 'accessibility.close' | t }}"
+                    >
+                      {{- 'icon-close.svg' | inline_asset_content -}}
+                    </button>
+                    <div id="QuickAddInfo-{{ card_product.id }}" class="quick-add-modal__content-info"></div>
+                  </div>
+                </quick-add-modal>
+              {%- else -%}
+                <product-form data-section-id="{{ section_id }}">
+                  {%- form 'product',
+                    card_product,
+                    id: product_form_id,
+                    class: 'form',
+                    novalidate: 'novalidate',
+                    data-type: 'add-to-cart-form'
+                  -%}
+                    <input
+                      type="hidden"
+                      name="id"
+                      value="{{ card_product.selected_or_first_available_variant.id }}"
+                      class="product-variant-id"
+                      {% if card_product.selected_or_first_available_variant.available == false %}
+                        disabled
+                      {% endif %}
+                    >
+                    <button
+                      id="{{ product_form_id }}-submit"
+                      type="submit"
+                      name="add"
+                      class="custom-card__cta custom-card__cta--quick-add"
+                      aria-haspopup="dialog"
+                      aria-labelledby="{{ product_form_id }}-submit CustomCardTitle-{{ section_id }}-{{ card_product.id }}"
+                      aria-live="polite"
+                      data-sold-out-message="true"
+                      {% if card_product.selected_or_first_available_variant.available == false %}
+                        disabled
+                      {% endif %}
+                    >
+                      <span>
+                        {%- if card_product.selected_or_first_available_variant.available -%}
+                          {{ 'products.product.add_to_cart' | t }}
+                        {%- else -%}
+                          {{ 'products.product.sold_out' | t }}
+                        {%- endif -%}
+                      </span>
+                      <span class="sold-out-message hidden">
+                        {{ 'products.product.sold_out' | t }}
+                      </span>
+                      {%- render 'loading-spinner' -%}
+                    </button>
+                  {%- endform -%}
+                </product-form>
+              {%- endif -%}
+            {%- else -%}
+              <a
+                href="{{ card_product.url }}"
+                class="custom-card__cta"
+                tabindex="-1"
+                aria-hidden="true"
+              >
+                {{ 'products.product.choose_options' | t }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </product-component>
+{%- else -%}
+  {%- liquid
+    assign ratio = 1
+    if media_aspect_ratio == 'portrait'
+      assign ratio = 0.8
+    endif
+  -%}
+  <div class="custom-card-wrapper">
+    <div
+      class="custom-card custom-card--placeholder{% if extend_height %} custom-card--extend-height{% endif %}"
+      style="--custom-card-ratio: {{ ratio }};"
+    >
+      <div class="custom-card__media">
+        {%- if placeholder_image -%}
+          {{ placeholder_image | placeholder_svg_tag: 'placeholder-svg custom-card__placeholder' }}
+        {%- else -%}
+          {{ 'product-apparel-2' | placeholder_svg_tag: 'placeholder-svg custom-card__placeholder' }}
+        {%- endif -%}
+      </div>
+      <div class="custom-card__info">
+        <h3 class="custom-card__title">{{ 'onboarding.product_title' | t }}</h3>
+        <div class="custom-card__price-row">
+          {% render 'price', placeholder: true, show_compare_at_price: true %}
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

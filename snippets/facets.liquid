@@ -82,7 +82,7 @@
                     <facet-remove>
                       <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
                         <span class="active-facets__button-inner button button--tertiary">
-                          {{ filter.label | escape }}: {{ value.label | escape }}
+                          {{ value.label | escape }}
                           <span class="svg-wrapper">
                             {{- 'icon-close-small.svg' | inline_asset_content -}}
                           </span>
@@ -119,11 +119,24 @@
                 assign total_active_values = total_active_values | plus: filter.active_values.size
                 assign presentation = filter.presentation | default: default_presentation
 
+                # Colour filters always render as swatches, whatever presentation is
+                # configured in Search & Discovery — see 'custom-facet-swatch'.
+                assign filter_signature = filter.label | downcase | append: ' ' | append: filter.param_name | downcase
+                if filter_signature contains 'color' or filter_signature contains 'colour'
+                  assign presentation = 'swatch'
+                endif
+
                 if presentation == 'image'
                   assign show_more_number = 12
                   assign visual_layout_class = 'facets-layout facets-layout-grid facets-layout-grid--' | append: presentation
                 else
-                  assign show_more_number = 10
+                  # Swatches sit 8-to-a-row, so a lot more of them fit before the
+                  # list needs a "Show more" — the Figma shows two full rows.
+                  if presentation == 'swatch'
+                    assign show_more_number = 24
+                  else
+                    assign show_more_number = 10
+                  endif
                   assign visual_layout_class = 'facets-layout facets-layout-list facets-layout-list--' | append: presentation
                 endif
               %}
@@ -228,13 +241,13 @@
                               {%- if presentation == 'swatch' -%}
                                 <div class="{{ label_class }}">
                                   <div class="swatch-input-wrapper">
-                                    {% render 'swatch-input',
+                                    {% render 'custom-facet-swatch',
                                       id: input_id,
-                                      type: 'checkbox',
                                       name: value.param_name,
                                       value: value.value,
-                                      product_form_id: 'FacetFiltersForm',
+                                      label: value.label,
                                       swatch: value.swatch,
+                                      product_form_id: 'FacetFiltersForm',
                                       checked: value.active,
                                       disabled: is_disabled
                                     %}
@@ -348,7 +361,7 @@
                   <facet-remove>
                     <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
                       <span class="active-facets__button-inner button button--tertiary">
-                        {{ filter.label | escape }}: {{ value.label | escape }}
+                        {{ value.label | escape }}
                         <span class="svg-wrapper">
                           {{- 'icon-close-small.svg' | inline_asset_content -}}
                         </span>
@@ -516,6 +529,12 @@
                 {%- for filter in results.filters -%}
                   {% liquid
                     assign presentation = filter.presentation | default: default_presentation
+
+                    assign filter_signature = filter.label | downcase | append: ' ' | append: filter.param_name | downcase
+                    if filter_signature contains 'color' or filter_signature contains 'colour'
+                      assign presentation = 'swatch'
+                    endif
+
                     if presentation == 'image'
                       assign visual_layout_class = 'facets-layout facets-layout-grid facets-layout-grid--' | append: presentation
                     else
@@ -597,13 +616,13 @@
                                 {% if presentation == 'swatch' %}
                                   <div class="{{ label_class }}">
                                     <div class="swatch-input-wrapper">
-                                      {% render 'swatch-input',
+                                      {% render 'custom-facet-swatch',
                                         id: input_id,
-                                        type: 'checkbox',
                                         name: value.param_name,
                                         value: value.value,
-                                        product_form_id: 'FacetFiltersFormMobile',
+                                        label: value.label,
                                         swatch: value.swatch,
+                                        product_form_id: 'FacetFiltersFormMobile',
                                         checked: value.active,
                                         disabled: is_disabled
                                       %}
@@ -781,6 +800,14 @@
               <input type="hidden" name="q" value="{{ results.terms | escape }}">
               <input name="options[prefix]" type="hidden" value="last">
             {%- endif -%}
+
+            {% comment %}
+              Keeps the "Show: N products" alternate template selected while filtering
+              from the mobile drawer — Dawn serialises this form straight into the URL.
+            {% endcomment %}
+            {%- if template.suffix != blank -%}
+              <input type="hidden" name="view" value="{{ template.suffix }}">
+            {%- endif -%}
           </div>
         </form>
       </facet-filters-form>
@@ -793,7 +820,7 @@
         <facet-remove>
           <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
             <span class="active-facets__button-inner button button--tertiary">
-              {{ filter.label | escape }}: {{ value.label | escape }}
+              {{ value.label | escape }}
               <span class="svg-wrapper">
                 {{- 'icon-close-small.svg' | inline_asset_content -}}
               </span>
@@ -906,7 +933,7 @@
               <facet-remove>
                 <a href="{{ value.url_to_remove }}" class="active-facets__button active-facets__button--light">
                   <span class="active-facets__button-inner button button--tertiary">
-                    {{ filter.label | escape }}: {{ value.label | escape }}
+                    {{ value.label | escape }}
                     <span class="svg-wrapper">
                       {{- 'icon-close-small.svg' | inline_asset_content -}}
                     </span>

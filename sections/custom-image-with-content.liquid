@@ -1,0 +1,294 @@
+{{ 'custom-image-with-content.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content__image-wrap {
+    border-radius: {{ section.settings.image_radius }}px;
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content__name {
+    color: {{ section.settings.name_color }};
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content__bio {
+    color: {{ section.settings.bio_color }};
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content__role {
+    color: {{ section.settings.role_color }};
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content__button {
+    background-color: {{ section.settings.button_bg_color }};
+    color: {{ section.settings.button_text_color }};
+  }
+
+  #shopify-section-{{ section.id }} .image-with-content__button:hover {
+    background-color: {{ section.settings.button_hover_bg_color }};
+    color: {{ section.settings.button_hover_text_color }};
+  }
+{%- endstyle -%}
+
+<div class="image-with-content">
+  <div
+    class="image-with-content__wrapper page-width section-{{ section.id }}-padding{% if section.settings.image_position == 'right' %} image-with-content__wrapper--reverse{% endif %}"
+    style="--image-with-content-gap: {{ section.settings.column_gap }}px; --image-with-content-image-width: {{ section.settings.image_width }}px;"
+  >
+    <div class="image-with-content__media{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="image-with-content__image-wrap">
+        {%- if section.settings.image != blank -%}
+          <img
+            class="image-with-content__image"
+            srcset="
+              {{ section.settings.image | image_url: width: 400 }} 400w,
+              {{ section.settings.image | image_url: width: 600 }} 600w,
+              {{ section.settings.image | image_url: width: 900 }} 900w
+            "
+            src="{{ section.settings.image | image_url: width: 600 }}"
+            alt="{{ section.settings.image.alt | default: section.settings.name | escape }}"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
+            loading="lazy"
+          >
+        {%- else -%}
+          {{ 'image' | placeholder_svg_tag: 'image-with-content__placeholder placeholder' }}
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="image-with-content__content{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      {%- if section.settings.name != blank -%}
+        <h2 class="image-with-content__name {{ section.settings.name_size }}">
+          {{ section.settings.name }}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.bio != blank -%}
+        <div class="image-with-content__bio">
+          {{ section.settings.bio }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.role_text != blank -%}
+        <p class="image-with-content__role">{{ section.settings.role_text }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a
+          {% if section.settings.button_link != blank %}
+            href="{{ section.settings.button_link }}"
+          {% else %}
+            role="link" aria-disabled="true"
+          {% endif %}
+          class="image-with-content__button"
+        >
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image with content",
+  "tag": "section",
+  "class": "section custom-image-with-content-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "label": "Image width",
+      "min": 200,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 280
+    },
+    {
+      "type": "range",
+      "id": "image_radius",
+      "label": "Image corner radius",
+      "min": 0,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "default": 15,
+      "info": "Use a large value for a fully rounded/circular image."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "name",
+      "label": "Name / heading",
+      "default": "Sruthi Sankar"
+    },
+    {
+      "type": "select",
+      "id": "name_size",
+      "label": "Name size",
+      "options": [
+        { "value": "h3", "label": "Small" },
+        { "value": "h2", "label": "Medium" },
+        { "value": "h1", "label": "Large" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "color",
+      "id": "name_color",
+      "label": "Name color",
+      "default": "#159A8D"
+    },
+    {
+      "type": "richtext",
+      "id": "bio",
+      "label": "Bio text",
+      "default": "<p>I am an Architect by profession and a crafter by passion. During Covid I had to find a way to entertain and educate my son and stumbled upon this concept.</p>"
+    },
+    {
+      "type": "color",
+      "id": "bio_color",
+      "label": "Bio text color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "text",
+      "id": "role_text",
+      "label": "Role / signature line",
+      "default": "Creative Head & Owner"
+    },
+    {
+      "type": "color",
+      "id": "role_color",
+      "label": "Role text color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Get In Touch"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "button_bg_color",
+      "label": "Button background",
+      "default": "#C2185B"
+    },
+    {
+      "type": "color",
+      "id": "button_text_color",
+      "label": "Button text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg_color",
+      "label": "Button background (hover)",
+      "default": "#E85A91"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_text_color",
+      "label": "Button text (hover)",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#CFF2F7"
+    },
+    {
+      "type": "range",
+      "id": "column_gap",
+      "label": "Space between image and content",
+      "min": 20,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with content"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,118 @@
+.shop-by-age__wrapper {
+  text-align: center;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.shop-by-age__heading {
+  margin: 0 0 3rem;
+  font-weight: 500;
+}
+
+.shop-by-age__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--shop-by-age-gap, 32px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shop-by-age__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: var(--circle-size-mobile, 100px);
+}
+
+.shop-by-age__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+  color: currentColor;
+}
+
+.shop-by-age__circle {
+  display: block;
+  width: var(--circle-size-mobile, 100px);
+  height: var(--circle-size-mobile, 100px);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.shop-by-age__circle img,
+.shop-by-age__circle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-by-age__link:hover .shop-by-age__circle,
+.shop-by-age__link:focus-visible .shop-by-age__circle {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.shop-by-age__label {
+  margin: 14px 0 0;
+  font-family: var(--font-heading-family);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 68px;
+  letter-spacing: 0;
+  color: #000000;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Mobile: swipeable slider instead of a wrapped row. Native scroll snapping, so
+   the gesture is the browser's own and it needs no script. Desktop is untouched. */
+@media screen and (max-width: 749px) {
+  .shop-by-age__list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Stay centred while the circles still fit, and only left-align once they
+       overflow - plain `center` would make the first circle unreachable. */
+    justify-content: flex-start;
+    justify-content: safe center;
+    /* The wrapper drops the page gutter, so hold the ends off the screen edge. */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    scroll-padding-left: 1.5rem;
+    /* Room for the circles' drop shadow, which a scroll container would clip. */
+    padding-bottom: 6px;
+  }
+
+  .shop-by-age__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-by-age__item {
+    /* Without this the circles would be squashed rather than scrolled. */
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .shop-by-age__item {
+    width: var(--circle-size-desktop, 160px);
+  }
+
+  .shop-by-age__circle {
+    width: var(--circle-size-desktop, 160px);
+    height: var(--circle-size-desktop, 160px);
+  }
+}

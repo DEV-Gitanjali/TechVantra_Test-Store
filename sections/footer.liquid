@@ -6,8 +6,169 @@
 {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
+  {{ section.settings.text_font | font_face: font_display: 'swap' }}
+
   .footer {
     margin-top: {{ section.settings.margin_top | times: 0.75 | round: 0 }}px;
+  }
+
+  #shopify-section-{{ section.id }} .footer {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__heading {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content,
+  #shopify-section-{{ section.id }} .footer-block__contact-text,
+  #shopify-section-{{ section.id }} .footer-block__contact-link,
+  #shopify-section-{{ section.id }} .list-menu__item--link,
+  #shopify-section-{{ section.id }} .copyright__content {
+    font-family: {{ section.settings.text_font.family }}, {{ section.settings.text_font.fallback_families }};
+    font-weight: {{ section.settings.text_font.weight }};
+    font-style: {{ section.settings.text_font.style }};
+    font-size: 14px;
+    line-height: 23px;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content.list-unstyled li {
+    margin-bottom: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content.list-unstyled li:last-child {
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .list-menu__item--link {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-text,
+  #shopify-section-{{ section.id }} .footer-block__contact-link {
+    font-size: 16px;
+  }
+
+  #shopify-section-{{ section.id }} .list-menu__item--active {
+    text-decoration: none;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content .list-menu__item--active {
+    color: rgba(var(--color-foreground), 0.75);
+  }
+
+  #shopify-section-{{ section.id }} .copyright__content a {
+    text-decoration: underline;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__details-content .list-menu__item--link:hover {
+    color: {{ section.settings.active_link_color }};
+    text-decoration: none;
+  }
+
+  #shopify-section-{{ section.id }} .footer__blocks-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3.2rem 2.4rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand {
+    flex: 1 0 100%;
+    width: 100%;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand .footer-block__image-wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand:not(.footer-block--brand-divider) {
+    margin-bottom: -1.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand-divider {
+    padding-bottom: 3.2rem;
+    border-bottom: 0.1rem dashed rgba(var(--color-foreground), 0.35);
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--brand-divider .footer-block__details-content {
+    max-width: 87rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block--menu-column {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-text {
+    margin-bottom: 1.2rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: rgba(var(--color-foreground), 0.75);
+    text-decoration: none;
+    margin-bottom: 0.8rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer-block__contact-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .footer__content-bottom-wrapper--socials {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social--bottom {
+    justify-content: flex-start;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social {
+    gap: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social .list-social__link {
+    border-radius: 50%;
+    border: 2px solid #000000;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  #shopify-section-{{ section.id }} .footer__list-social .list-social__link:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+  }
+
+  @media screen and (min-width: 990px) {
+    #shopify-section-{{ section.id }} .footer-block--menu-column {
+      flex: 1 1 0%;
+      width: auto;
+      max-width: none;
+    }
   }
 
   .section-{{ section.id }}-padding {
@@ -68,7 +229,7 @@
           >
             {%- for block in section.blocks -%}
               <div
-                class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                class="footer-block grid__item{% if block.type == 'link_list' %} footer-block--menu{% endif %}{% if block.type == 'link_list' or block.type == 'contact_info' %} footer-block--menu-column{% endif %}{% if block.type == 'image' %} footer-block--brand{% endif %}{% if block.type == 'text' %} footer-block--brand footer-block--brand-divider{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
                 {{ block.shopify_attributes }}
                 {% if settings.animations_reveal_on_scroll %}
                   data-cascade
@@ -130,6 +291,28 @@
                       {%- endif -%}
                       {%- if block.settings.show_social and has_social_icons -%}
                         {%- render 'social-icons', class: 'footer__list-social' -%}
+                      {%- endif -%}
+                    </div>
+                  {%- when 'contact_info' -%}
+                    <div class="footer-block__contact-info">
+                      {%- if block.settings.availability_text != blank -%}
+                        <div class="footer-block__contact-text rte">{{ block.settings.availability_text }}</div>
+                      {%- endif -%}
+                      {%- if block.settings.phone != blank -%}
+                        <a href="tel:{{ block.settings.phone | remove: ' ' }}" class="footer-block__contact-link">
+                          <span class="footer-block__contact-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.46.57 3.58a1 1 0 0 1-.25 1.01l-2.2 2.2Z"/></svg>
+                          </span>
+                          {{ block.settings.phone }}
+                        </a>
+                      {%- endif -%}
+                      {%- if block.settings.email != blank -%}
+                        <a href="mailto:{{ block.settings.email }}" class="footer-block__contact-link">
+                          <span class="footer-block__contact-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm0 2v.01L12 12l8-5.99V6H4Zm16 12V8.24l-7.4 5.55a1 1 0 0 1-1.2 0L4 8.24V18h16Z"/></svg>
+                          </span>
+                          {{ block.settings.email }}
+                        </a>
                       {%- endif -%}
                     </div>
                   {%- when 'image' -%}
@@ -242,9 +425,6 @@
             </div>
           {%- endif -%}
 
-          {%- if section.settings.show_social and has_social_icons -%}
-            {%- render 'social-icons', class: 'footer__list-social' -%}
-          {%- endif -%}
         </div>
       </div>
     {%- endunless -%}
@@ -297,22 +477,28 @@
         {%- endif -%}
       </div>
     </div>
-    <div class="footer__content-bottom-wrapper page-width{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
+    <div class="footer__content-bottom-wrapper page-width footer__content-bottom-wrapper--socials{% if section.settings.enable_country_selector == false and section.settings.enable_language_selector == false %} footer__content-bottom-wrapper--center{% endif %}">
+      {%- if section.settings.show_social and has_social_icons -%}
+        {%- render 'social-icons', class: 'footer__list-social footer__list-social--bottom' -%}
+      {%- endif -%}
       <div class="footer__copyright caption">
-        <small class="copyright__content"
+        <small class="copyright__content copyright__content--brand"
           >&copy; {{ 'now' | date: '%Y' }}, {{ shop.name | link_to: routes.root_url -}}
         </small>
         <small class="copyright__content">{{ powered_by_link }}</small>
         {%- if section.settings.show_policy -%}
           <ul class="policies list-unstyled">
             {%- for policy in shop.policies -%}
-              {%- if policy != blank -%}
+              {%- unless policy == blank
+                or policy.url contains 'privacy-policy'
+                or policy.url contains 'shipping-policy'
+              -%}
                 <li>
                   <small class="copyright__content"
                     ><a href="{{ policy.url }}">{{ policy.title | escape }}</a></small
                   >
                 </li>
-              {%- endif -%}
+              {%- endunless -%}
             {%- endfor -%}
           </ul>
         {%- endif -%}
@@ -382,6 +568,36 @@
       ]
     },
     {
+      "type": "contact_info",
+      "name": "Contact information",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "default": "Contact Info",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "availability_text",
+          "default": "<p>Available between 8AM to 8PM. Ready to answer your questions.</p>",
+          "label": "Availability text"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "default": "+91 0123456789",
+          "label": "Phone number"
+        },
+        {
+          "type": "text",
+          "id": "email",
+          "default": "hello@feltbarn.com",
+          "label": "Email"
+        }
+      ]
+    },
+    {
       "type": "image",
       "name": "Image",
       "settings": [
@@ -429,6 +645,24 @@
       "id": "color_scheme",
       "label": "t:sections.all.colors.label",
       "default": "scheme-1"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#BEE3F8"
+    },
+    {
+      "type": "color",
+      "id": "active_link_color",
+      "label": "Active link color",
+      "default": "#FF7A93"
+    },
+    {
+      "type": "font_picker",
+      "id": "text_font",
+      "label": "Text font",
+      "default": "poppins_n4"
     },
     {
       "type": "header",

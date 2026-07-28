@@ -1,0 +1,161 @@
+{% comment %}
+  Renders the collection toolbar that sits above the product grid:
+  "Show: N"  ...  "Sort By: <option>"  [grid] [list]
+
+  The Show control switches page size through alternate collection templates
+  (`?view=show-18` -> templates/collection.show-18.json), because Liquid cannot read
+  arbitrary query parameters. `custom-collection-toolbar.js` does the navigation and
+  keeps the `view` parameter attached to filter links.
+
+  Accepts:
+  - results: {Object} Collection or Search object
+  - enable_sorting: {Boolean}
+  - products_per_page: {Number} page size currently in effect
+  - default_per_page: {Number} page size of the default template (no `view` parameter)
+  - template_suffix: {String} current template suffix, blank on the default template
+
+  Usage:
+    {% render 'custom-collection-toolbar',
+      results: collection,
+      enable_sorting: section.settings.enable_sorting,
+      products_per_page: products_per_page,
+      default_per_page: section.settings.products_per_page,
+      template_suffix: template.suffix
+    %}
+{% endcomment %}
+
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign per_page_options = '9,18,27,36' | split: ','
+  assign per_page_has_current = false
+  for option in per_page_options
+    assign option_number = option | times: 1
+    if option_number == products_per_page
+      assign per_page_has_current = true
+      break
+    endif
+  endfor
+-%}
+
+{%- capture caret_svg -%}
+  <svg class="collection-toolbar__caret-icon" viewBox="0 0 12 8" fill="none" aria-hidden="true" focusable="false">
+    <path d="M1 1.5 6 6.5l5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+{%- endcapture -%}
+
+<div class="collection-toolbar" data-collection-toolbar>
+  <div class="collection-toolbar__show">
+    <label class="collection-toolbar__label" for="ProductsPerPage">Show:</label>
+    <div class="collection-toolbar__select">
+      <select
+        id="ProductsPerPage"
+        class="collection-toolbar__select-input"
+        data-per-page-select
+        data-default-per-page="{{ default_per_page }}"
+      >
+        {%- unless per_page_has_current -%}
+          <option value="{{ products_per_page }}" selected="selected">{{ products_per_page }}</option>
+        {%- endunless -%}
+        {%- for option in per_page_options -%}
+          {%- assign option_number = option | times: 1 -%}
+          <option
+            value="{{ option_number }}"
+            {% if option_number == products_per_page %}
+              selected="selected"
+            {% endif %}
+          >
+            {{ option_number }}
+          </option>
+        {%- endfor -%}
+      </select>
+      <span class="collection-toolbar__caret">{{ caret_svg }}</span>
+    </div>
+  </div>
+
+  <div class="collection-toolbar__end">
+    {%- if enable_sorting -%}
+      <facet-filters-form class="collection-toolbar__sort small-hide">
+        <form class="facets-vertical-form" id="FacetSortForm">
+          <div class="facet-filters sorting caption">
+            <div class="facet-filters__field">
+              <h2 class="facet-filters__label collection-toolbar__label">
+                <label for="SortBy">Sort By:</label>
+              </h2>
+              <div class="collection-toolbar__select collection-toolbar__select--wide">
+                <select
+                  name="sort_by"
+                  class="facet-filters__sort collection-toolbar__select-input"
+                  id="SortBy"
+                  aria-describedby="a11y-refresh-page-message"
+                >
+                  {%- for option in results.sort_options -%}
+                    <option
+                      value="{{ option.value | escape }}"
+                      {% if option.value == sort_by %}
+                        selected="selected"
+                      {% endif %}
+                    >
+                      {%- if option.value == results.default_sort_by -%}
+                        Default Sorting
+                      {%- else -%}
+                        {{ option.name | escape }}
+                      {%- endif -%}
+                    </option>
+                  {%- endfor -%}
+                </select>
+                <span class="collection-toolbar__caret">{{ caret_svg }}</span>
+              </div>
+            </div>
+          </div>
+
+          {% if results.current_vendor or results.current_type %}
+            <input type="hidden" name="q" value="{{ results.current_vendor }}{{ results.current_type }}">
+          {% endif %}
+
+          {%- if results.terms -%}
+            <input type="hidden" name="q" value="{{ results.terms | escape }}">
+            <input name="options[prefix]" type="hidden" value="last">
+          {%- endif -%}
+
+          {% comment %} Keeps the selected page size while filtering/sorting over AJAX {% endcomment %}
+          {%- if template_suffix != blank -%}
+            <input type="hidden" name="view" value="{{ template_suffix }}">
+          {%- endif -%}
+        </form>
+      </facet-filters-form>
+    {%- endif -%}
+
+    <div class="collection-toolbar__views" role="group" aria-label="Product layout">
+      <button
+        type="button"
+        class="collection-toolbar__view is-active"
+        data-view-mode="grid"
+        aria-pressed="true"
+        aria-label="Grid view"
+      >
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+          <rect x="1.5" y="1.5" width="7" height="7" rx="1.5" fill="currentColor"/>
+          <rect x="11.5" y="1.5" width="7" height="7" rx="1.5" fill="currentColor"/>
+          <rect x="1.5" y="11.5" width="7" height="7" rx="1.5" fill="currentColor"/>
+          <rect x="11.5" y="11.5" width="7" height="7" rx="1.5" fill="currentColor"/>
+        </svg>
+      </button>
+      <button
+        type="button"
+        class="collection-toolbar__view"
+        data-view-mode="list"
+        aria-pressed="false"
+        aria-label="List view"
+      >
+        <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" focusable="false">
+          <rect x="1.5" y="2.5" width="3" height="3" rx="1" fill="currentColor"/>
+          <rect x="1.5" y="8.5" width="3" height="3" rx="1" fill="currentColor"/>
+          <rect x="1.5" y="14.5" width="3" height="3" rx="1" fill="currentColor"/>
+          <rect x="7" y="3.25" width="11.5" height="1.5" rx="0.75" fill="currentColor"/>
+          <rect x="7" y="9.25" width="11.5" height="1.5" rx="0.75" fill="currentColor"/>
+          <rect x="7" y="15.25" width="11.5" height="1.5" rx="0.75" fill="currentColor"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

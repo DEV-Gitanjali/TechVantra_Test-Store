@@ -1,0 +1,738 @@
+{{ 'custom-coming-next.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'custom-coming-next.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign enable_reveal = false
+  if section.settings.enable_animation and settings.animations_reveal_on_scroll
+    assign enable_reveal = true
+  endif
+
+  assign featured_index = -1
+  for block in section.blocks
+    if block.settings.feature_card and featured_index == -1
+      assign featured_index = forloop.index0
+    endif
+  endfor
+  if featured_index == -1 and section.blocks.size > 0
+    assign featured_index = section.blocks.size | divided_by: 2
+  endif
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .coming-next {
+    background-color: {{ section.settings.background_color }};
+  }
+
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__container {
+    {%- if section.settings.content_width == 'boxed' -%}
+      max-width: {{ section.settings.container_width }}px;
+      margin-left: auto;
+      margin-right: auto;
+    {%- else -%}
+      max-width: none;
+    {%- endif -%}
+    padding-left: {{ section.settings.spacing_left }}px;
+    padding-right: {{ section.settings.spacing_right }}px;
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__heading {
+    color: {{ section.settings.heading_color }};
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__label {
+    font-size: {{ section.settings.label_font_size }}px;
+    font-weight: {{ section.settings.label_font_weight }};
+    font-style: normal;
+    color: {{ section.settings.label_color }};
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__title {
+    font-weight: {{ section.settings.title_font_weight }};
+    font-style: normal;
+    color: {{ section.settings.title_color }};
+    line-height: {{ section.settings.title_line_height }}px;
+    font-size: {{ section.settings.title_font_size_mobile }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .coming-next__title {
+      font-size: {{ section.settings.title_font_size_desktop }}px;
+    }
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__arrow {
+    color: {{ section.settings.arrow_color }};
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__overlay {
+    background-color: {{ section.settings.overlay_color }};
+  }
+
+  #shopify-section-{{ section.id }} .coming-next__card {
+    border-radius: {{ section.settings.border_radius }}px;
+  }
+
+  {%- comment -%}
+    Every slide gets one fixed frame: tall enough for a featured card plus its
+    label and title. Without it the row's height follows whichever card is active
+    - the card grows, its text appears, and the whole section (and the intro
+    column beside it) shifts up and down on every slide. Set here rather than in
+    script so it holds from the first paint.
+  {%- endcomment -%}
+  {%- if section.settings.desktop_layout == 'carousel' -%}
+    @media screen and (min-width: 750px) {
+      #shopify-section-{{ section.id }} .coming-next__slide {
+        height: calc(var(--coming-next-featured-h, 460px) + var(--coming-next-text-space, 84px));
+      }
+    }
+  {%- endif -%}
+
+  {%- if section.settings.mobile_layout == 'carousel' -%}
+    @media screen and (max-width: 749px) {
+      #shopify-section-{{ section.id }} .coming-next__slide {
+        height: calc(var(--coming-next-featured-h, 460px) + var(--coming-next-text-space, 84px));
+      }
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+<div class="coming-next">
+  <div
+    class="coming-next__container section-{{ section.id }}-padding"
+    style="
+      --coming-next-gap: {{ section.settings.card_gap }}px;
+      --coming-next-featured-w: {{ section.settings.featured_card_width }}px;
+      --coming-next-featured-h: {{ section.settings.featured_card_height }}px;
+      --coming-next-side-w: {{ section.settings.side_card_width }}px;
+      --coming-next-side-h: {{ section.settings.side_card_height }}px;
+      --coming-next-transition: {{ section.settings.transition_speed }}ms;
+      --coming-next-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    "
+  >
+    <div class="coming-next__wrapper">
+      <div class="coming-next__intro{% if enable_reveal %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="coming-next__heading {{ section.settings.heading_size }}">
+            {{ section.settings.heading }}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.subheading != blank -%}
+          <div class="coming-next__subheading">
+            {{ section.settings.subheading }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.show_arrows and section.blocks.size > 1 -%}
+          <div class="coming-next__nav">
+            <button
+              type="button"
+              class="coming-next__nav-button coming-next__nav-button--prev"
+              data-coming-next-prev
+              aria-label="{{ 'general.slider.previous_slide' | t }}"
+              aria-controls="ComingNext-{{ section.id }}"
+            >
+              <span class="icon-wrap">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            </button>
+            <button
+              type="button"
+              class="coming-next__nav-button coming-next__nav-button--next"
+              data-coming-next-next
+              aria-label="{{ 'general.slider.next_slide' | t }}"
+              aria-controls="ComingNext-{{ section.id }}"
+            >
+              <span class="icon-wrap">
+                {{- 'icon-arrow.svg' | inline_asset_content -}}
+              </span>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <coming-next-carousel
+          class="coming-next__track-wrapper"
+          data-layout="{{ section.settings.desktop_layout }}"
+          data-mobile-layout="{{ section.settings.mobile_layout }}"
+          data-autoplay="{{ section.settings.enable_autoplay }}"
+          data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+          data-loop="{{ section.settings.enable_infinite_loop }}"
+          data-drag="{{ section.settings.enable_drag }}"
+          data-featured-index="{{ featured_index }}"
+          data-transition-speed="{{ section.settings.transition_speed }}"
+        >
+          <ul id="ComingNext-{{ section.id }}" class="coming-next__track" role="list">
+            {%- for block in section.blocks -%}
+              {%- liquid
+                assign card_url = block.settings.link
+                if block.settings.collection != blank
+                  assign card_url = block.settings.collection.url
+                endif
+
+                assign card_title = block.settings.title
+                if card_title == blank and block.settings.collection != blank
+                  assign card_title = block.settings.collection.title
+                endif
+
+                assign card_image = block.settings.image
+                if card_image == blank and block.settings.collection.featured_image != blank
+                  assign card_image = block.settings.collection.featured_image
+                endif
+              -%}
+              <li
+                class="coming-next__slide{% if enable_reveal %} scroll-trigger animate--slide-in{% endif %}"
+                data-coming-next-slide
+                {{ block.shopify_attributes }}
+                {% if enable_reveal %}
+                  data-cascade
+                  style="--animation-order: {{ forloop.index }};"
+                {% endif %}
+              >
+                <div class="coming-next__card">
+                  {%- if card_url != blank -%}
+                    <a href="{{ card_url }}" class="coming-next__image-wrap" aria-label="{{ card_title | escape }}">
+                  {%- else -%}
+                    <span class="coming-next__image-wrap">
+                  {%- endif -%}
+                    {%- if card_image != blank -%}
+                      <img
+                        class="coming-next__image"
+                        style="object-fit: {{ block.settings.image_fit }};"
+                        srcset="
+                          {{ card_image | image_url: width: 400 }} 400w,
+                          {{ card_image | image_url: width: 600 }} 600w,
+                          {{ card_image | image_url: width: 900 }} 900w
+                        "
+                        src="{{ card_image | image_url: width: 600 }}"
+                        alt="{{ card_image.alt | default: card_title | escape }}"
+                        width="{{ card_image.width }}"
+                        height="{{ card_image.height }}"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      {{ 'collection-1' | placeholder_svg_tag: 'coming-next__placeholder placeholder' }}
+                    {%- endif -%}
+                    {%- if section.settings.enable_overlay -%}
+                      <span class="coming-next__overlay" aria-hidden="true"></span>
+                    {%- endif -%}
+                  {%- if card_url != blank -%}
+                    </a>
+                  {%- else -%}
+                    </span>
+                  {%- endif -%}
+                </div>
+
+                {%- if block.settings.label != blank -%}
+                  <p class="coming-next__label">{{ block.settings.label | escape }}</p>
+                {%- endif -%}
+
+                {%- if card_title != blank -%}
+                  {%- if card_url != blank -%}
+                    <a href="{{ card_url }}" class="coming-next__title">
+                  {%- else -%}
+                    <span class="coming-next__title">
+                  {%- endif -%}
+                    {{ card_title | escape }}
+                    {%- if section.settings.enable_arrow -%}
+                      <span class="coming-next__arrow icon-wrap">
+                        {{- 'icon-arrow.svg' | inline_asset_content -}}
+                      </span>
+                    {%- endif -%}
+                  {%- if card_url != blank -%}
+                    </a>
+                  {%- else -%}
+                    </span>
+                  {%- endif -%}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+
+          {%- if section.settings.show_pagination and section.blocks.size > 1 -%}
+            <div class="coming-next__dots" role="tablist" data-coming-next-dots>
+              {%- for block in section.blocks -%}
+                <button
+                  type="button"
+                  class="coming-next__dot"
+                  data-coming-next-dot
+                  data-index="{{ forloop.index0 }}"
+                  aria-label="{{ 'general.slider.name' | t }} {{ forloop.index }}"
+                ></button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </coming-next-carousel>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom coming next",
+  "tag": "section",
+  "class": "section custom-coming-next-section",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What's Coming Next 🎉"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" },
+        { "value": "hxl", "label": "Extra large" }
+      ],
+      "default": "h2",
+      "label": "Heading size"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#159A8D"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "<p>Fun and exciting adventure just for kids! Get ready to discover brand-new surprises.</p>"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Section background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "options": [
+        { "value": "full_width", "label": "Full width" },
+        { "value": "boxed", "label": "Boxed" }
+      ],
+      "default": "full_width"
+    },
+    {
+      "type": "range",
+      "id": "container_width",
+      "label": "Container width",
+      "min": 960,
+      "max": 1600,
+      "step": 20,
+      "unit": "px",
+      "default": 1200,
+      "info": "Used when content width is set to Boxed."
+    },
+    {
+      "type": "range",
+      "id": "spacing_horizontal",
+      "label": "Left & right spacing",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Card gap",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Card border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "desktop_layout",
+      "label": "Desktop layout",
+      "options": [
+        { "value": "carousel", "label": "Carousel (center card larger)" },
+        { "value": "grid", "label": "Static grid" }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "Mobile layout",
+      "options": [
+        { "value": "carousel", "label": "Carousel" },
+        { "value": "stacked", "label": "Stacked" }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_animation",
+      "label": "Reveal cards with a scroll animation",
+      "default": true,
+      "info": "Also requires the theme's 'Reveal sections on scroll' animation setting to be enabled."
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 48
+    },
+    {
+      "type": "header",
+      "content": "Featured & side card size"
+    },
+    {
+      "type": "range",
+      "id": "featured_card_width",
+      "label": "Featured card width",
+      "min": 260,
+      "max": 560,
+      "step": 10,
+      "unit": "px",
+      "default": 380
+    },
+    {
+      "type": "range",
+      "id": "featured_card_height",
+      "label": "Featured card height",
+      "min": 260,
+      "max": 600,
+      "step": 10,
+      "unit": "px",
+      "default": 460
+    },
+    {
+      "type": "range",
+      "id": "side_card_width",
+      "label": "Side card width",
+      "min": 120,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 220
+    },
+    {
+      "type": "range",
+      "id": "side_card_height",
+      "label": "Side card height",
+      "min": 160,
+      "max": 500,
+      "step": 10,
+      "unit": "px",
+      "default": 320
+    },
+    {
+      "type": "header",
+      "content": "Carousel behavior"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "Show navigation arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pagination",
+      "label": "Show pagination dots",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_autoplay",
+      "label": "Enable autoplay",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_infinite_loop",
+      "label": "Infinite loop",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_drag",
+      "label": "Enable mouse drag to swipe",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "transition_speed",
+      "label": "Transition speed",
+      "min": 200,
+      "max": 1000,
+      "step": 50,
+      "unit": "ms",
+      "default": 400
+    },
+    {
+      "type": "header",
+      "content": "Label typography"
+    },
+    {
+      "type": "range",
+      "id": "label_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "select",
+      "id": "label_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "400", "label": "Regular" },
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "label_color",
+      "label": "Text color",
+      "default": "#8C8C8C"
+    },
+    {
+      "type": "select",
+      "id": "label_text_transform",
+      "label": "Text transform",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "capitalize", "label": "Capitalize" },
+        { "value": "uppercase", "label": "Uppercase" },
+        { "value": "lowercase", "label": "Lowercase" }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "header",
+      "content": "Title typography"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_desktop",
+      "label": "Font size (desktop)",
+      "min": 16,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "range",
+      "id": "title_font_size_mobile",
+      "label": "Font size (mobile)",
+      "min": 12,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Font weight",
+      "options": [
+        { "value": "500", "label": "Medium" },
+        { "value": "600", "label": "Semibold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Text color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "title_line_height",
+      "label": "Line height",
+      "min": 18,
+      "max": 44,
+      "step": 1,
+      "unit": "px",
+      "default": 26
+    },
+    {
+      "type": "header",
+      "content": "Arrow icon"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_arrow",
+      "label": "Show arrow beside title",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "arrow_color",
+      "label": "Arrow color",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "header",
+      "content": "Image styling"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_overlay",
+      "label": "Show color overlay on hover",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection_card",
+      "name": "Collection card",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection",
+          "info": "Used to auto-fill the link, title and image if left blank below."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom image",
+          "info": "Overrides the collection's featured image."
+        },
+        {
+          "type": "select",
+          "id": "image_fit",
+          "label": "Image fit",
+          "options": [
+            { "value": "cover", "label": "Cover" },
+            { "value": "contain", "label": "Contain" }
+          ],
+          "default": "cover"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Small label",
+          "default": "New Launch: Super Soon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Collection title",
+          "default": "Art & Craft"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom link",
+          "info": "Used only if no collection is selected above."
+        },
+        {
+          "type": "checkbox",
+          "id": "feature_card",
+          "label": "Show as featured (center) card on load",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom coming next",
+      "blocks": [
+        { "type": "collection_card", "settings": { "title": "Christmas Gifts", "label": "New Launch: Super Soon" } },
+        { "type": "collection_card", "settings": { "title": "Art & Craft", "label": "New Launch: Super Soon", "feature_card": true } },
+        { "type": "collection_card", "settings": { "title": "Game Night", "label": "New Launch: Super Soon" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

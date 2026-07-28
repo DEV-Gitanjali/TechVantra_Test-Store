@@ -1,0 +1,112 @@
+/* Featured collection — heading colour and slider arrows per Figma.
+
+   The arrow treatment intentionally mirrors .coming-next__nav-button in
+   custom-coming-next.css (40px circle, 1.5px border, #159a8d) so the two
+   carousels on the storefront read as the same control. */
+
+.custom-featured-collection .title {
+  color: #159a8d;
+  font-weight: 500;
+}
+
+/* Heading on the left, arrows on the right, on one row above the carousel */
+.featured-collection__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+/* The title wrapper carries its own spacing for the standalone layout; inside the
+   header row the row itself owns the bottom margin. */
+.featured-collection__header .collection__title,
+.featured-collection__header .collection__title--desktop-slider .title {
+  margin-bottom: 0;
+}
+
+.featured-collection__header .collection__title {
+  min-width: 0;
+}
+
+.custom-featured-collection .slider-buttons {
+  flex: 0 0 auto;
+  gap: 12px;
+}
+
+.custom-featured-collection .slider-button {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1.5px solid #159a8d;
+  border-radius: 50%;
+  background: transparent;
+  color: #159a8d;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+/* The arrow is inlined in the section without Dawn's `icon` class, so none of the
+   `.slider-button .icon` sizing or caret-rotation rules reach it. */
+.featured-collection__arrow {
+  display: flex;
+  align-items: center;
+  width: 16px;
+}
+
+.featured-collection__arrow svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The glyph points right; prev flips the whole wrapper to point left */
+.custom-featured-collection .slider-button--prev .featured-collection__arrow {
+  transform: rotate(180deg);
+}
+
+/* Filled prev / outlined next, matching the design */
+.custom-featured-collection .slider-button--prev {
+  background: #159a8d;
+  color: #ffffff;
+}
+
+.custom-featured-collection .slider-button--prev:not([disabled]):hover,
+.custom-featured-collection .slider-button--prev:not([disabled]):focus-visible {
+  background: #0f7a70;
+  border-color: #0f7a70;
+  color: #ffffff;
+}
+
+.custom-featured-collection .slider-button--next:not([disabled]):hover,
+.custom-featured-collection .slider-button--next:not([disabled]):focus-visible {
+  background: #159a8d;
+  color: #ffffff;
+}
+
+/* SliderComponent disables prev while the row is scrolled to the start — i.e. on load, which
+   is exactly the state the Figma shows with a solid teal left arrow. So the disabled state
+   keeps the full treatment and only the cursor signals it; a 0.35 opacity here read as the
+   arrows being missing. */
+.custom-featured-collection .slider-button[disabled] {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .custom-featured-collection .slider-button {
+    transition: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  /* The heading shares the row with the arrows, so at phone width the desktop
+     size wraps onto two lines and pushes the row taller than the buttons. */
+  .custom-featured-collection .title {
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .featured-collection__header {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}

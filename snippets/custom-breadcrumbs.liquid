@@ -1,0 +1,65 @@
+{% comment %}
+  Renders a breadcrumb trail — Home > ... > current page.
+
+  The trail is derived from the page type, so the snippet can be dropped into any
+  template. The last crumb is never a link and carries aria-current="page".
+
+  Accepts:
+  - current_label: {String} (optional) overrides the label of the last crumb, for when
+    the navigation wording differs from the resource title (e.g. "Shop" for a collection
+    whose title is used as the banner heading).
+
+  Usage:
+    {% render 'custom-breadcrumbs' %}
+    {% render 'custom-breadcrumbs', current_label: section.settings.breadcrumb_label %}
+{% endcomment %}
+
+{{ 'custom-breadcrumbs.css' | asset_url | stylesheet_tag }}
+
+<nav class="breadcrumbs" aria-label="Breadcrumb">
+  <ol class="breadcrumbs__list" role="list">
+    <li class="breadcrumbs__item">
+      <a href="{{ routes.root_url }}" class="breadcrumbs__link">Home</a>
+    </li>
+
+    {%- case request.page_type -%}
+      {%- when 'collection' -%}
+        {%- assign current_crumb = current_label | default: collection.title -%}
+
+      {%- when 'product' -%}
+        {%- if collection.title != blank -%}
+          <li class="breadcrumbs__item">
+            <a href="{{ collection.url }}" class="breadcrumbs__link">{{ collection.title | escape }}</a>
+          </li>
+        {%- endif -%}
+        {%- assign current_crumb = current_label | default: product.title -%}
+
+      {%- when 'article' -%}
+        <li class="breadcrumbs__item">
+          <a href="{{ blog.url }}" class="breadcrumbs__link">{{ blog.title | escape }}</a>
+        </li>
+        {%- assign current_crumb = current_label | default: article.title -%}
+
+      {%- when 'blog' -%}
+        {%- assign current_crumb = current_label | default: blog.title -%}
+
+      {%- when 'page' -%}
+        {%- assign current_crumb = current_label | default: page.title -%}
+
+      {%- when 'search' -%}
+        {%- assign current_crumb = current_label | default: 'Search' -%}
+
+      {%- when 'cart' -%}
+        {%- assign current_crumb = current_label | default: 'Cart' -%}
+
+      {%- else -%}
+        {%- assign current_crumb = current_label | default: page_title -%}
+    {%- endcase -%}
+
+    {%- if current_crumb != blank -%}
+      <li class="breadcrumbs__item">
+        <span class="breadcrumbs__current" aria-current="page">{{ current_crumb | escape }}</span>
+      </li>
+    {%- endif -%}
+  </ol>
+</nav>

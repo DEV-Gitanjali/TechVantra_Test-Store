@@ -1,0 +1,248 @@
+/* Collection toolbar — "Show: N" / "Sort By" / grid-list toggle, per Figma.
+   Sits in the right-hand column, level with the top of the filter sidebar. */
+
+.collection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.2rem 1.6rem;
+  margin: 0 0 2rem;
+}
+
+.collection-toolbar__show,
+.collection-toolbar__end {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.collection-toolbar__end {
+  margin-left: auto;
+  gap: 1.6rem;
+}
+
+.collection-toolbar__label {
+  margin: 0 0.2rem 0 0;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #1e1e1e;
+}
+
+.collection-toolbar__label label {
+  cursor: pointer;
+}
+
+/* Dropdowns — bordered rounded rect with a thin chevron */
+.collection-toolbar__select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.collection-toolbar .collection-toolbar__select-input {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+  min-width: 7rem;
+  min-height: 0;
+  height: auto;
+  padding: 0.9rem 3.2rem 0.9rem 1.4rem;
+  border: 1px solid #d5d5d5;
+  border-radius: 0.8rem;
+  background-color: #ffffff;
+  background-image: none;
+  color: #1e1e1e;
+  font-family: inherit;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+  box-shadow: none;
+  transition: border-color var(--duration-short, 150ms) ease;
+}
+
+.collection-toolbar .collection-toolbar__select--wide .collection-toolbar__select-input {
+  min-width: 18rem;
+}
+
+.collection-toolbar .collection-toolbar__select-input:hover {
+  border-color: #b5b5b5;
+}
+
+.collection-toolbar .collection-toolbar__select-input:focus-visible {
+  outline: 0.2rem solid rgba(30, 30, 30, 0.5);
+  outline-offset: 0.2rem;
+  border-color: #1e1e1e;
+  box-shadow: none;
+}
+
+.collection-toolbar__caret {
+  position: absolute;
+  right: 1.2rem;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: #1e1e1e;
+}
+
+.collection-toolbar__caret-icon {
+  width: 1.1rem;
+  height: 0.8rem;
+}
+
+/* Neutralise Dawn's sort-field layout rules inside the toolbar */
+.collection-toolbar .facet-filters,
+.collection-toolbar .facet-filters__field {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  flex-grow: 0;
+  gap: 1rem;
+}
+
+.collection-toolbar .sorting {
+  margin: 0;
+}
+
+/* Grid / list view toggle */
+.collection-toolbar__views {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.collection-toolbar__view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 3.4rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.6rem;
+  background: transparent;
+  color: #b5b5b5;
+  cursor: pointer;
+  box-shadow: none;
+  transition: color var(--duration-short, 150ms) ease;
+}
+
+.collection-toolbar__view:hover {
+  color: #7a7a7a;
+}
+
+.collection-toolbar__view.is-active {
+  color: #1e1e1e;
+}
+
+.collection-toolbar__view svg {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.collection-toolbar__view:focus-visible {
+  outline: 0.2rem solid rgba(30, 30, 30, 0.5);
+  outline-offset: 0.2rem;
+}
+
+/* ---------- List view ----------
+   Dawn's .grid is a flex row with percentage widths on .grid__item — not a CSS
+   grid — so one-per-row has to be forced on the flex items, not with columns. */
+.product-grid.product-grid--list {
+  display: flex;
+  flex-direction: column;
+  column-gap: 0;
+}
+
+.product-grid.product-grid--list > .grid__item {
+  width: 100%;
+  max-width: 100%;
+}
+
+.product-grid--list .custom-card {
+  display: grid;
+  grid-template-columns: 24rem minmax(0, 1fr);
+  align-items: center;
+  aspect-ratio: auto;
+  height: auto;
+  background-color: #ffffff;
+  border: 1px solid #ececec;
+}
+
+.product-grid--list .custom-card__media {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 2rem 0 0 2rem;
+}
+
+/* Stays positioned so it keeps winning over the full-card link overlay (z-index 2) */
+.product-grid--list .custom-card__info {
+  position: relative;
+  z-index: 3;
+  padding: 2rem 2.4rem;
+  border-radius: 0;
+  text-align: left;
+  box-shadow: none;
+  background: transparent;
+}
+
+.product-grid--list .custom-card__rating,
+.product-grid--list .custom-card__price-row,
+.product-grid--list .custom-card__price-row .price__container,
+.product-grid--list .custom-card__price-row .price__regular,
+.product-grid--list .custom-card__price-row .price__sale {
+  justify-content: flex-start;
+}
+
+.product-grid--list .custom-card__title {
+  font-size: 1.8rem;
+}
+
+/* The CTA is hover-revealed in the grid card; in a list row it always shows */
+.product-grid--list .custom-card__actions {
+  max-height: 6rem;
+  opacity: 1;
+  margin-top: 1.4rem;
+}
+
+.product-grid--list .custom-card__cta {
+  min-width: 0;
+}
+
+@media screen and (max-width: 749px) {
+  .product-grid--list .custom-card {
+    grid-template-columns: 12rem minmax(0, 1fr);
+  }
+
+  .product-grid--list .custom-card__media {
+    border-radius: 1.6rem 0 0 1.6rem;
+  }
+
+  .product-grid--list .custom-card__info {
+    padding: 1.2rem 1.4rem;
+  }
+
+  .product-grid--list .custom-card__title {
+    font-size: 1.4rem;
+  }
+}
+
+/* ---------- Toolbar placement inside the vertical filter layout ---------- */
+@media screen and (max-width: 749px) {
+  .collection-toolbar {
+    margin-top: 1.6rem;
+  }
+
+  .collection-toolbar__end {
+    gap: 1rem;
+  }
+}
