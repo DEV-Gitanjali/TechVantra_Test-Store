@@ -244,4 +244,13 @@
   .customer-reviews__nav {
     padding-top: 0;
   }
+
+  .customer-reviews__heading {
+    font-size: 22px;
+  }
+
+  .customer-reviews__subheading {
+    font-size: 14px;
+    line-height: 20px;
+  }
 }

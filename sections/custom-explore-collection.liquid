@@ -27,7 +27,7 @@
 <div class="explore-collection">
   <div
     class="explore-collection__wrapper page-width section-{{ section.id }}-padding"
-    style="--explore-collection-gap: {{ section.settings.item_spacing }}px; --explore-collection-radius: {{ section.settings.card_radius }}px; --explore-collection-columns-desktop: {{ section.settings.columns_desktop }};"
+    style="--explore-collection-gap: {{ section.settings.item_spacing }}px; --explore-collection-radius: {{ section.settings.card_radius }}px; --explore-collection-columns-desktop: {{ section.settings.columns_desktop }}; --explore-collection-mobile-card: {{ section.settings.mobile_card_width }}%;"
   >
     {%- if section.settings.heading != blank -%}
       <h2
@@ -309,6 +309,17 @@
       "step": 2,
       "unit": "px",
       "default": 24
+    },
+    {
+      "type": "range",
+      "id": "mobile_card_width",
+      "label": "Card width (mobile carousel)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 80,
+      "info": "On mobile the cards become a swipeable carousel. Below 100% the next card peeks in at the edge."
     },
     {
       "type": "header",

@@ -73,6 +73,39 @@
   white-space: nowrap;
 }
 
+/* Mobile: swipeable slider instead of a wrapped row. Native scroll snapping, so
+   the gesture is the browser's own and it needs no script. Desktop is untouched. */
+@media screen and (max-width: 749px) {
+  .shop-by-age__list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Stay centred while the circles still fit, and only left-align once they
+       overflow - plain `center` would make the first circle unreachable. */
+    justify-content: flex-start;
+    justify-content: safe center;
+    /* The wrapper drops the page gutter, so hold the ends off the screen edge. */
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    scroll-padding-left: 1.5rem;
+    /* Room for the circles' drop shadow, which a scroll container would clip. */
+    padding-bottom: 6px;
+  }
+
+  .shop-by-age__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .shop-by-age__item {
+    /* Without this the circles would be squashed rather than scrolled. */
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+}
+
 @media screen and (min-width: 750px) {
   .shop-by-age__item {
     width: var(--circle-size-desktop, 160px);

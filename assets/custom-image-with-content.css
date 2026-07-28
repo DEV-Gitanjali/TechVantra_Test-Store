@@ -91,8 +91,45 @@
     text-align: center;
   }
 
+  /* The wrapper still carries align-items: flex-start, which in a column pins the
+     media to the left edge and shrinks it to its content - so the auto margins
+     below had nothing to centre against. Centre the media box itself. */
+  .image-with-content__media {
+    align-self: center;
+  }
+
   .image-with-content__image-wrap {
     width: min(var(--image-with-content-image-width, 280px), 220px);
     margin: 0 auto;
+  }
+
+  /* Desktop type is set for a wide column; at phone width it wraps after two or
+     three words. Scale the whole block down. */
+  .image-with-content__name {
+    /* The desktop rule pulls the name up by 23px to offset its 90px line box;
+       with a normal line height here that offset would just clip it. */
+    margin: 0 0 10px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .image-with-content__bio {
+    margin: 0 0 12px;
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .image-with-content__bio p {
+    margin: 0 0 12px;
+  }
+
+  .image-with-content__role {
+    margin: 0 0 18px;
+    font-size: 14px;
+  }
+
+  .image-with-content__button {
+    padding: 10px 22px;
+    font-size: 13px;
   }
 }

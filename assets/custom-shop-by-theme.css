@@ -151,3 +151,26 @@
   width: 100%;
   height: 100%;
 }
+
+@media screen and (max-width: 749px) {
+  /* 44px on a 68px line box wraps onto two widely spaced lines at phone width. */
+  .shop-by-theme__heading {
+    margin: 0 0 8px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .shop-by-theme__subheading {
+    margin: 0 auto 24px;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .shop-by-theme__label {
+    left: 14px;
+    right: 14px;
+    bottom: 24px;
+    font-size: 20px;
+    line-height: 26px;
+  }
+}
