@@ -363,7 +363,7 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
-            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
+            "image": "shopify://shop_images/fc40c3270f88bd83fe05e811de81946be8590f94.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Christmas Gifts",
@@ -375,7 +375,7 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
-            "image": "shopify://shop_images/little-girl-with-apron-painting.png",
+            "image": "shopify://shop_images/907be32b73956e81ceb36078f75c74769d051bc2.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Art & Craft",
@@ -387,7 +387,7 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
-            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
+            "image": "shopify://shop_images/02e5a824dbaa1c580bdc6d2610fed79d679b70e5.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Game Night",
@@ -411,7 +411,7 @@
         "content_width": "full_width",
         "container_width": 1200,
         "spacing_horizontal": 0,
-        "card_gap": 40,
+        "card_gap": 20,
         "border_radius": 16,
         "desktop_layout": "carousel",
         "mobile_layout": "carousel",
@@ -420,8 +420,8 @@
         "padding_bottom": 48,
         "featured_card_width": 460,
         "featured_card_height": 540,
-        "side_card_width": 280,
-        "side_card_height": 380,
+        "side_card_width": 270,
+        "side_card_height": 280,
         "show_arrows": true,
         "show_pagination": false,
         "enable_autoplay": false,
@@ -444,6 +444,94 @@
         "overlay_color": "#000000",
         "overlay_opacity": 30
       }
+    },
+    "image_with_content_9fRt2K": {
+      "type": "custom-image-with-content",
+      "settings": {
+        "image": "shopify://shop_images/image_841.png",
+        "image_position": "left",
+        "image_width": 500,
+        "image_radius": 15,
+        "name": "Sruthi Sankar",
+        "name_size": "h1",
+        "name_color": "#008b8b",
+        "bio": "<p>I am an Architect by profession and a crafter by passion. During Covid I had to find a way to entertain and educate my son and stumbled upon this concept. Luckily being from a Textile Industry background I could find all the resources at hands reach and began designing my own collections. Exposing my samples to the outside world showed me the real potential and gave me the confidence to bring Felt Barn to the Market<br/><br/>Creative Head & Owner of Felt Barn by Sruthi Sankar</p>",
+        "bio_color": "#000000",
+        "role_text": "",
+        "role_color": "#000000",
+        "button_label": "Get In Touch",
+        "button_link": "",
+        "button_bg_color": "#fd8db9",
+        "button_text_color": "#ffffff",
+        "button_hover_bg_color": "#fd8db9",
+        "button_hover_text_color": "#ffffff",
+        "background_color": "#cff2f7",
+        "column_gap": 44,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "instagram_feed_6mLp8Q": {
+      "type": "custom-instagram-feed",
+      "blocks": {
+        "instagram_post_1a": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_831.png",
+            "link": ""
+          }
+        },
+        "instagram_post_2b": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_832.png",
+            "link": ""
+          }
+        },
+        "instagram_post_3c": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/image_830.png",
+            "link": ""
+          }
+        },
+        "instagram_post_4d": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
+            "link": ""
+          }
+        },
+        "instagram_post_5e": {
+          "type": "instagram_post",
+          "settings": {
+            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "instagram_post_1a",
+        "instagram_post_2b",
+        "instagram_post_3c",
+        "instagram_post_4d",
+        "instagram_post_5e"
+      ],
+      "name": "Instagram feed",
+      "settings": {
+        "heading": "We're on Instagram",
+        "heading_size": "h1",
+        "heading_color": "#159a8d",
+        "background_color": "#ffffff",
+        "columns_desktop": 5,
+        "item_spacing": 4,
+        "open_in_new_tab": true,
+        "overlay_color": "#000000",
+        "overlay_opacity": 40,
+        "icon_color": "#ffffff",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
@@ -452,6 +540,8 @@
     "shop_by_theme_4mNb7R",
     "explore_collection_7pXq9Z",
     "customer_reviews_5wZk3T",
-    "coming_next_2hTf8L"
+    "coming_next_2hTf8L",
+    "image_with_content_9fRt2K",
+    "instagram_feed_6mLp8Q"
   ]
 }

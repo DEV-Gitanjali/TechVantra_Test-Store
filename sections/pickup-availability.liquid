@@ -5,9 +5,9 @@
   <pickup-availability-preview class="pickup-availability-preview">
     {% assign closest_location = pick_up_availabilities.first %}
 
-    {% if closest_location.available %}
-      <span class="svg-wrapper">{{ 'icon-tick.svg' | inline_asset_content }}</span>
-    {% endif %}
+    <span class="svg-wrapper pickup-availability-preview__icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+    </span>
 
     <div class="pickup-availability-info">
       {%- if closest_location.available -%}
@@ -17,18 +17,20 @@
             | t: location_name: closest_location.location.name
           }}
         </p>
-        <p class="caption">{{ closest_location.pick_up_time }}</p>
-        <button
-          id="ShowPickupAvailabilityDrawer"
-          class="pickup-availability-button link link--text underlined-link"
-          aria-haspopup="dialog"
-        >
-          {%- if pick_up_availabilities.size == 1 -%}
-            {{ 'products.product.pickup_availability.view_store_info' | t }}
-          {%- else -%}
-            {{ 'products.product.pickup_availability.check_other_stores' | t }}
-          {%- endif -%}
-        </button>
+        <div class="pickup-availability-row">
+          <p class="caption">{{ closest_location.pick_up_time }}</p>
+          <button
+            id="ShowPickupAvailabilityDrawer"
+            class="pickup-availability-button link link--text underlined-link"
+            aria-haspopup="dialog"
+          >
+            {%- if pick_up_availabilities.size == 1 -%}
+              {{ 'products.product.pickup_availability.view_store_info' | t }}
+            {%- else -%}
+              {{ 'products.product.pickup_availability.check_other_stores' | t }}
+            {%- endif -%}
+          </button>
+        </div>
       {%- else -%}
         <p class="caption-large">
           {{

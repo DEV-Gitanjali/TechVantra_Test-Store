@@ -352,6 +352,10 @@
     text-decoration: underline;
     text-underline-offset: 0.3rem;
   }
+  .copyright__content:hover{
+    color: #FD8DB9 !important;
+    text-decoration: none !important;
+  }
 
   .footer-block__details-content .list-menu__item--active:hover {
     text-decoration-thickness: 0.2rem;

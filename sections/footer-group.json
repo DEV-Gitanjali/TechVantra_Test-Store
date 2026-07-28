@@ -1,1 +1,100 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer":{"type":"footer","settings":{"color_scheme":"scheme-1","newsletter_enable":true,"newsletter_heading":"Subscribe to our emails","enable_follow_on_shop":true,"show_social":true,"enable_country_selector":true,"enable_language_selector":true,"payment_enable":true,"show_policy":true,"margin_top":0,"padding_top":36,"padding_bottom":36}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "image_PHDX73": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/image_827.png",
+            "image_width": 100,
+            "alignment": "center"
+          }
+        },
+        "text_pPCcAx": {
+          "type": "text",
+          "settings": {
+            "heading": "",
+            "subtext": "<p>\"Step into a world where colors dance, stories come alive, and every detail is made just for curious little hearts. Our kids' collection is designed to celebrate creativity, learning, and laughter — making every day brighter, more exciting, and full of endless possibilities!</p>"
+          }
+        },
+        "link_list_BGCNFY": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick links",
+            "menu": "quick-links"
+          }
+        },
+        "link_list_M4gCR7": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Policies",
+            "menu": "policies"
+          }
+        },
+        "link_list_J7hNnb": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Popular Collections",
+            "menu": "popular-collections"
+          }
+        },
+        "link_list_GJ8DLq": {
+          "type": "link_list",
+          "settings": {
+            "heading": "My Accounts",
+            "menu": "my-accounts"
+          }
+        },
+        "contact_info_9kTp3L": {
+          "type": "contact_info",
+          "settings": {
+            "heading": "Contact Info",
+            "availability_text": "<p>Available between 8AM to 8PM. Ready to answer your questions.</p>",
+            "phone": "+91 0123456789",
+            "email": "Sruthi Sankar@gmail.com"
+          }
+        }
+      },
+      "block_order": [
+        "image_PHDX73",
+        "text_pPCcAx",
+        "link_list_BGCNFY",
+        "link_list_M4gCR7",
+        "link_list_J7hNnb",
+        "link_list_GJ8DLq",
+        "contact_info_9kTp3L"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "background_color": "#B3E7E7",
+        "active_link_color": "#ff7a93",
+        "newsletter_enable": false,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "payment_enable": false,
+        "show_policy": true,
+        "margin_top": 0,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

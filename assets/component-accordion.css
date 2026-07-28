@@ -32,6 +32,8 @@
   min-height: 1.6rem;
   margin: 0;
   word-break: break-word;
+  font-weight: 600 !important;
+  font-size:18px !important;
 }
 
 .accordion .svg-wrapper {
@@ -52,7 +54,10 @@
   overflow-x: auto;
   padding: 0 0.6rem;
 }
-
+.accordion__content p{
+  font-size: 14px !important;
+  /* line-height: 148% !important; */
+}
 .accordion__content img {
   max-width: 100%;
 }
