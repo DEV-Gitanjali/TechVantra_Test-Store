@@ -37,8 +37,12 @@
 
   assign columns_mobile_int = section.settings.columns_mobile | plus: 0
   assign columns_desktop_int = section.settings.columns_desktop | plus: 0
+  # The design is a carousel on mobile too, so this is no longer behind the
+  # "swipe on mobile" setting — that setting defaulted to false, and a saved false
+  # would silently leave a plain stacked grid. Still needs more products than
+  # columns, otherwise there is nothing to swipe to.
   assign show_mobile_slider = false
-  if section.settings.swipe_on_mobile and products_to_display > columns_mobile_int
+  if products_to_display > columns_mobile_int
     assign show_mobile_slider = true
   endif
 
@@ -611,12 +615,6 @@
         }
       ]
     },    
-    {
-      "type": "checkbox",
-      "id": "swipe_on_mobile",
-      "default": false,
-      "label": "t:sections.featured-collection.settings.swipe_on_mobile.label"
-    },          
     {
       "type": "header",
       "content": "t:sections.all.padding.section_padding_heading"

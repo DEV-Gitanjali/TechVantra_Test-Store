@@ -214,7 +214,7 @@
       "settings": {
         "collection": "frontpage",
         "products_to_show": 8,
-        "title": "Featured collection",
+        "title": "Our Best Products",
         "heading_size": "h1",
         "description": "",
         "show_description": false,
