@@ -1,47 +1,74 @@
 {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
-{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
+{{ 'custom-collection-banner.css' | asset_url | stylesheet_tag }}
 
-{%- style -%}
-  @media screen and (max-width: 749px) {
-    .collection-hero--with-image .collection-hero__inner {
-      padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 2rem);
-    }
-  }
-{%- endstyle -%}
+{%- liquid
+  assign banner_image = section.settings.image | default: collection.image
+  assign banner_heading = section.settings.heading | default: collection.title
+  assign overlay_percent = section.settings.overlay_opacity | default: 0
 
-<div class="collection-hero{% if section.settings.show_collection_image and collection.image %} collection-hero--with-image{% endif %} color-{{ section.settings.color_scheme }} gradient">
-  <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
-    <div class="collection-hero__text-wrapper">
-      <h1 class="collection-hero__title">
-        <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
-        {{- collection.title | escape -}}
-      </h1>
+  assign banner_classes = 'collection-banner'
+  unless banner_image
+    assign banner_classes = banner_classes | append: ' collection-banner--no-image'
+  endunless
 
-      {%- if section.settings.show_collection_description -%}
-        <div class="collection-hero__description rte">{{ collection.description }}</div>
-      {%- endif -%}
+  assign banner_style = '--collection-banner-height: ' | append: section.settings.height | append: 'px;'
+  if overlay_percent > 0
+    assign overlay_alpha = overlay_percent | divided_by: 100.0
+    assign banner_classes = banner_classes | append: ' collection-banner--overlay'
+    assign banner_style = banner_style | append: ' --collection-banner-overlay: ' | append: overlay_alpha | append: ';'
+  endif
+-%}
+
+<div class="collection-banner-section color-{{ section.settings.color_scheme }} gradient">
+  {%- if section.settings.show_breadcrumbs -%}
+    <div class="page-width">
+      {% render 'custom-breadcrumbs', current_label: section.settings.breadcrumb_label %}
     </div>
+  {%- endif -%}
 
-    {%- if section.settings.show_collection_image and collection.image -%}
-      <div class="collection-hero__image-container media gradient">
+  {% comment %}
+    No scroll-reveal animation here: this banner is above the fold, so fading it in
+    only delays the largest paint, and in the theme editor the animation restarts on
+    every settings change — which reads as a permanent haze over the image.
+  {% endcomment %}
+  <div class="page-width">
+    <div class="{{ banner_classes }}" style="{{ banner_style }}">
+      {%- if banner_image -%}
         <img
           srcset="
-            {%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
-            {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
-            {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
-            {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
-            {%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
-            {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
-            {{ collection.image | image_url }} {{ collection.image.width }}w
+            {%- if banner_image.width >= 375 -%}{{ banner_image | image_url: width: 375 }} 375w,{%- endif -%}
+            {%- if banner_image.width >= 750 -%}{{ banner_image | image_url: width: 750 }} 750w,{%- endif -%}
+            {%- if banner_image.width >= 1100 -%}{{ banner_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+            {%- if banner_image.width >= 1500 -%}{{ banner_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+            {%- if banner_image.width >= 2200 -%}{{ banner_image | image_url: width: 2200 }} 2200w,{%- endif -%}
+            {{ banner_image | image_url }} {{ banner_image.width }}w
           "
-          src="{{ collection.image | image_url: width: 750 }}"
-          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
-          alt="{{ collection.image.alt | escape }}"
-          width="{{ collection.image.width }}"
-          height="{{ collection.image.height }}"
+          src="{{ banner_image | image_url: width: 1500 }}"
+          sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 }}px, calc(100vw - 4rem)"
+          alt="{{ banner_image.alt | escape }}"
+          class="collection-banner__image"
+          width="{{ banner_image.width }}"
+          height="{{ banner_image.height }}"
+          fetchpriority="high"
         >
+      {%- endif -%}
+
+      <div class="collection-banner__content">
+        {% comment %}
+          When the title is toggled off it stays in the markup as visually-hidden rather
+          than being dropped, so the page keeps its h1 for search engines and screen
+          readers. `visually-hidden` is position:absolute, so it takes up no space.
+        {% endcomment %}
+        <h1 class="collection-banner__title{% unless section.settings.show_heading %} visually-hidden{% endunless %}">
+          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+          {{- banner_heading | escape -}}
+        </h1>
+
+        {%- if section.settings.show_collection_description and collection.description != blank -%}
+          <div class="collection-banner__description rte">{{ collection.description }}</div>
+        {%- endif -%}
       </div>
-    {%- endif -%}
+    </div>
   </div>
 </div>
 
@@ -51,8 +78,32 @@
   "class": "section",
   "settings": [
     {
-      "type": "paragraph",
-      "content": "t:sections.main-collection-banner.settings.paragraph.content"
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "default": true,
+      "label": "Show breadcrumbs"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_label",
+      "label": "Breadcrumb label",
+      "info": "Overrides the last breadcrumb. Leave blank to use the collection title."
+    },
+    {
+      "type": "header",
+      "content": "Banner"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "default": true,
+      "label": "Show collection title"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "info": "Leave blank to use the collection title."
     },
     {
       "type": "checkbox",
@@ -61,10 +112,30 @@
       "label": "t:sections.main-collection-banner.settings.show_collection_description.label"
     },
     {
-      "type": "checkbox",
-      "id": "show_collection_image",
-      "default": false,
-      "label": "t:sections.main-collection-banner.settings.show_collection_image.label"
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image",
+      "info": "Leave blank to use the collection image."
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "min": 160,
+      "max": 600,
+      "step": 20,
+      "unit": "px",
+      "default": 220,
+      "label": "Banner height"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 45,
+      "label": "Image overlay opacity"
     },
     {
       "type": "color_scheme",

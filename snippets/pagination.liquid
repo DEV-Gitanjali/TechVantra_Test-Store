@@ -12,24 +12,45 @@
 {% endcomment %}
 
 {{ 'component-pagination.css' | asset_url | stylesheet_tag }}
+{{ 'custom-pagination.css' | asset_url | stylesheet_tag }}
 
 {%- if paginate.parts.size > 0 -%}
+  {%- capture chevron_left -%}
+    <svg class="pagination__chevron" viewBox="0 0 8 14" fill="none" aria-hidden="true" focusable="false">
+      <path d="M6.5 1 1 7l5.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- endcapture -%}
+  {%- capture chevron_right -%}
+    <svg class="pagination__chevron" viewBox="0 0 8 14" fill="none" aria-hidden="true" focusable="false">
+      <path d="M1.5 1 7 7l-5.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  {%- endcapture -%}
+
   <div class="pagination-wrapper" data-page="{{ paginate.current_page }}">
     <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
       <ul class="pagination__list list-unstyled" role="list">
-        {%- if paginate.previous -%}
-          <li>
+        {% comment %}
+          Both arrows always render so the row keeps its shape — the unavailable one
+          is an inert span rather than a link, matching the muted state in the design.
+        {% endcomment %}
+        <li>
+          {%- if paginate.previous -%}
             <a
               href="{{ paginate.previous.url }}{{ anchor }}"
-              class="pagination__item pagination__item--next pagination__item-arrow link motion-reduce"
+              class="pagination__item pagination__arrow pagination__arrow--prev link motion-reduce"
               aria-label="{{ 'general.pagination.previous' | t }}"
             >
-              <span class="svg-wrapper">
-                {{- 'icon-caret.svg' | inline_asset_content -}}
-              </span>
+              {{ chevron_left }}
             </a>
-          </li>
-        {%- endif -%}
+          {%- else -%}
+            <span
+              class="pagination__item pagination__arrow pagination__arrow--prev pagination__arrow--disabled"
+              aria-hidden="true"
+            >
+              {{ chevron_left }}
+            </span>
+          {%- endif -%}
+        </li>
 
         {%- for part in paginate.parts -%}
           <li>
@@ -46,32 +67,37 @@
                 <a
                   role="link"
                   aria-disabled="true"
-                  class="pagination__item pagination__item--current light"
+                  class="pagination__item pagination__item--current"
                   aria-current="page"
                   aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
                 >
                   {{- part.title -}}
                 </a>
               {%- else -%}
-                <span class="pagination__item">{{ part.title }}</span>
+                <span class="pagination__item pagination__item--gap">{{ part.title }}</span>
               {%- endif -%}
             {%- endif -%}
           </li>
         {%- endfor -%}
 
-        {%- if paginate.next -%}
-          <li>
+        <li>
+          {%- if paginate.next -%}
             <a
               href="{{ paginate.next.url }}{{ anchor }}"
-              class="pagination__item pagination__item--prev pagination__item-arrow link motion-reduce"
+              class="pagination__item pagination__arrow pagination__arrow--next link motion-reduce"
               aria-label="{{ 'general.pagination.next' | t }}"
             >
-              <span class="svg-wrapper">
-                {{- 'icon-caret.svg' | inline_asset_content -}}
-              </span>
+              {{ chevron_right }}
             </a>
-          </li>
-        {%- endif -%}
+          {%- else -%}
+            <span
+              class="pagination__item pagination__arrow pagination__arrow--next pagination__arrow--disabled"
+              aria-hidden="true"
+            >
+              {{ chevron_right }}
+            </span>
+          {%- endif -%}
+        </li>
       </ul>
     </nav>
   </div>
