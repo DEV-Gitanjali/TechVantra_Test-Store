@@ -6,6 +6,7 @@
 
 .custom-featured-collection .title {
   color: #159a8d;
+  font-weight: 500;
 }
 
 /* Heading on the left, arrows on the right, on one row above the carousel */
@@ -93,5 +94,19 @@
 @media (prefers-reduced-motion: reduce) {
   .custom-featured-collection .slider-button {
     transition: none;
+  }
+}
+
+@media screen and (max-width: 749px) {
+  /* The heading shares the row with the arrows, so at phone width the desktop
+     size wraps onto two lines and pushes the row taller than the buttons. */
+  .custom-featured-collection .title {
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .featured-collection__header {
+    gap: 1rem;
+    margin-bottom: 1.5rem;
   }
 }
