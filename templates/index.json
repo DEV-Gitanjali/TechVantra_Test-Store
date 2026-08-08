@@ -102,6 +102,7 @@
         "age_group_1a": {
           "type": "age_group",
           "settings": {
+            "image": "shopify://shop_images/d921ae06d23a2f01af8d03b2182a3b5439a06132.jpg",
             "label": "0-1 Years",
             "link": "shopify://collections"
           }
@@ -109,6 +110,7 @@
         "age_group_2b": {
           "type": "age_group",
           "settings": {
+            "image": "shopify://shop_images/d921ae06d23a2f01af8d03b2182a3b5439a06132.jpg",
             "label": "1-2 Years",
             "link": ""
           }
@@ -116,6 +118,7 @@
         "age_group_3c": {
           "type": "age_group",
           "settings": {
+            "image": "shopify://shop_images/d921ae06d23a2f01af8d03b2182a3b5439a06132.jpg",
             "label": "2-3 Years",
             "link": ""
           }
@@ -123,6 +126,7 @@
         "age_group_4d": {
           "type": "age_group",
           "settings": {
+            "image": "shopify://shop_images/d921ae06d23a2f01af8d03b2182a3b5439a06132.jpg",
             "label": "3-4 Years",
             "link": ""
           }
@@ -130,6 +134,7 @@
         "age_group_5e": {
           "type": "age_group",
           "settings": {
+            "image": "shopify://shop_images/d921ae06d23a2f01af8d03b2182a3b5439a06132.jpg",
             "label": "4-5 Years",
             "link": ""
           }
@@ -161,6 +166,7 @@
         "theme_card_1a": {
           "type": "theme_card",
           "settings": {
+            "image": "shopify://shop_images/image_831.png",
             "label": "My First Binders",
             "link": "shopify://collections"
           }
@@ -168,6 +174,7 @@
         "theme_card_2b": {
           "type": "theme_card",
           "settings": {
+            "image": "shopify://shop_images/d7a85ac8d906eb4c5690ab464c1c40433d0eb2fb.png",
             "label": "Story Themes",
             "link": ""
           }
@@ -175,6 +182,7 @@
         "theme_card_3c": {
           "type": "theme_card",
           "settings": {
+            "image": "shopify://shop_images/image_831.png",
             "label": "Custom Books",
             "link": ""
           }
@@ -232,6 +240,7 @@
           "settings": {
             "collection": "",
             "link": "",
+            "image": "shopify://shop_images/830ddc5aa0d20627e5499aa81bc69e2760f75561.jpg",
             "video_url": "",
             "label": "Play Dough"
           }
@@ -241,6 +250,7 @@
           "settings": {
             "collection": "",
             "link": "",
+            "image": "shopify://shop_images/e8fd16eee24601d798ae85c33c7e81b404d2ad68.jpg",
             "video_url": "",
             "label": "Soft Toys"
           }
@@ -250,6 +260,7 @@
           "settings": {
             "collection": "",
             "link": "",
+            "image": "shopify://shop_images/b584b47a8d9e0835098c2e2c3cfeb81e292502d5.jpg",
             "video_url": "",
             "label": "Winter Wear"
           }
@@ -259,6 +270,7 @@
           "settings": {
             "collection": "",
             "link": "",
+            "image": "shopify://shop_images/Frame_1171278972.png",
             "video_url": "",
             "label": "Painting"
           }
@@ -291,6 +303,7 @@
         "review_1a": {
           "type": "review",
           "settings": {
+            "avatar": "shopify://shop_images/fd448498f0ba0ce550fe5978905462c8b4b04ef3_747eae4b-3033-41d4-8055-16798379d9ef.png",
             "name": "Emily R.",
             "location": "California, USA",
             "rating": 5,
@@ -300,6 +313,7 @@
         "review_2b": {
           "type": "review",
           "settings": {
+            "avatar": "shopify://shop_images/547731878040b39b353397731a2f2784a9d4d31e.jpg",
             "name": "Michael S",
             "location": "Seattle, Washington",
             "rating": 5,
@@ -309,6 +323,7 @@
         "review_3c": {
           "type": "review",
           "settings": {
+            "avatar": "shopify://shop_images/547731878040b39b353397731a2f2784a9d4d31e_1.jpg",
             "name": "James W.",
             "location": "San Diego, California",
             "rating": 5,
@@ -371,6 +386,7 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/fc40c3270f88bd83fe05e811de81946be8590f94.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Christmas Gifts",
@@ -382,6 +398,7 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/907be32b73956e81ceb36078f75c74769d051bc2.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Art & Craft",
@@ -393,6 +410,7 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
+            "image": "shopify://shop_images/02e5a824dbaa1c580bdc6d2610fed79d679b70e5.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Game Night",
@@ -453,6 +471,7 @@
     "image_with_content_9fRt2K": {
       "type": "custom-image-with-content",
       "settings": {
+        "image": "shopify://shop_images/628363bbf3cff1424855ea444edacf4cf466329a.png",
         "image_position": "left",
         "image_width": 500,
         "image_radius": 15,
@@ -481,30 +500,35 @@
         "instagram_post_1a": {
           "type": "instagram_post",
           "settings": {
+            "image": "shopify://shop_images/22746449c688b611f765461e89b2274c63753fc2.jpg",
             "link": ""
           }
         },
         "instagram_post_2b": {
           "type": "instagram_post",
           "settings": {
+            "image": "shopify://shop_images/651ddf8c563e900e387303999c15ec89c7cca791.jpg",
             "link": ""
           }
         },
         "instagram_post_3c": {
           "type": "instagram_post",
           "settings": {
+            "image": "shopify://shop_images/6cca69b5acad8fb3413eac4463a0d8f0fda7dbba.jpg",
             "link": ""
           }
         },
         "instagram_post_4d": {
           "type": "instagram_post",
           "settings": {
+            "image": "shopify://shop_images/ffd440fdc9f7455200558ab9013f99753698586b.jpg",
             "link": ""
           }
         },
         "instagram_post_5e": {
           "type": "instagram_post",
           "settings": {
+            "image": "shopify://shop_images/6007c6caca6a496a9e6a21440980d7feee52f0b8.jpg",
             "link": ""
           }
         }

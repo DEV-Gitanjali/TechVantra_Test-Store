@@ -17,8 +17,8 @@
         "image_PHDX73": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/image_827__2_-removebg-preview_5f99ca8b-755f-4069-8d22-f4c526d2831a.png",
-            "image_width": 180,
+            "image": "shopify://shop_images/b83c1c768740390e8ea8dbd6932a3b9f3da3055c-removebg-preview.png",
+            "image_width": 120,
             "alignment": "center"
           }
         },
@@ -33,28 +33,28 @@
           "type": "link_list",
           "settings": {
             "heading": "Quick links",
-            "menu": "quick-links"
+            "menu": ""
           }
         },
         "link_list_M4gCR7": {
           "type": "link_list",
           "settings": {
             "heading": "Policies",
-            "menu": "policies"
+            "menu": ""
           }
         },
         "link_list_J7hNnb": {
           "type": "link_list",
           "settings": {
             "heading": "Popular Collections",
-            "menu": "popular-collections"
+            "menu": ""
           }
         },
         "link_list_GJ8DLq": {
           "type": "link_list",
           "settings": {
             "heading": "My Accounts",
-            "menu": "my-accounts"
+            "menu": ""
           }
         },
         "contact_info_9kTp3L": {
