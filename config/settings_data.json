@@ -9,7 +9,7 @@
  */
 {
   "current": {
-    "logo": "shopify://shop_images/image_827.png",
+    "logo": "shopify://shop_images/b83c1c768740390e8ea8dbd6932a3b9f3da3055c.png",
     "logo_width": 70,
     "type_header_font": "fredoka_n4",
     "heading_scale": 100,
@@ -202,7 +202,7 @@
         "settings": {
           "background": "#ffffff",
           "background_gradient": "",
-          "text": "#008B8B",
+          "text": "#008b8b",
           "button": "#000000",
           "button_label": "#ffffff",
           "secondary_button_label": "#121212",
