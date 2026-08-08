@@ -16,7 +16,7 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "desktop_image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
+            "desktop_image": "shopify://shop_images/front-view-kids-playing-table_1.png",
             "heading": "Creative Playtime With Building Blocks",
             "description": "Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.",
             "button_text": "Show Now",
@@ -46,7 +46,6 @@
           "type": "slide",
           "settings": {
             "media_type": "image",
-            "desktop_image": "shopify://shop_images/841d0b13a45d8135caa6c04131ff9ea182fe37e1.jpg",
             "heading": "Creative Playtime With Building Blocks",
             "description": "Two young children are deeply engaged in a screen-free, imaginative play session, stacking wooden blocks on a small table.",
             "button_text": "Show Now",
@@ -103,7 +102,6 @@
         "age_group_1a": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "0-1 Years",
             "link": "shopify://collections"
           }
@@ -111,7 +109,6 @@
         "age_group_2b": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "1-2 Years",
             "link": ""
           }
@@ -119,7 +116,6 @@
         "age_group_3c": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "2-3 Years",
             "link": ""
           }
@@ -127,7 +123,6 @@
         "age_group_4d": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "3-4 Years",
             "link": ""
           }
@@ -135,7 +130,6 @@
         "age_group_5e": {
           "type": "age_group",
           "settings": {
-            "image": "shopify://shop_images/top-view-postpartum-basket-still-life_1.png",
             "label": "4-5 Years",
             "link": ""
           }
@@ -167,7 +161,6 @@
         "theme_card_1a": {
           "type": "theme_card",
           "settings": {
-            "image": "shopify://shop_images/image_831.png",
             "label": "My First Binders",
             "link": "shopify://collections"
           }
@@ -175,7 +168,6 @@
         "theme_card_2b": {
           "type": "theme_card",
           "settings": {
-            "image": "shopify://shop_images/image_832.png",
             "label": "Story Themes",
             "link": ""
           }
@@ -183,7 +175,6 @@
         "theme_card_3c": {
           "type": "theme_card",
           "settings": {
-            "image": "shopify://shop_images/image_830.png",
             "label": "Custom Books",
             "link": ""
           }
@@ -229,7 +220,6 @@
         "show_rating": false,
         "quick_add": "standard",
         "columns_mobile": "2",
-        "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -242,7 +232,6 @@
           "settings": {
             "collection": "",
             "link": "",
-            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
             "video_url": "",
             "label": "Play Dough"
           }
@@ -252,7 +241,6 @@
           "settings": {
             "collection": "",
             "link": "",
-            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
             "video_url": "",
             "label": "Soft Toys"
           }
@@ -262,7 +250,6 @@
           "settings": {
             "collection": "",
             "link": "",
-            "image": "shopify://shop_images/medium-shot-smiley-girl-having-fun.png",
             "video_url": "",
             "label": "Winter Wear"
           }
@@ -272,7 +259,6 @@
           "settings": {
             "collection": "",
             "link": "",
-            "image": "shopify://shop_images/little-girl-with-apron-painting.png",
             "video_url": "",
             "label": "Painting"
           }
@@ -305,7 +291,6 @@
         "review_1a": {
           "type": "review",
           "settings": {
-            "avatar": "shopify://shop_images/image_438.png",
             "name": "Emily R.",
             "location": "California, USA",
             "rating": 5,
@@ -315,7 +300,6 @@
         "review_2b": {
           "type": "review",
           "settings": {
-            "avatar": "shopify://shop_images/smiling-young-brunette-caucasian-girl-looks-camera-olive-green_1.png",
             "name": "Michael S",
             "location": "Seattle, Washington",
             "rating": 5,
@@ -325,7 +309,6 @@
         "review_3c": {
           "type": "review",
           "settings": {
-            "avatar": "shopify://shop_images/brunette-young-woman-with-healthy-beauty-skin-smiles-gently-shows-white-perfect-teeth_1.png",
             "name": "James W.",
             "location": "San Diego, California",
             "rating": 5,
@@ -335,7 +318,6 @@
         "review_KjBxhW": {
           "type": "review",
           "settings": {
-            "avatar": "shopify://shop_images/smiling-young-brunette-caucasian-girl-looks-camera-olive-green_1.png",
             "name": "Michael S",
             "location": "Seattle, Washington",
             "rating": 5,
@@ -345,7 +327,6 @@
         "review_jBQgQY": {
           "type": "review",
           "settings": {
-            "avatar": "shopify://shop_images/brunette-young-woman-with-healthy-beauty-skin-smiles-gently-shows-white-perfect-teeth_1.png",
             "name": "James W.",
             "location": "San Diego, California",
             "rating": 5,
@@ -390,7 +371,6 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
-            "image": "shopify://shop_images/fc40c3270f88bd83fe05e811de81946be8590f94.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Christmas Gifts",
@@ -402,7 +382,6 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
-            "image": "shopify://shop_images/907be32b73956e81ceb36078f75c74769d051bc2.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Art & Craft",
@@ -414,7 +393,6 @@
           "type": "collection_card",
           "settings": {
             "collection": "",
-            "image": "shopify://shop_images/02e5a824dbaa1c580bdc6d2610fed79d679b70e5.jpg",
             "image_fit": "cover",
             "label": "New Launch: Super Soon",
             "title": "Game Night",
@@ -475,7 +453,6 @@
     "image_with_content_9fRt2K": {
       "type": "custom-image-with-content",
       "settings": {
-        "image": "shopify://shop_images/image_841.png",
         "image_position": "left",
         "image_width": 500,
         "image_radius": 15,
@@ -504,35 +481,30 @@
         "instagram_post_1a": {
           "type": "instagram_post",
           "settings": {
-            "image": "shopify://shop_images/image_831.png",
             "link": ""
           }
         },
         "instagram_post_2b": {
           "type": "instagram_post",
           "settings": {
-            "image": "shopify://shop_images/image_832.png",
             "link": ""
           }
         },
         "instagram_post_3c": {
           "type": "instagram_post",
           "settings": {
-            "image": "shopify://shop_images/image_830.png",
             "link": ""
           }
         },
         "instagram_post_4d": {
           "type": "instagram_post",
           "settings": {
-            "image": "shopify://shop_images/kids-playing-with-play-dough_1.png",
             "link": ""
           }
         },
         "instagram_post_5e": {
           "type": "instagram_post",
           "settings": {
-            "image": "shopify://shop_images/side-view-kids-playing-playing-with-toys.png",
             "link": ""
           }
         }
