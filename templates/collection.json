@@ -14,11 +14,12 @@
       "settings": {
         "show_breadcrumbs": true,
         "breadcrumb_label": "",
-        "show_heading": false,
-        "heading": "",
+        "show_heading": true,
+        "heading": "Welcome to our Kids' Collection",
         "show_collection_description": true,
+        "image": "shopify://shop_images/e008498778af9788f701397fc9a2fd3ee33d8009.jpg",
         "height": 260,
-        "overlay_opacity": 0,
+        "overlay_opacity": 50,
         "color_scheme": "scheme-1"
       }
     },
