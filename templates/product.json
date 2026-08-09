@@ -44,10 +44,6 @@
             "swatch_shape": "circle"
           }
         },
-        "zippy_zipcode_validator_zippy_widget_Cbf3CN": {
-          "type": "shopify://apps/zippy-zipcode-validator/blocks/zippy_widget/14b4faf5-2197-4ce1-b361-3bf431fbc80f",
-          "settings": {}
-        },
         "personalization_field": {
           "type": "personalization_field",
           "settings": {
@@ -145,7 +141,6 @@
         "rating",
         "description",
         "variant_picker",
-        "zippy_zipcode_validator_zippy_widget_Cbf3CN",
         "personalization_field",
         "complementary_WYVrnd",
         "quantity_selector",
@@ -193,7 +188,7 @@
         "heading_size": "h1",
         "enable_video_looping": false,
         "video_url": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
-        "cover_image": "shopify://shop_images/little-children-reading-bedtime-story-home_2_1.png",
+        "cover_image": "shopify://shop_images/little-children-reading-bedtime-story-home_2.png",
         "description": "",
         "full_width": true,
         "color_scheme": "",
